@@ -26,7 +26,7 @@ namespace Penneo.Mapping
         public void AddProperty(Expression<Func<T, object>> property, string alias = null)
         {
             var name = alias ?? ReflectionUtil.GetPropertyName(property);
-            _properties.Add(name, property.Compile());
+            _properties[name] = property.Compile();
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Penneo.Mapping
         public void AddFileProperty(Expression<Func<T, string>> property, string alias = null)
         {
             var name = alias ?? ReflectionUtil.GetPropertyName(property);
-            _properties.Add(name, property.Compile());
+            _properties[name] = property.Compile();
             _isFile.Add(name);
         }
 
@@ -63,7 +63,7 @@ namespace Penneo.Mapping
                     continue;
                 }
                 var value = _isFile.Contains(propertyName) ? FileUtil.GetBase64((string) v) : v;
-                values.Add(propertyName, value);
+                values[propertyName] = value;
             }
             return values;
         }

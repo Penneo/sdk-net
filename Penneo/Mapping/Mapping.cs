@@ -50,7 +50,7 @@ namespace Penneo.Mapping
         /// </summary>
         internal void AddMapping(string method, MethodProperties<T> properties)
         {
-            _mapping.Add(method, properties);
+            _mapping[method] = properties;
         }
 
         /// <summary>

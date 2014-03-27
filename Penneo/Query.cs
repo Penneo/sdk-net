@@ -57,19 +57,19 @@ namespace Penneo
 
             if (limit.HasValue)
             {
-                query.Add("limit", limit);
+                query["limit"] = limit;
             }
             if (offset.HasValue)
             {
-                query.Add("offset", offset);
+                query["offset"] = offset;
             }
 
             if (orderBy != null)
             {
                 var sort = string.Join(",", orderBy.Keys);
                 var order = string.Join(",", orderBy.Values);
-                query.Add("sort", sort);
-                query.Add("order", order);
+                query["sort"] = sort;
+                query["order"] = order;
             }
 
             IEnumerable<T> result;

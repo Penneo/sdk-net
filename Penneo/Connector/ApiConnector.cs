@@ -207,7 +207,7 @@ namespace Penneo.Connector
             if (query != null && query.Count > 0)
             {
                 options = new Dictionary<string, Dictionary<string, object>>();
-                options.Add("query", query);
+                options["query"] = query;
             }
             var response = CallServer(resource, null, Method.GET, options);
             if (response == null || !_successStatusCodes.Contains(response.StatusCode))
@@ -250,11 +250,11 @@ namespace Penneo.Connector
             _restResources = ServiceLocator.Instance.GetInstance<RestResources>();
 
             _headers = PenneoConnector.Headers ?? new Dictionary<string, string>();
-            _headers.Add("Content-type", "application/json");
+            _headers["Content-type"] = "application/json";
 
             if (!string.IsNullOrEmpty(PenneoConnector.User))
             {
-                _headers.Add("penneo-api-user", PenneoConnector.User);
+                _headers["penneo-api-user"] = PenneoConnector.User;
             }
 
             _client.Authenticator = new WSSEAuthenticator(PenneoConnector.Key, PenneoConnector.Secret);

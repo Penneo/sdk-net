@@ -33,6 +33,8 @@ NDependOut/
 
 #ignore nuget packages 
 packages
+nuget/lib
+nuget/*.nupkg
 
 #ignore test data
 TestData

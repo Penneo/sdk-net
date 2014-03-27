@@ -20,7 +20,7 @@ namespace Penneo.Mapping
         /// </summary>
         public void AddMapping(IMapping m)
         {
-            _mappings.Add(m.Type, m);
+            _mappings[m.Type] = m;
         }
 
         /// <summary>

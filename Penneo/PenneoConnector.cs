@@ -9,7 +9,7 @@ namespace Penneo
     /// </summary>
     public class PenneoConnector
     {
-        internal static bool IsInitialized;
+        public static bool IsInitialized;
         internal static string Key;
         internal static string Secret;
         internal static string Endpoint;

@@ -20,7 +20,7 @@ namespace Penneo.Connector
         /// </summary>
         public void Add<T>(string resource)
         {
-            _resources.Add(typeof (T), resource);
+            _resources[typeof (T)] = resource;
         }
 
         /// <summary>

@@ -27,12 +27,12 @@ namespace Penneo
 
         public void RegisterInstance(string name, object o)
         {
-            _objects.Add(name, o);
+            _objects[name] = o;
         }
 
         public void RegisterInstance<T>(object o)
         {
-            _objects.Add(typeof(T).Name, o);
+            _objects[typeof(T).Name] = o;
         }
 
         public T GetInstance<T>(string name)
