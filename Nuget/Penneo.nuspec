@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Penneo.SDK</id>
+    <version>1.0.0.0</version>
+    <title>Penneo .Net SDK</title>
+    <authors>Penneo</authors>
+    <owners>Penneo</owners>
+    <licenseUrl>https://github.com/Penneo/sdk-net/blob/master/license.txt</licenseUrl>
+    <projectUrl>https://github.com/Penneo/sdk-net</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/Penneo/sdk-net/master/icon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>SDK for using Penneo in your own C# projects</description>
+    <copyright>Copyright 2014</copyright>
+    <tags>Penneo sign signing digital</tags>
+    <dependencies>
+      <dependency id="RestSharp" version="104.4.0" />
+    </dependencies>
+  </metadata>
+</package>
