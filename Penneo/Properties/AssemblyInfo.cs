@@ -7,9 +7,9 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 
 [assembly: AssemblyTitle("Penneo")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("SDK for Penneo Web API")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Penneo")]
 [assembly: AssemblyProduct("Penneo")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
