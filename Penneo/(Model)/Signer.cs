@@ -13,10 +13,15 @@ namespace Penneo
             CaseFile = cf;
         }
 
-        public Signer(CaseFile cf, string name, string socialSecurityNumber)
+        public Signer(CaseFile cf, string name)
             : this(cf)
         {
             Name = name;
+        }
+
+        public Signer(CaseFile cf, string name, string socialSecurityNumber)
+            : this(cf, name)
+        {
             SocialSecurityNumberPlain = socialSecurityNumber;
         }
 
