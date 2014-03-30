@@ -54,7 +54,6 @@ var myDocuments = Query.FindByTitle<Document>(
 );
 
 // Retrieve documents from offset 10 until 110 ordered by title in ascending order
-// Retrieve documents from offset 10 until 110 ordered by title in ascending order
 var myDocuments = Query.FindBy<Document>(	
 	orderBy: new Dictionary<string, string>(){ {"title", "asc" } },
 	limit: 10,
