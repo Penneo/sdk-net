@@ -24,16 +24,16 @@ This section documents the different objects available through the SDK and how t
 ### Authentication
 In order to use the SDK, you will have to authenticate against the Penneo API. Authentication is done in a single line of code, using your Penneo API credentials:
 
-```c#
+```csharp
 // Initialize the connection to the API
 PenneoConnector.Initialize("apiKeyHere", "apiSecretHere", "endpointHere");
 ```
 
 If you have a reseller account, you can carry out operations on behalf of one of your customers, by specifying the customer id as well:
 
-```c#
+```csharp
 // Initialize the connection to the API as customer
-PenneoConnector.Initialize('apiKeyHere','apiSecretHere', "endpointHere", "customerIdHere");
+PenneoConnector.Initialize("apiKeyHere","apiSecretHere", "endpointHere", "customerIdHere");
 ```
 
 The endpoint url can point to either the sandbox (for testing) or the live system. Both endpoint urls are available on request.
@@ -60,7 +60,7 @@ Money laundering regulations require companies to validate the identity of their
 In this example, we show how to create a document with a single signer.
 The link to the Penneo signing portal, where the actual signing takes place, is printed as a result.
 
-```c#
+```csharp
 // Create a new case file
 var myCaseFile = new CaseFile("Demo case file");
 myCaseFile.Persist();
@@ -96,7 +96,7 @@ Console.WriteLine("<a href=\"" + mySigningRequest.GetLink() + "\">Sign now</a>")
 In this example we demontrate, how to validate a person from his/her electronic ID and social security number.
 The result is a link to the Penneo validation page. The person in question must follow the link and complete some actions in order to be validated.
 
-```c#
+```csharp
 // Create a new validation
 var myValidation = new Validation("john Doe");
 myValidation.Persist();
