@@ -23,18 +23,18 @@ There is several ways to retrieve case files from Penneo. Available methods for 
 Find one specific case file by its ID.
 * __Query.FindAll<CaseFile>__
 Find all case files accessible by the authenticated user.
-* __Query.FindBy(Dictionary\<string, object\> criteria = null, Dictionary\<string, string\> orderBy = null, int? limit = null, int? offset = null)__
+* __Query.FindBy<Casefile>(Dictionary\<string, object\> criteria = null, Dictionary\<string, string\> orderBy = null, int? limit = null, int? offset = null)__
 Find all case files matching _criteria_ ordered by _orderBy_. If _limit_ is set, only _limit_ results are returned. If _offset_ is set, the _offset_ first results are skipped.
 Criteria can either be _title_ or _metaData_.
-* __Query.FindOneBy(Dictionary\<string, object\> criteria = null, Dictionary\<string, string\> orderBy = null)__
+* __Query.FindOneBy<Casefile>(Dictionary\<string, object\> criteria = null, Dictionary\<string, string\> orderBy = null)__
 Same as _FindBy_ setting _limit_ = 1 and _offset_ = null
-* __Query.FindByTitle(string title, Dictionary\<string, string\> orderBy = null, int? limit, int? offset)__
+* __Query.FindByTitle<Casefile>(string title, Dictionary\<string, string\> orderBy = null, int? limit, int? offset)__
 Same as _FindBy_ using title as criteria.
-* __Query.FindOneByTitle(string title, Dictionary\<string, string\> orderBy = null)__
+* __Query.FindOneByTitle<Casefile>(string title, Dictionary\<string, string\> orderBy = null)__
 Same as _FindOneBy_ using title as criteria.
-* __Query.FindByMetaData(string metaData, Dictionary\<string, string\> orderBy = null, int? limit, int? offset)__
+* __Query.FindByMetaData<Casefile>(string metaData, Dictionary\<string, string\> orderBy = null, int? limit, int? offset)__
 Same as _FindBy_ using metaData as criteria.
-* __Query.FindOneByMetaData(string metaData, Dictionary\<string, string\> orderBy = null)__
+* __Query.FindOneByMetaData<Casefile>(string metaData, Dictionary\<string, string\> orderBy = null)__
 Same as _FindOneBy_ using metaData as criteria.
 
 Below is a couple of examples:
@@ -81,7 +81,7 @@ Returns the status of the case file as a string. Possible status values are:
  * _Deleted_: The case file has been out for signing but have since been deleted
  * _Signed_: The case file is signed, but the signed documents are not generated
  * _Completed_: The signing process is completed
-* __CreatedAt__
+* __Created__
 Returns the date and time the case file was created as a _DateTime_ object
 * __SignIteration__
 Returns the current sign iteration. This is only relevant if the signing process is not parallel. In that case, the signing process is broken into iterations.

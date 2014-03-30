@@ -52,24 +52,14 @@ namespace Penneo
             return linked;
         }
 
-        public CaseFileStatus GetStatus()
+        public ObjectStatus GetStatus()
         {
-            return (CaseFileStatus)Status;
+            return (ObjectStatus)Status;
         }
 
         public bool Send()
         {
             return PerformAction(ACTION_SEND);
         }
-    }
-
-    public enum CaseFileStatus
-    {
-        New = 0,
-        Pending = 1,
-        Rejected = 2,
-        Deleted = 3,
-        Signed = 4,
-        Completed = 5
     }
 }

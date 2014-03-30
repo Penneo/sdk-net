@@ -47,6 +47,11 @@ namespace Penneo
             Type = TYPE_SIGNABLE;
         }
 
+        public ObjectStatus GetStatus()
+        {
+            return (ObjectStatus)Status;
+        }
+
         public byte[] GetPdf()
         {
             return GetFileAssets(ASSET_PDF);
