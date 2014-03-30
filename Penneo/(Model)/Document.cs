@@ -36,7 +36,7 @@ namespace Penneo
         public DateTime Created { get; internal set; }
         public DateTime Modified { get; internal set; }
         public DateTime Completed { get; internal set; }
-        public int Status { get; internal set; }
+        public int? Status { get; internal set; }
         public string PdfFile { get; set; }
         public CaseFile CaseFile { get; internal set; }
         public string Type { get; internal set; }
@@ -47,9 +47,13 @@ namespace Penneo
             Type = TYPE_SIGNABLE;
         }
 
-        public ObjectStatus GetStatus()
+        public DocumentStatus GetStatus()
         {
-            return (ObjectStatus)Status;
+            if (!Status.HasValue)
+            {
+                return DocumentStatus.New;
+            }
+            return (DocumentStatus)Status;
         }
 
         public byte[] GetPdf()
@@ -76,5 +80,15 @@ namespace Penneo
         {
             return FindLinkedEntity<SignatureLine>(id);
         }
+    }
+
+    public enum DocumentStatus
+    {
+        New = 0,
+        Pending = 1,
+        Rejected = 2,
+        Deleted = 3,
+        Signed = 4,
+        Completed = 5
     }
 }

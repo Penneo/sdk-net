@@ -21,7 +21,7 @@ namespace Penneo
 
         public string Title { get; set; }
         public string MetaData { get; set; }
-        public int Status { get; internal set; }
+        public int? Status { get; internal set; }
         public DateTime Created { get; internal set; }
         public int SignIteration { get; internal set; }
 
@@ -52,14 +52,28 @@ namespace Penneo
             return linked;
         }
 
-        public ObjectStatus GetStatus()
+        public CaseFileStatus GetStatus()
         {
-            return (ObjectStatus)Status;
+            if (!Status.HasValue)
+            {
+                return CaseFileStatus.New;
+            }
+            return (CaseFileStatus)Status;
         }
 
         public bool Send()
         {
             return PerformAction(ACTION_SEND);
+        }
+
+        public enum CaseFileStatus
+        {
+            New = 0,
+            Pending = 1,
+            Rejected = 2,
+            Deleted = 3,
+            Signed = 4,
+            Completed = 5
         }
     }
 }

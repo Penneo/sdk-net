@@ -10,7 +10,16 @@
         public string RejectReason { get; set; }
         public string SuccessUrl { get; set; }
         public string FailUrl { get; set; }
-        public int Status { get; internal set; }
+        public int? Status { get; internal set; }
+
+        public SigningRequestStatus GetStatus()
+        {
+            if (!Status.HasValue)
+            {
+                return SigningRequestStatus.New;
+            }
+            return (SigningRequestStatus)Status;
+        }
 
         public string GetLink()
         {
@@ -21,5 +30,15 @@
         {
             return PerformAction(ACTION_SEND);
         }
+    }
+
+    public enum SigningRequestStatus
+    {
+        New = 0,
+        Pending = 1,
+        Rejected = 2,
+        Deleted = 3,
+        Signed = 4,
+        Undeliverable = 5
     }
 }

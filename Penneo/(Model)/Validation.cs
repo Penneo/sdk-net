@@ -25,7 +25,16 @@ namespace Penneo
         public string Name { get; set; }
         public string Email { get; set; }
         public string EmailText { get; set; }
-        public int Status { get; internal set; }
+        public int? Status { get; internal set; }
+
+        public ValidationStatus GetStatus()
+        {
+            if (!Status.HasValue)
+            {
+                return ValidationStatus.New;
+            }
+            return (ValidationStatus)Status;
+        }
 
         public byte[] GetPdf()
         {
@@ -46,5 +55,15 @@ namespace Penneo
         {
             return GetTextAssets(ASSET_LINK);
         }
+    }
+
+    public enum ValidationStatus
+    {
+        New = 0,
+        Pending = 1,
+        Undeliverable = 2,
+        Deleted = 3,
+        Ready = 4,
+        Completed = 5
     }
 }

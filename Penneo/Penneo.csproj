@@ -45,7 +45,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="%28Model%29\ObjectStatus.cs" />
     <Compile Include="Mapping\Mappings.cs" />
     <Compile Include="%28Model%29\SigningRequest.cs" />
     <Compile Include="%28Model%29\Signer.cs" />

@@ -8,51 +8,44 @@ Penneo can distribute the validation link for you. The link will be send out to 
 
 The process is best explained by an example:
 
-```php
-// Create a new validation
-$myValidation = new Validation();
-
-// Set the details of the user you wish to validate.
-$myValidation->setName('John Doe');
-$myValidation->setEmail('john@doe.com');
+```csharp
+// Create a new validation with details of the user to validate
+myValidation = new Validation("John Doe", "john@doe.com");
 
 // Define the content of the email
-$myValidation->setEmailText('Dear john. Please validate yourself using this link.');
+myValidation.EmailText = "Dear john. Please validate yourself using this link.";
 
 // Persist the new validation object
-Validation::persist($myValidation);
+myValidation.Persist();
 
 // Finally, send out the validation link
-$myValidation->send();
+myValidation.Send();
 ```
 
 ## Distributing the validation link yourself
 If you don't want Penneo to distribute your validation links, you can handle the process yourself. All you need to do is to fetch the link from the validation object:
 
-```php
-// Create a new validation
-$myValidation = new Validation();
-
-// Set the details of the user you wish to validate.
-$myValidation->setName('John Doe');
+```csharp
+// Create a new validation with details of the user to validate
+myValidation = new Validation("John Doe");
 
 // Persist the new validation object
-Validation::persist($myValidation);
+myValidation.Persist();
 
 // Activate the validation object
-$myValidation->send();
+myValidation.Send();
 
 // Retrieve the validation link
-$myLink = $myValidation->getLink();
+myLink = myValidation.GetLink();;
 ```
 
-Note that the validation link won't be active until you call the __send()__ method on the validation object.
+Note that the validation link won't be active until you call the __Send()__ method on the validation object.
 
 ## Retrieving the validation document
-Once the validation is completed (when __getStatus()__ returns _completed_), the resulting validation document can be retrieved:
+Once the validation is completed (when __GetStatus()__ returns _Completed_), the resulting validation document can be retrieved:
 
-```php
-$myValidation->getPdf();
+```csharp
+myValidation.GetPdf();
 ```
 
 The validation document contains all the information that Penneo has gathered about the validated person.
@@ -60,11 +53,11 @@ The validation document contains all the information that Penneo has gathered ab
 ## State variables
 A series state variables are used to describe the validation state over the course of its life time. The methods for retrieving the state variables are described below:
 
-* __getStatus()__
+* __GetStatus()__
 Returns the status of the validation as a string. Possible status values are:
- * _new_: The validation request hasn't been sent out yet
- * _pending_: Waiting for the user to complete the validation
- * _undeliverable_: The validation request email could not be delivered
- * _deleted_: The validation has been send but have since been deleted
- * _ready_: The user has completed the validation process, but the validation document is not generated yet
- * _completed_: The validation process is completed
+ * _New_: The validation request hasn't been sent out yet
+ * _Pending_: Waiting for the user to complete the validation
+ * _Undeliverable_: The validation request email could not be delivered
+ * _Deleted_: The validation has been send but have since been deleted
+ * _Ready_: The user has completed the validation process, but the validation document is not generated yet
+ * _Completed_: The validation process is completed
