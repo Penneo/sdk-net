@@ -8,7 +8,7 @@ The following example shows how to create a signable document linked to _myCaseF
 
 ```csharp
 // Create a new document object with title and link actual PDF document
-var myDocument = new Document(myCaseFile, "My brand new document", "My brand new document", "/path/to/pdfFile");
+var myDocument = new Document(myCaseFile, "My brand new document", "/path/to/pdfFile");
 
 // Make the document signable
 myDocument.MakeSignable();
