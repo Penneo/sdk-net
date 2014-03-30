@@ -23,7 +23,7 @@ There is several ways to retrieve case files from Penneo. Available methods for 
 Find one specific case file by its ID.
 * __Query.FindAll<CaseFile>__
 Find all case files accessible by the authenticated user.
-* __Query.FindBy(Dictionary<string, object> criteria = null, Dictionary<string, string> orderBy = null, int? limit = null, int? offset = null)__
+* __Query.FindBy(Dictionary<string, object> criteria = null, Dictionary\<string, string\> orderBy = null, int? limit = null, int? offset = null)__
 Find all case files matching _criteria_ ordered by _orderBy_. If _limit_ is set, only _limit_ results are returned. If _offset_ is set, the _offset_ first results are skipped.
 Criteria can either be _title_ or _metaData_.
 * __Query.FindOneBy(Dictionary<string, object> criteria = null, Dictionary<string, string> orderBy = null)__
