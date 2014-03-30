@@ -20,7 +20,7 @@ namespace PenneoTests
             var s = CreateSigner();
             Assert.IsNotNull(s.CaseFile);
             Assert.AreEqual("john", s.Name);
-            Assert.AreEqual("1111111111", s.SocialSecurityNumberPlain);
+            Assert.AreEqual("1111111111", s.SocialSecurityNumber);
             Assert.AreEqual(s.CaseFile, s.Parent);
         }
         

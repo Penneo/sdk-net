@@ -22,11 +22,11 @@ namespace Penneo
         public Signer(CaseFile cf, string name, string socialSecurityNumber)
             : this(cf, name)
         {
-            SocialSecurityNumberPlain = socialSecurityNumber;
+            SocialSecurityNumber = socialSecurityNumber;
         }
 
         public string Name { get; set; }
-        public string SocialSecurityNumberPlain { get; set; }
+        public string SocialSecurityNumber { get; set; }
         public string OnBehalfOf { get; set; }
         public CaseFile CaseFile { get; internal set; }
 

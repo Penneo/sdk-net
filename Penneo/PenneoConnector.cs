@@ -112,11 +112,11 @@ namespace Penneo
             new MappingBuilder<Signer>(mappings)
                 .ForCreate()
                 .Map(x => x.Name)
-                .Map(x => x.SocialSecurityNumberPlain)
+                .Map(x => x.SocialSecurityNumber, "SocialSecurityNumberPlain")
                 .Map(x => x.OnBehalfOf)
                 .ForUpdate()
                 .Map(x => x.Name)
-                .Map(x => x.SocialSecurityNumberPlain)
+                .Map(x => x.SocialSecurityNumber, "SocialSecurityNumberPlain")
                 .Map(x => x.OnBehalfOf)
                 .Create();
 
