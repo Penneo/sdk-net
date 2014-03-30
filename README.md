@@ -11,6 +11,8 @@ You can install the SDK by simply cloning or downloading the source, or you can 
 
 The recommended way to install the Penneo SDK is through [Nuget](http://www.nuget.org/). Nuget is now part of Visual Studio, and can be updated through Visual Studio.
 
+Use the Nuget UI in Visual Studio for installing the Penneo SDK, or use the command prompt:
+
 ```bash
 # Install Penneo SDK
 nuget install Penneo.SDK
