@@ -23,18 +23,18 @@ There is several ways to retrieve case files from Penneo. Available methods for 
 Find one specific case file by its ID.
 * __Query.FindAll<CaseFile>__
 Find all case files accessible by the authenticated user.
-* __Query.FindBy(Dictionary<string, object> criteria = null, Dictionary\<string, string\> orderBy = null, int? limit = null, int? offset = null)__
+* __Query.FindBy(Dictionary\<string, object\> criteria = null, Dictionary\<string, string\> orderBy = null, int? limit = null, int? offset = null)__
 Find all case files matching _criteria_ ordered by _orderBy_. If _limit_ is set, only _limit_ results are returned. If _offset_ is set, the _offset_ first results are skipped.
 Criteria can either be _title_ or _metaData_.
-* __Query.FindOneBy(Dictionary<string, object> criteria = null, Dictionary<string, string> orderBy = null)__
+* __Query.FindOneBy(Dictionary\<string, object\> criteria = null, Dictionary\<string, string\> orderBy = null)__
 Same as _FindBy_ setting _limit_ = 1 and _offset_ = null
-* __Query.FindByTitle(string title, Dictionary<string, string> orderBy = null, int? limit, int? offset)__
+* __Query.FindByTitle(string title, Dictionary\<string, string\> orderBy = null, int? limit, int? offset)__
 Same as _FindBy_ using title as criteria.
-* __Query.FindOneByTitle(string title, Dictionary<string, string> orderBy = null)__
+* __Query.FindOneByTitle(string title, Dictionary\<string, string\> orderBy = null)__
 Same as _FindOneBy_ using title as criteria.
-* __Query.FindByMetaData(string metaData, Dictionary<string, string> orderBy = null, int? limit, int? offset)__
+* __Query.FindByMetaData(string metaData, Dictionary\<string, string\> orderBy = null, int? limit, int? offset)__
 Same as _FindBy_ using metaData as criteria.
-* __Query.FindOneByMetaData(string metaData, array $orderBy)__
+* __Query.FindOneByMetaData(string metaData, Dictionary\<string, string\> orderBy = null)__
 Same as _FindOneBy_ using metaData as criteria.
 
 Below is a couple of examples:
