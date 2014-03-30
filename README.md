@@ -33,7 +33,7 @@ If you have a reseller account, you can carry out operations on behalf of one of
 
 ```c#
 // Initialize the connection to the API as customer
-PenneoConnector::initialize('apiKeyHere','apiSecretHere', "endpointHere", "customerIdHere");
+PenneoConnector.Initialize('apiKeyHere','apiSecretHere', "endpointHere", "customerIdHere");
 ```
 
 The endpoint url can point to either the sandbox (for testing) or the live system. Both endpoint urls are available on request.
@@ -60,57 +60,49 @@ Money laundering regulations require companies to validate the identity of their
 In this example, we show how to create a document with a single signer.
 The link to the Penneo signing portal, where the actual signing takes place, is printed as a result.
 
-```php
+```c#
 // Create a new case file
-$myCaseFile = new CaseFile();
-$myCaseFile->setTitle('Demo case file');
-CaseFile::persist($myCaseFile);
+var myCaseFile = new CaseFile("Demo case file");
+myCaseFile.Persist();
 
 // Create a new signable document in this case file
-$myDocument = new Document();
-$myDocument->setCaseFile($myCaseFile);
-$myDocument->setTitle('Demo document');
-$myDocument->setPdfFile('/path/to/pdfFile');
-$myDocument->makeSignable();
-Document::persist($myDocument);
+var myDocument = new Document(myCasefile, "Demo Document", "/path/to/pdfFile");
+myDocument.MakeSignable();
+myDocument.Persist();
 
 // Create a new signature line on the document
-$mySignatureLine = new SignatureLine($myDocument);
-$mySignatureLine->setRole('MySignerRole');
-SignatureLine::persist($mySignatureLine);
+var mySignatureLine = new SignatureLine(myDocument, "MySignerRole");
+mySignatureLine.Persist();
 
 // Create a new signer that can sign documents in the case file
-$mySigner = new Signer($myCaseFile);
-$mySigner->setName('John Doe');
-Signer::persist($mySigner);
+var mySigner = new Signer(myCaseFile, "John Doe");
+mySigner.Persist();
 
 // Update the signing request for the new signer
-$mySigningRequest = $mySigner->getSigningRequest();
-$mySigningRequest->setSuccessUrl('http://go/here/on/success');
-$mySigningRequest->setFailUrl('http://go/here/on/failure');
-SigningRequest::persist($mySigningRequest);
+var mySigningRequest = mySigner.GetSigningRequest();
+mySigningRequest.SuccessUrl = "http://go/here/on/success";
+mySigningRequest.FailUrl = "http://go/here/on/failure";
+mySigningRequest.Persist();
 
 // "Package" the case file for "sending".
-$myCaseFile->send();
+myCaseFile->send();
 
 // And finally, print out the link leading to the signing portal.
 // The signer uses this link to sign the document.
-print('<a href="'.$mySigningRequest->getLink().'">Sign now</a>');
+Console.WriteLine("<a href=\"" + mySigningRequest.GetLink() + "\">Sign now</a>");
 ```
 
 ### Validating a person (money laundering regulations)
 In this example we demontrate, how to validate a person from his/her electronic ID and social security number.
 The result is a link to the Penneo validation page. The person in question must follow the link and complete some actions in order to be validated.
 
-```php
+```c#
 // Create a new validation
-$myValidation = new Validation();
-$myValidation->setName('John Doe');
-Validation::persist($myValidation);
+var myValidation = new Validation("john Doe");
+myValidation.Persist();
 
 // Output the validation link.
-print('<a href="'.$myValidation->getLink().'">Validate now</a>');
-
+Console.WriteLine("<a href=\"" + myValidation.GetLink() + "\">Validate now</a>");
 ```
 
 ## Resources

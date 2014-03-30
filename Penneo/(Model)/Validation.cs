@@ -11,9 +11,14 @@ namespace Penneo
         {
         }
 
-        public Validation(string name, string email)
+		public Validation(string name)
         {
-            Name = name;
+            Name = name;    
+        }
+		
+        public Validation(string name, string email)
+		 : this(name)
+        {
             Email = email;
         }
 

@@ -11,13 +11,17 @@
             Document = doc;
         }
 
-
-        public SignatureLine(Document doc, string role, int signOrder)
+		public SignatureLine(Document doc, string role)
             : this(doc)
         {
             Role = role;
-            SignOrder = signOrder;
         }
+
+        public SignatureLine(Document doc, string role, int signOrder)
+            : this(doc, role)
+        {
+            SignOrder = signOrder;
+        }		
 
         public SignatureLine(Document doc, string role, int signOrder, string conditions)
             : this(doc, role, signOrder)
