@@ -89,7 +89,7 @@ mySigningRequest.FailUrl = "http://go/here/on/failure";
 mySigningRequest.Persist();
 
 // "Package" the case file for "sending".
-myCaseFile->send();
+myCaseFile.Send();
 
 // And finally, print out the link leading to the signing portal.
 // The signer uses this link to sign the document.
