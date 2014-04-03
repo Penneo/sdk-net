@@ -37,7 +37,7 @@ If you don't want Penneo to distribute your signing links, you can handle the pr
 var myLink = mySigningRequest.GetLink();
 ```
 
-Note that the signing link won't be active until you send out the case file by calling the __Send()__ method on the owning case file object.
+Note that the signing link won't be active until you activate the case file by calling the __activate()__ method on the owning case file object.
 
 ## Customizing the signing process
 When the signer completes an action on the Penneo signing portal (that is, he/she signs or rejects to sign), the signer is redirected to the default Penneo success/failure page. You can choose to use your own custom status pages instead. All you need to do is pass the urls to the signing request like so:
