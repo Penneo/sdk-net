@@ -7,6 +7,7 @@ namespace Penneo
     public class CaseFile : Entity
     {
         private const string ACTION_SEND = "send";
+        private const string ACTION_ACTIVATE = "activate";
         
         public CaseFile()
         {
@@ -64,6 +65,11 @@ namespace Penneo
         public bool Send()
         {
             return PerformAction(ACTION_SEND);
+        }
+
+        public bool Activate()
+        {
+            return PerformAction(ACTION_ACTIVATE);
         }
 
         public enum CaseFileStatus
