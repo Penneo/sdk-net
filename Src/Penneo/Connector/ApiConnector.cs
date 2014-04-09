@@ -269,6 +269,11 @@ namespace Penneo.Connector
             _factory = factory;
 
             //Null instance if a new factory is provided
+            ResetInstance();
+        }
+
+        public static void ResetInstance()
+        {
             _instance = null;
         }
 

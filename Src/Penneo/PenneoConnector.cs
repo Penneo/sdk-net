@@ -30,6 +30,9 @@ namespace Penneo
             InitializeRestResources();
             InitializeMappings();
 
+            //Reset the api-connector if it was created earlier (to reset any cached authentication)
+            ApiConnector.ResetInstance();
+
             IsInitialized = true;
         }
 

@@ -61,7 +61,13 @@ namespace PenneoTests
         public void SendTest()
         {
             TestUtil.TestPerformActionSuccess(() => new CaseFile().Send());
-        }        
+        }
+
+        [TestMethod]
+        public void ActivateTest()
+        {
+            TestUtil.TestPerformActionSuccess(() => new CaseFile().Activate());
+        }  
 
     }
 }
