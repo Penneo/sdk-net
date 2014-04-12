@@ -257,7 +257,18 @@ namespace Penneo.Connector
                 _headers["penneo-api-user"] = PenneoConnector.User;
             }
 
-            _client.Authenticator = new WSSEAuthenticator(PenneoConnector.Key, PenneoConnector.Secret);
+            if (PenneoConnector.AuthenticationType == AuthType.WSSE)
+            {
+                _client.Authenticator = new WSSEAuthenticator(PenneoConnector.Key, PenneoConnector.Secret);
+            }
+            else if (PenneoConnector.AuthenticationType == AuthType.Basic)
+            {
+                _client.Authenticator = new HttpBasicAuthenticator(PenneoConnector.Key, PenneoConnector.Secret);
+            }
+            else
+            {
+                throw new NotSupportedException("Unknown authentication type " + PenneoConnector.AuthenticationType);
+            }
             PenneoConnector.Reset();
         }
 

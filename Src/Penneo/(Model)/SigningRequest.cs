@@ -6,11 +6,13 @@
         private const string ACTION_SEND = "send";
 
         public string Email { get; set; }
+        public string EmailSubject { get; set; }
         public string EmailText { get; set; }
         public string RejectReason { get; set; }
         public string SuccessUrl { get; set; }
         public string FailUrl { get; set; }
         public int? Status { get; internal set; }
+        public int? ReminderInterval { get; set; }
 
         public SigningRequestStatus GetStatus()
         {

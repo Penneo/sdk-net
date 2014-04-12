@@ -23,7 +23,9 @@ namespace Penneo
         }
 
         public string Name { get; set; }
+        public string Title { get; set; }
         public string Email { get; set; }
+        public string EmailSubject { get; set; }
         public string EmailText { get; set; }
         public int? Status { get; internal set; }
 
