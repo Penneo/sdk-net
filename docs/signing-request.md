@@ -15,6 +15,7 @@ The process is best explained by an example. Lets say that we have a signing req
 mySigningRequest.Email = "john@doe.com";
 
 // Define the content of the email
+mySigningRequest.EmailSubject = "Contract for signing";
 mySigningRequest.EmailText = "Dear john. Please sign the contract.";
 
 // Store the changes to the signing request
@@ -29,6 +30,9 @@ If you need to re-send the signing request email (fx. due to a change in the ema
 // Re-send the signing request email
 mySigningRequest.Send();
 ```
+
+### Reminder emails
+When using Penneo to distribute signing links, it is also possible to have Penneo remind the signers regularly by email, until the signer either signs or rejects to sign. To set up a reminder, just use the __ReminderInterval__ property to set the number of days between reminders.
 
 ## Distributing the signing link yourself
 If you don't want Penneo to distribute your signing links, you can handle the process yourself. All you need to do is to fetch the link from the signing request object:

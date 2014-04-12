@@ -103,6 +103,7 @@ The result is a link to the Penneo validation page. The person in question must 
 ```csharp
 // Create a new validation
 var myValidation = new Validation("john Doe");
+myValidation.Title = "My new validation";
 myValidation.Persist();
 
 // Output the validation link.

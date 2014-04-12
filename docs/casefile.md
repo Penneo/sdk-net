@@ -13,11 +13,14 @@ myCaseFile.Persist();
 ```
 
 ## Sending a case file out for signing
-When the case file contains the relevant documents and signers, it has to be "send out for signing" before the signing process can begin. This is accomplished by calling the __send()__ method on the case file object.
+When the case file contains the relevant documents and signers, it has to be "send out for signing" before the signing process can begin. This is accomplished by calling the __send()__ method on the case file object. You can delay the sending by setting the SendAt time using the __SendAt__ property on the case file object. This method takes a DateTime object as parameter.
 
 If you want to distribute the signing links yourself, use the __activate()__ method instead to activate the case file signing links.
 
 Once the case file has been sent or activated, documents and signers can no longer be added or removed.
+
+## Setting an expiry time on a case file
+A case file can be set to expire using the __ExpireAt__ property on the object. When a case file is expired, the signers can no longer sign the case file documents. The __ExpireAt__ property takes a DateTime object.
 
 ## Retrieve existing case files
 There is several ways to retrieve case files from Penneo. Available methods for retrieving case files are:
