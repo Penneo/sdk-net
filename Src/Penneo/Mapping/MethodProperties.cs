@@ -12,21 +12,27 @@ namespace Penneo.Mapping
         where T : Entity
     {
         private readonly HashSet<string> _isFile;
+        private readonly Dictionary<string, Func<object, object>> _convert;
         private readonly Dictionary<string, Func<T, object>> _properties;
 
         public MethodProperties()
         {
             _properties = new Dictionary<string, Func<T, object>>();
             _isFile = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            _convert = new Dictionary<string, Func<object, object>>(StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>
         /// Adds a property to the container
         /// </summary>      
-        public void AddProperty(Expression<Func<T, object>> property, string alias = null)
+        public void AddProperty(Expression<Func<T, object>> property, string alias = null, Func<object, object> convert = null)
         {
             var name = alias ?? ReflectionUtil.GetPropertyName(property);
             _properties[name] = property.Compile();
+            if (convert != null)
+            {
+                _convert[name] = convert;
+            }
         }
 
         /// <summary>
@@ -63,7 +69,16 @@ namespace Penneo.Mapping
                     continue;
                 }
                 var value = _isFile.Contains(propertyName) ? FileUtil.GetBase64((string) v) : v;
-                values[propertyName] = value;
+
+                //Convert value if converter is defined
+                Func<object, object> convert;
+                if (_convert.TryGetValue(propertyName, out convert))
+                {
+                    value = convert(value);
+                }
+
+                //Store value
+                values[propertyName] = value;              
             }
             return values;
         }

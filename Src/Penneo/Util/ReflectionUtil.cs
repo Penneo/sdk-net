@@ -46,7 +46,7 @@ namespace Penneo.Util
             {
                 return Convert.ToBoolean(value);
             }
-            if (type == typeof (DateTime))
+            if (type == typeof (DateTime) || type == typeof(DateTime?))
             {
                 return TimeUtil.FromUnixTime(Convert.ToInt64(value));
             }

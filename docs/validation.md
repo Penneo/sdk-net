@@ -11,8 +11,10 @@ The process is best explained by an example:
 ```csharp
 // Create a new validation with details of the user to validate
 myValidation = new Validation("John Doe", "john@doe.com");
+myValidation.Title = "My validation";
 
 // Define the content of the email
+myValidation.EmailSubject = "Validation inquiry";
 myValidation.EmailText = "Dear john. Please validate yourself using this link.";
 
 // Persist the new validation object
@@ -28,6 +30,7 @@ If you don't want Penneo to distribute your validation links, you can handle the
 ```csharp
 // Create a new validation with details of the user to validate
 myValidation = new Validation("John Doe");
+myValidation.Title = "My validation";
 
 // Persist the new validation object
 myValidation.Persist();

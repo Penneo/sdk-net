@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Penneo.Connector;
 using Penneo.Mapping;
+using Penneo.Util;
 
 namespace Penneo
 {
@@ -10,19 +12,21 @@ namespace Penneo
     public class PenneoConnector
     {
         public static bool IsInitialized;
+        internal static AuthType AuthenticationType;
         internal static string Key;
         internal static string Secret;
         internal static string Endpoint;
         internal static string User;
         internal static Dictionary<string, string> Headers;
-
+   
         /// <summary>
         /// Initialize the connection to Penneo.
         /// </summary>        
-        public static void Initialize(string key, string secret, string endpoint = null, string user = null, Dictionary<string, string> headers = null)
+        public static void Initialize(string key, string secret, string endpoint = null, string user = null, Dictionary<string, string> headers = null, AuthType authType = AuthType.WSSE)
         {
             Key = key;
             Secret = secret;
+            AuthenticationType = authType;
             Endpoint = endpoint;
             User = user;
             Headers = headers;
@@ -82,6 +86,9 @@ namespace Penneo
                 .ForCreate()
                 .Map(x => x.Title)
                 .Map(x => x.MetaData)
+                .Map(x => x.SendAt, convert: x => TimeUtil.ToUnixTime((DateTime)x))
+                .Map(x => x.ExpireAt, convert: x => TimeUtil.ToUnixTime((DateTime)x))
+                .Map(x => x.VisibilityMode)
                 .ForUpdate()
                 .Map(x => x.Title)
                 .Map(x => x.MetaData)
@@ -134,11 +141,15 @@ namespace Penneo
             new MappingBuilder<Validation>(mappings)
                 .ForCreate()
                 .Map(x => x.Name)
+                .Map(x => x.Title)
                 .Map(x => x.Email)
+                .Map(x => x.EmailSubject)
                 .Map(x => x.EmailText)
                 .ForUpdate()
                 .Map(x => x.Name)
+                .Map(x => x.Title)
                 .Map(x => x.Email)
+                .Map(x => x.EmailSubject)
                 .Map(x => x.EmailText)
                 .Create();
         }

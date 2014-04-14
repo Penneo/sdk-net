@@ -48,9 +48,9 @@ namespace Penneo.Mapping
         /// <summary>
         /// Maps a given property (with an optional alias) for the current method
         /// </summary>
-        public MappingBuilder<T> Map(Expression<Func<T, object>> property, string alias = null)
+        public MappingBuilder<T> Map(Expression<Func<T, object>> property, string alias = null, Func<object, object> convert = null)
         {
-            _currentMethodProperties.AddProperty(property, alias);
+            _currentMethodProperties.AddProperty(property, alias, convert);
             return this;
         }
 

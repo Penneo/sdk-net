@@ -25,6 +25,9 @@ namespace Penneo
         public int? Status { get; internal set; }
         public DateTime Created { get; internal set; }
         public int SignIteration { get; internal set; }
+        public DateTime? SendAt { get; set; }
+        public DateTime? ExpireAt { get; set; }
+        public int? VisibilityMode { get; set; }
 
         public IEnumerable<Document> GetDocuments()
         {
