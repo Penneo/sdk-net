@@ -12,6 +12,7 @@ namespace Penneo
         public CaseFile()
         {
             MetaData = null;
+            VisibilityMode = 0;
         }
 
         public CaseFile(string title)
