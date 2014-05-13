@@ -75,5 +75,11 @@ namespace PenneoTests
             }
             A.CallTo(() => connector.GetFileAssets(null, null)).WithAnyArguments().MustHaveHappened();
         }
+
+        [TestMethod]
+        public void SendTest()
+        {
+            TestUtil.TestPerformActionSuccess(() => new Validation().Send());
+        }
     }
 }

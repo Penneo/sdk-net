@@ -6,6 +6,7 @@ namespace Penneo
     {
         private const string ASSET_PDF = "pdf";
         private const string ASSET_LINK = "link";
+        private const string ACTION_SEND = "send";
 
         public Validation()
         {
@@ -56,6 +57,11 @@ namespace Penneo
         public string GetLink()
         {
             return GetTextAssets(ASSET_LINK);
+        }
+
+        public bool Send()
+        {
+            return PerformAction(ACTION_SEND);
         }
     }
 
