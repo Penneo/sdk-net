@@ -74,13 +74,16 @@ var myDocument = new Document(myCasefile, "Demo Document", "/path/to/pdfFile");
 myDocument.MakeSignable();
 myDocument.Persist();
 
+// Create a new signer that can sign documents in the case file
+var mySigner = new Signer(myCaseFile, "John Doe");
+mySigner.Persist();
+
 // Create a new signature line on the document
 var mySignatureLine = new SignatureLine(myDocument, "MySignerRole");
 mySignatureLine.Persist();
 
-// Create a new signer that can sign documents in the case file
-var mySigner = new Signer(myCaseFile, "John Doe");
-mySigner.Persist();
+// Map the signer to the signing request
+mySignatureLine.SetSigner(mySigner);
 
 // Update the signing request for the new signer
 var mySigningRequest = mySigner.GetSigningRequest();
