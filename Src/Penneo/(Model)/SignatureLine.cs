@@ -1,4 +1,6 @@
-﻿namespace Penneo
+﻿using System;
+using System.Linq;
+namespace Penneo
 {
     public class SignatureLine : Entity
     {
@@ -29,15 +31,30 @@
             Conditions = conditions;
         }
 
-        public Document Document { get; internal set; }
-        public Signer Signer { get; private set; }
+        public Document Document { get; internal set; }        
         public string Role { get; set; }
         public string Conditions { get; set; }
         public int SignOrder { get; set; }
+        public DateTime SignedAt { get; internal set; }
 
         internal override Entity Parent
         {
             get { return Document; }
+        }
+
+        private Signer _signer;
+        public Signer Signer
+        {
+            get 
+            {
+                if (_signer == null)
+                {
+                    _signer = GetLinkedEntities<Signer>().FirstOrDefault();
+                    _signer.CaseFile = Document.CaseFile;
+                }
+                return _signer; 
+            }
+            private set { _signer = value; }
         }
 
 
