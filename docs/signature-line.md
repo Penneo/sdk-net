@@ -20,3 +20,13 @@ To link a signer to a signature line, simply use the __SetSigner()__ method on t
 // Link an existing signer to the signature line
 mySignatureLine.SetSigner(mySigner);
 ```
+
+## Setting the sign order
+The sign order defines the order in which the signature lines must be signed.
+Per default, the sign order for all signature lines is 0, meaning that all signers sign in parallel.
+A signature line with sign order of fx. 2 can first be signed when all signature lines having a sign order < 2 has been signed.
+
+```csharp
+// Set the sign order to 2
+mySignatureLine.signOrder = 2;
+```
