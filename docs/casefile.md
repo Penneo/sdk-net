@@ -34,14 +34,6 @@ Find all case files matching _criteria_ ordered by _orderBy_. If _limit_ is set,
 Criteria can either be _title_ or _metaData_.
 * __Query.FindOneBy<Casefile>(Dictionary\<string, object\> criteria = null, Dictionary\<string, string\> orderBy = null)__
 Same as _FindBy_ setting _limit_ = 1 and _offset_ = null
-* __Query.FindByTitle<Casefile>(string title, Dictionary\<string, string\> orderBy = null, int? limit, int? offset)__
-Same as _FindBy_ using title as criteria.
-* __Query.FindOneByTitle<Casefile>(string title, Dictionary\<string, string\> orderBy = null)__
-Same as _FindOneBy_ using title as criteria.
-* __Query.FindByMetaData<Casefile>(string metaData, Dictionary\<string, string\> orderBy = null, int? limit, int? offset)__
-Same as _FindBy_ using metaData as criteria.
-* __Query.FindOneByMetaData<Casefile>(string metaData, Dictionary\<string, string\> orderBy = null)__
-Same as _FindOneBy_ using metaData as criteria.
 
 Below is a couple of examples:
 

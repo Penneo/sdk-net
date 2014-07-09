@@ -135,5 +135,12 @@ namespace Penneo
         {
             return ApiConnector.Instance.PerformAction(this, action);
         }
+
+        /// <summary>
+        /// Do optional initialization when reading the entity from a source
+        /// </summary>
+        internal virtual void ReadInit()
+        {
+        }
     }
 }

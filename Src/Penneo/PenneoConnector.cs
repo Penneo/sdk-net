@@ -134,6 +134,7 @@ namespace Penneo
                 .ForUpdate()
                 .Map(x => x.Email)
                 .Map(x => x.EmailText)
+                .Map(x => x.EmailSubject)
                 .Map(x => x.SuccessUrl)
                 .Map(x => x.FailUrl)
                 .Create();

@@ -21,7 +21,7 @@ namespace Penneo
             if (!ApiConnector.Instance.ReadObject(obj))
             {
                 throw new Exception("Penneo: Could not find the requested " + typeof (T).Name + " (id = " + id + ")");
-            }
+            }            
             return obj;
         }
 
@@ -76,8 +76,7 @@ namespace Penneo
             if (!ApiConnector.Instance.FindBy(query, out result))
             {
                 throw new Exception("Penneo: Internal problem encountered");
-            }
-
+            }            
             return result;
         }
     }

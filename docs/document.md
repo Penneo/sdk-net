@@ -29,14 +29,6 @@ Find all documents matching _criteria_ ordered by _orderBy_. If _limit_ is set, 
 Criteria can either be _title_ or _metaData_.
 * __Query.FindOneBy<Document>(Dictionary\<string, object\> criteria = null, Dictionary\<string, string\> orderBy = null)__
 Same as _FindBy_ setting _limit_ = 1 and _offset_ = null
-* __Query.FindByTitle<Document>(string title, Dictionary\<string, string\> orderBy = null, int? limit, int? offset)__
-Same as _FindBy_ using title as criteria.
-* __Query.FindOneByTitle<Document>(string title, Dictionary\<string, string\> orderBy = null)__
-Same as _FindOneBy_ using title as criteria.
-* __Query.FindByMetaData<Document>(string metaData, Dictionary\<string, string\> orderBy = null, int? limit, int? offset)__
-Same as _FindBy_ using metaData as criteria.
-* __Query.FindOneByMetaData<Document>(string metaData, Dictionary\<string, string\> orderBy = null)__
-Same as _FindOneBy_ using metaData as criteria.
 
 Below is a couple of examples:
 

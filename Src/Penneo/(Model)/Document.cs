@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Penneo
 {
@@ -37,10 +38,24 @@ namespace Penneo
         public DateTime Modified { get; internal set; }
         public DateTime Completed { get; internal set; }
         public int? Status { get; internal set; }
-        public string PdfFile { get; set; }
-        public CaseFile CaseFile { get; internal set; }
+        public string PdfFile { get; set; }        
         public string Type { get; internal set; }
         public string Options { get; set; }
+
+
+        private CaseFile _caseFile;
+        public CaseFile CaseFile 
+        {
+            get 
+            {
+                if (_caseFile == null)
+                {
+                    _caseFile = GetLinkedEntities<CaseFile>().FirstOrDefault();
+                }                
+                return _caseFile;                               
+            }
+            internal set { _caseFile = value; } 
+        }
 
         public void MakeSignable()
         {
@@ -73,12 +88,19 @@ namespace Penneo
 
         public IEnumerable<SignatureLine> GetSignatureLines()
         {
-            return GetLinkedEntities<SignatureLine>();
+            var signatureLines = GetLinkedEntities<SignatureLine>();
+            foreach(var sl in signatureLines)
+            {
+                sl.Document = this; 
+            }
+            return signatureLines;
         }
 
         public SignatureLine FindSignatureLine(int id)
         {
-            return FindLinkedEntity<SignatureLine>(id);
+            var sl = FindLinkedEntity<SignatureLine>(id);
+            sl.Document = this;
+            return sl;
         }
     }
 
