@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Security.Authentication;
-using System.Web.Helpers;
+using Newtonsoft.Json;
 using Penneo.Util;
 using RestSharp;
 
@@ -191,8 +191,8 @@ namespace Penneo.Connector
         {
             var url = obj.RelativeUrl + "/" + obj.Id + "/" + assetName;
             var response = CallServer(url);
-            var text = Json.Decode(response.Content)[0];
-            return text;
+            var text = JsonConvert.DeserializeObject(response.Content);
+            return Convert.ToString(text);
         }
 
         /// <summary>
@@ -368,7 +368,7 @@ namespace Penneo.Connector
         private static IEnumerable<T> CreateObjects<T>(string json)
         {
             var result = new List<T>();
-            var values = Json.Decode<List<Dictionary<string, object>>>(json);
+            var values = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(json);
             foreach (var v in values)
             {
                 var instance = Activator.CreateInstance<T>();
@@ -384,7 +384,7 @@ namespace Penneo.Connector
         private static T CreateObject<T>(string json)
         {
             var instance = Activator.CreateInstance<T>();
-            var values = Json.Decode<Dictionary<string, object>>(json);
+            var values = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
             ReflectionUtil.SetPropertiesFromDictionary(instance, values);
             return instance;
         }

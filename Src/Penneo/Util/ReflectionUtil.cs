@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Web.Helpers;
+using Newtonsoft.Json;
 
 namespace Penneo.Util
 {
@@ -16,7 +16,7 @@ namespace Penneo.Util
         /// </summary>
         public static void SetPropertiesFromJson(object obj, string json)
         {
-            var values = Json.Decode<Dictionary<string, object>>(json);
+            var values = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
             SetPropertiesFromDictionary(obj, values);
         }
 
@@ -32,6 +32,11 @@ namespace Penneo.Util
                 var propInfo = obj.GetType().GetProperty(propertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.IgnoreCase | BindingFlags.Instance);
                 if (propInfo != null && propInfo.CanWrite)
                 {
+                    if (value is long && propInfo.PropertyType == typeof(int) || propInfo.PropertyType == typeof(int?))
+                    {                        
+                        value = Convert.ToInt32(value);
+                    }
+
                     propInfo.SetValue(obj, ConvertToType(propInfo.PropertyType, value), null);
                 }
             }
