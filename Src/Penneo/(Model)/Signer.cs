@@ -28,6 +28,7 @@ namespace Penneo
         public string Name { get; set; }
         public string SocialSecurityNumber { get; set; }
         public string OnBehalfOf { get; set; }
+        public string VATIdentificationNumber { get; set; }
         public CaseFile CaseFile { get; internal set; }
 
         internal override Entity Parent

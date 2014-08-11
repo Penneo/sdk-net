@@ -123,10 +123,12 @@ namespace Penneo
                 .ForCreate()
                 .Map(x => x.Name)
                 .Map(x => x.SocialSecurityNumber, "SocialSecurityNumberPlain")
+                .Map(x => x.VATIdentificationNumber)
                 .Map(x => x.OnBehalfOf)
                 .ForUpdate()
                 .Map(x => x.Name)
                 .Map(x => x.SocialSecurityNumber, "SocialSecurityNumberPlain")
+                .Map(x => x.VATIdentificationNumber)
                 .Map(x => x.OnBehalfOf)
                 .Create();
 
