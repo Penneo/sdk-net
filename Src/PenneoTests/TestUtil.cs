@@ -64,11 +64,11 @@ namespace PenneoTests
         {
             var connector = CreateFakeConnector();
             var list = new List<TChild>() {Activator.CreateInstance<TChild>()};
-            A.CallTo(() => connector.GetLinkedEntities<TChild>(null)).WithAnyArguments().Returns(list);
+            A.CallTo(() => connector.GetLinkedEntities<TChild>(null, null)).WithAnyArguments().Returns(list);
 
             var result = getter();
 
-            A.CallTo(() => connector.GetLinkedEntities<TChild>(null)).WithAnyArguments().MustHaveHappened();
+            A.CallTo(() => connector.GetLinkedEntities<TChild>(null, null)).WithAnyArguments().MustHaveHappened();
             Assert.IsNotNull(result);
             Assert.AreEqual(list.Count, result.Count());
         }
@@ -78,11 +78,11 @@ namespace PenneoTests
             var connector = CreateFakeConnector();
             var instance = Activator.CreateInstance<TChild>();
             var list = new List<TChild> { instance };
-            A.CallTo(() => connector.GetLinkedEntities<TChild>(null)).WithAnyArguments().Returns(list);
+            A.CallTo(() => connector.GetLinkedEntities<TChild>(null, null)).WithAnyArguments().Returns(list);
 
             var result = getter();
 
-            A.CallTo(() => connector.GetLinkedEntities<TChild>(null)).WithAnyArguments().MustHaveHappened();
+            A.CallTo(() => connector.GetLinkedEntities<TChild>(null, null)).WithAnyArguments().MustHaveHappened();
             Assert.IsNotNull(result);
             Assert.AreEqual(instance, result);
         }

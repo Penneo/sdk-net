@@ -70,6 +70,7 @@ namespace Penneo
             r.Add<Signer>("signers");
             r.Add<SigningRequest>("signingrequests");
             r.Add<Validation>("validations");
+            r.Add<Folder>("folders");
 
             ServiceLocator.Instance.RegisterInstance<RestResources>(r);
         }
@@ -156,6 +157,13 @@ namespace Penneo
                 .Map(x => x.EmailSubject)
                 .Map(x => x.EmailText)
                 .Map(x => x.SuccessUrl)
+                .Create();
+
+            new MappingBuilder<Folder>(mappings)
+                .ForCreate()
+                .Map(x => x.Title)
+                .ForUpdate()
+                .Map(x => x.Title)
                 .Create();
         }
     }

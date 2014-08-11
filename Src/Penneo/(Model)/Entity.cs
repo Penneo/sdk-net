@@ -99,9 +99,9 @@ namespace Penneo
         /// <summary>
         /// Get all entities linked with this entity in the storage
         /// </summary>
-        protected IEnumerable<T> GetLinkedEntities<T>()
+        protected IEnumerable<T> GetLinkedEntities<T>(string url = null)
         {
-            return ApiConnector.Instance.GetLinkedEntities<T>(this);
+            return ApiConnector.Instance.GetLinkedEntities<T>(this, url);
         }
 
         /// <summary>

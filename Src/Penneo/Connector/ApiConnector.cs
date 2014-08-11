@@ -154,10 +154,19 @@ namespace Penneo.Connector
         /// <summary>
         /// <see cref="IApiConnector.GetLinkedEntities{T}"/>
         /// </summary>
-        public IEnumerable<T> GetLinkedEntities<T>(Entity obj)
+        public IEnumerable<T> GetLinkedEntities<T>(Entity obj, string url = null)
         {
-            var url = obj.RelativeUrl + "/" + obj.Id + "/" + _restResources.GetResource<T>();
-            var response = CallServer(url);
+            string actualUrl;
+            if (string.IsNullOrEmpty(url))
+            {
+                actualUrl = obj.RelativeUrl + "/" + obj.Id + "/" + _restResources.GetResource<T>();
+            }
+            else
+            {
+                actualUrl = url;
+            }
+
+            var response = CallServer(actualUrl);
             return CreateObjects<T>(response.Content);
         }
 

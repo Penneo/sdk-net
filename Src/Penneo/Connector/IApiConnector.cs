@@ -30,7 +30,7 @@ namespace Penneo.Connector
         /// <summary>
         /// Gets all entities linked with obj from the backend.
         /// </summary>
-        IEnumerable<T> GetLinkedEntities<T>(Entity obj);
+        IEnumerable<T> GetLinkedEntities<T>(Entity obj, string url = null);
 
         /// <summary>
         /// Find a specific linked entity
