@@ -148,12 +148,14 @@ namespace Penneo
                 .Map(x => x.Email)
                 .Map(x => x.EmailSubject)
                 .Map(x => x.EmailText)
+                .Map(x => x.SuccessUrl)
                 .ForUpdate()
                 .Map(x => x.Name)
                 .Map(x => x.Title)
                 .Map(x => x.Email)
                 .Map(x => x.EmailSubject)
                 .Map(x => x.EmailText)
+                .Map(x => x.SuccessUrl)
                 .Create();
         }
     }

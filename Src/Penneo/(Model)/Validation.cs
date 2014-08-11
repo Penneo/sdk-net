@@ -29,6 +29,7 @@ namespace Penneo
         public string EmailSubject { get; set; }
         public string EmailText { get; set; }
         public int? Status { get; internal set; }
+        public string SuccessUrl { get; set; }
 
         public ValidationStatus GetStatus()
         {
