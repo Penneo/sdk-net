@@ -152,6 +152,23 @@ namespace Penneo.Connector
         }
 
         /// <summary>
+        /// <see cref="IApiConnector.UnlinkEntity"/>
+        /// </summary>
+        public bool UnlinkEntity(Entity parent, Entity child)
+        {
+            var url = parent.RelativeUrl + "/" + parent.Id + "/" + _restResources.GetResource(child.GetType()) + "/" + child.Id;
+
+            var response = CallServer(url, customMethod: "UNLINK");
+
+            if (response == null || !_successStatusCodes.Contains(response.StatusCode))
+            {
+                return false;
+            }
+
+            return true;
+        }      
+
+        /// <summary>
         /// <see cref="IApiConnector.GetLinkedEntities{T}"/>
         /// </summary>
         public IEnumerable<T> GetLinkedEntities<T>(Entity obj, string url = null)

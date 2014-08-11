@@ -28,6 +28,11 @@ namespace Penneo.Connector
         bool LinkEntity(Entity parent, Entity child);
 
         /// <summary>
+        /// Unlink two objects on the backend.
+        /// </summary>
+        bool UnlinkEntity(Entity parent, Entity child);
+
+        /// <summary>
         /// Gets all entities linked with obj from the backend.
         /// </summary>
         IEnumerable<T> GetLinkedEntities<T>(Entity obj, string url = null);
