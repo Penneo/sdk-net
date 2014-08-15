@@ -71,6 +71,9 @@ namespace Penneo
             r.Add<SigningRequest>("signingrequests");
             r.Add<Validation>("validations");
             r.Add<Folder>("folders");
+            r.Add<SignerType>("signertypes");
+            r.Add<DocumentType>("documenttype");
+            r.Add<CaseFileType>("casefiletype");
 
             ServiceLocator.Instance.RegisterInstance<RestResources>(r);
         }
@@ -90,9 +93,11 @@ namespace Penneo
                 .Map(x => x.SendAt, convert: x => TimeUtil.ToUnixTime((DateTime)x))
                 .Map(x => x.ExpireAt, convert: x => TimeUtil.ToUnixTime((DateTime)x))
                 .Map(x => x.VisibilityMode)
+                .Map(x => x.CaseFileType.Id, "caseFileTypeId")
                 .ForUpdate()
                 .Map(x => x.Title)
                 .Map(x => x.MetaData)
+                .Map(x => x.CaseFileType.Id, "caseFileTypeId")
                 .Create();
 
             new MappingBuilder<Document>(mappings)
@@ -103,6 +108,7 @@ namespace Penneo
                 .Map(x => x.Type)
                 .Map(x => x.Options)
                 .MapFile(x => x.PdfFile)
+                .Map(x => x.DocumentType.Id, "documentTypeId")
                 .ForUpdate()
                 .Map(x => x.Title)
                 .Map(x => x.MetaData)
@@ -166,6 +172,8 @@ namespace Penneo
                 .ForUpdate()
                 .Map(x => x.Title)
                 .Create();
+
+            
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Penneo
 {
@@ -39,6 +40,21 @@ namespace Penneo
         public SigningRequest GetSigningRequest()
         {
             return GetLinkedEntities<SigningRequest>().FirstOrDefault();
+        }
+
+        public bool AddSignerType(SignerType type)
+        {
+            return LinkEntity(type);
+        }
+
+        public bool RemoveSignerType(SignerType type)
+        {
+            return UnlinkEntity(type);
+        }
+
+        public IEnumerable<SignerType> GetSignerTypes()
+        {
+            return GetLinkedEntities<SignerType>();
         }
     }
 }

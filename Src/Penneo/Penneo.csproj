@@ -45,7 +45,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="%28Model%29\CaseFileType.cs" />
+    <Compile Include="%28Model%29\DocumentType.cs" />
     <Compile Include="%28Model%29\Folder.cs" />
+    <Compile Include="%28Model%29\SignerType.cs" />
     <Compile Include="AuthType.cs" />
     <Compile Include="Mapping\Mappings.cs" />
     <Compile Include="%28Model%29\SigningRequest.cs" />
