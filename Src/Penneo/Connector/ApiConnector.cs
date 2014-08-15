@@ -95,7 +95,8 @@ namespace Penneo.Connector
             {
                 var response = CallServer(obj.RelativeUrl + "/" + obj.Id, data, Method.PUT);
                 if (response == null || !_successStatusCodes.Contains(response.StatusCode))
-                {
+                {                    
+                    Log.Write("Write Failed for " + obj.GetType().Name + ": " + (response == null ? "Empty response" : response.Content), LogSeverity.Error);
                     return false;
                 }
             }
@@ -104,6 +105,7 @@ namespace Penneo.Connector
                 var response = CallServer(obj.RelativeUrl, data, Method.POST);
                 if (response == null || !_successStatusCodes.Contains(response.StatusCode))
                 {
+                    Log.Write("Write Failed for " + obj.GetType().Name + ": " + (response == null ? "Empty response" : response.Content), LogSeverity.Error);
                     return false;
                 }
 
