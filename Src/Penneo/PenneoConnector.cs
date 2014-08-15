@@ -147,6 +147,7 @@ namespace Penneo
                 .Map(x => x.SuccessUrl)
                 .Map(x => x.FailUrl)
                 .Map(x => x.ReminderInterval)
+                .Map(x => x.AccessControl)
                 .Create();
 
             new MappingBuilder<Validation>(mappings)
