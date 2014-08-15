@@ -158,6 +158,7 @@ namespace Penneo
                 .Map(x => x.EmailSubject)
                 .Map(x => x.EmailText)
                 .Map(x => x.SuccessUrl)
+                .Map(x => x.CustomText)
                 .ForUpdate()
                 .Map(x => x.Name)
                 .Map(x => x.Title)
@@ -165,6 +166,7 @@ namespace Penneo
                 .Map(x => x.EmailSubject)
                 .Map(x => x.EmailText)
                 .Map(x => x.SuccessUrl)
+                .Map(x => x.CustomText)
                 .Create();
 
             new MappingBuilder<Folder>(mappings)
