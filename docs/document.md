@@ -40,9 +40,9 @@ var myDocuments = Query.FindAll<Document>();
 var myDocument = Query.Find<Document>(7382393);
 
 // Retrieve all documents that contains the word "the" in their title and sort descending by creation date
-var myDocuments = Query.FindByTitle<Document>(
-	"the",
-	orderBy: new Dictionary<string, string>(){ {"created", "desc" } }
+var myDocuments = Query.FindBy<Document>(
+	criteria: new Dictionary<string, object>{ { "title", "the" } },
+	orderBy: new Dictionary<string, string>(){ { "created", "desc" } }
 );
 
 // Retrieve documents from offset 10 until 110 ordered by title in ascending order

@@ -1,6 +1,6 @@
 ﻿namespace Penneo
 {
-    public class CaseFileType : Entity
+    public class CaseFileTemplate : Entity
     {
         public string Name { get; set; }
     }

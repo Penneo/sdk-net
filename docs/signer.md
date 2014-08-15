@@ -1,5 +1,5 @@
 # Signers
-A signer object represents the person that signs. Apart from the obvious name, a signer can also be assigned and organisation name (that he/she signs on behalf of) and a social security number to verify his/her identity.
+A signer object represents the person that signs. Apart from the obvious name, a signer can also be assigned and organisation name (that he/she signs on behalf of) and a social security number or VAT identification number to verify his/her identity.
 
 ## Creating a signer
 A signer is always linked to a case file and can't exist on its own. On construction of a signer object, a case file object must be passed to the signer constructor.
@@ -14,6 +14,9 @@ mySigner.OnBehalfOf = "Acme Corporation";
 
 // Set the optional social security number
 mySigner.SocialSecurityNumber = "0101501111";
+
+// Set the optional VAT identification number
+mySigner.VATIdentificationNumber = 12345678;
 
 // Finally, persist the new object
 mySigner.Persist();

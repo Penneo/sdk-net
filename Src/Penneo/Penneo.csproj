@@ -45,7 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="%28Model%29\CaseFileType.cs" />
+    <Compile Include="%28Model%29\CaseFileTemplate.cs" />
     <Compile Include="%28Model%29\DocumentType.cs" />
     <Compile Include="%28Model%29\Folder.cs" />
     <Compile Include="%28Model%29\SignerType.cs" />
