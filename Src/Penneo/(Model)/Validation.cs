@@ -31,6 +31,7 @@ namespace Penneo
         public int? Status { get; internal set; }
         public string SuccessUrl { get; set; }
         public string CustomText { get; set; }
+        public int? ReminderInterval { get; set; }
 
         public ValidationStatus GetStatus()
         {
