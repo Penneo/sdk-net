@@ -224,6 +224,17 @@ namespace Penneo.Connector
         }
 
         /// <summary>
+        /// <see cref="IApiConnector.GetStringListAsset"/>
+        /// </summary>
+        public IEnumerable<string> GetStringListAsset(Entity obj, string assetName)
+        {
+            var url = obj.RelativeUrl + "/" + obj.Id + "/" + assetName;
+            var response = CallServer(url);
+            var result = Json.Decode<string[]>(response.Content);
+            return result;
+        }
+
+        /// <summary>
         /// <see cref="IApiConnector.FindBy{T}"/>
         /// </summary>
         public bool FindBy<T>(Dictionary<string, object> query, out IEnumerable<T> objects)

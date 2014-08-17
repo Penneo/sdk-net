@@ -101,9 +101,9 @@ namespace Penneo
             CaseFileTemplate = template;
         }
 
-        public string GetErrors()
+        public IEnumerable<string> GetErrors()
         {
-            return GetTextAssets("errors");
+            return GetStringListAsset("errors");
 	    }
 
         public bool Send()
@@ -125,5 +125,6 @@ namespace Penneo
             Signed = 4,
             Completed = 5
         }
+
     }
 }

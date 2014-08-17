@@ -13,6 +13,7 @@ namespace PenneoTests
         {
             var cf = new CaseFile();
             var doc = new Document(cf, "doc", "path");
+            doc.Id = 1;
             return doc;
         }
 
@@ -23,6 +24,13 @@ namespace PenneoTests
             Assert.IsNotNull(doc.CaseFile);
             Assert.AreEqual("doc", doc.Title);
             Assert.AreEqual("path", doc.PdfFile);
+        }
+
+        [TestMethod]
+        public void GetCaseFileTest()
+        {
+            var doc = new Document();
+            TestUtil.TestGetLinked(() => doc.CaseFile);
         }
 
         [TestMethod]
@@ -97,6 +105,38 @@ namespace PenneoTests
                 File.Delete(savePath);
             }
             A.CallTo(() => connector.GetFileAssets(null, null)).WithAnyArguments().MustHaveHappened();
+        }
+
+        [TestMethod]
+        public void GetDocumentTypeTest()
+        {
+            var doc1 = CreateDocument();
+            TestUtil.TestGetLinked(doc1.GetDocumentType);
+
+            var doc2 = new Document();
+            doc2.DocumentType = new DocumentType();
+            TestUtil.TestGetLinkedNotCalled(doc2.GetDocumentType);
+            Assert.AreEqual(doc2.GetDocumentType(), doc2.DocumentType);
+        }
+
+        [TestMethod]
+        public void SetDocumentTypeTest()
+        {
+            var dt = new DocumentType();
+            var doc = new Document();
+            doc.SetDocumentType(dt);
+            Assert.AreEqual(dt, doc.DocumentType);
+        }
+
+        [TestMethod]
+        public void GetStatusTest()
+        {
+            var doc = CreateDocument();
+            doc.Status = null;
+            Assert.AreEqual(DocumentStatus.New, doc.GetStatus());
+
+            doc.Status = (int?)DocumentStatus.Completed;
+            Assert.AreEqual(DocumentStatus.Completed, doc.GetStatus());
         }
     }
 }

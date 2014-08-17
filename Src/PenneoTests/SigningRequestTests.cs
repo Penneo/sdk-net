@@ -43,5 +43,16 @@ namespace PenneoTests
         {
             TestUtil.TestPerformActionSuccess(() => new SigningRequest().Send());
         }
+
+        [TestMethod]
+        public void GetStatusTest()
+        {
+            var s = new SigningRequest();
+            s.Status = null;
+            Assert.AreEqual(SigningRequestStatus.New, s.GetStatus());
+
+            s.Status = (int?)SigningRequestStatus.Signed;
+            Assert.AreEqual(SigningRequestStatus.Signed, s.GetStatus());
+        }
     }
 }

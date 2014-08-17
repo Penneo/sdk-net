@@ -53,6 +53,11 @@ namespace Penneo.Connector
         string GetTextAssets(Entity obj, string assetName);
 
         /// <summary>
+        /// Get list of string asset for the given obj and asset name
+        /// </summary>
+        IEnumerable<string> GetStringListAsset(Entity obj, string assetName);
+
+        /// <summary>
         /// Find objects on the backend based on query parameters
         /// </summary>
         bool FindBy<T>(Dictionary<string, object> query, out IEnumerable<T> objects)

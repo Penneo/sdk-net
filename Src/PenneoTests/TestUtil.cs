@@ -87,6 +87,14 @@ namespace PenneoTests
             Assert.AreEqual(instance, result);
         }
 
+        public static void TestGetLinkedNotCalled<TChild>(Func<TChild> getter)
+        {
+            var connector = CreateFakeConnector();
+            A.CallTo(() => connector.GetLinkedEntities<TChild>(null, null)).WithAnyArguments().Returns(new List<TChild>());
+            getter();
+            A.CallTo(() => connector.GetLinkedEntities<TChild>(null, null)).WithAnyArguments().MustNotHaveHappened();
+        }
+
         public static void TestFindLinked<TChild>(Func<TChild> getter)
         {
             var connector = CreateFakeConnector();
@@ -108,6 +116,26 @@ namespace PenneoTests
             action();
 
             A.CallTo(() => connector.PerformAction(null, null)).WithAnyArguments().MustHaveHappened();
+        }
+
+        public static void TestLink(Action action, Entity parent, Entity child)
+        {
+            var connector = CreateFakeConnector();
+            A.CallTo(() => connector.LinkEntity(parent, child)).WithAnyArguments().Returns(true);
+
+            action();
+
+            A.CallTo(() => connector.LinkEntity(parent, child)).WithAnyArguments().MustHaveHappened();
+        }
+
+        public static void TestUnlink(Action action, Entity parent, Entity child)
+        {
+            var connector = CreateFakeConnector();
+            A.CallTo(() => connector.UnlinkEntity(parent, child)).WithAnyArguments().Returns(true);
+
+            action();
+
+            A.CallTo(() => connector.UnlinkEntity(parent, child)).WithAnyArguments().MustHaveHappened();
         }
 
         public static void TestGetFileAsset(Action action)

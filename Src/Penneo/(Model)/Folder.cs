@@ -9,6 +9,15 @@ namespace Penneo
     {
         public String Title { get; set; }
 
+        public Folder()
+        {            
+        }
+
+        public Folder(string title)
+        {
+            Title = title;
+        }
+
         public IEnumerable<CaseFile> GetCaseFiles()
 	    {
             var caseFiles = GetLinkedEntities<CaseFile>(@"Penneo\SDK\CaseFile");

@@ -144,6 +144,14 @@ namespace Penneo
         }
 
         /// <summary>
+        /// Get list of string asset with the given name for this entity
+        /// </summary>
+        protected IEnumerable<string> GetStringListAsset(string assetName)
+        {
+            return ApiConnector.Instance.GetStringListAsset(this, assetName);
+        }
+
+        /// <summary>
         /// Perform the given action on this entity
         /// </summary>
         protected bool PerformAction(string action)
