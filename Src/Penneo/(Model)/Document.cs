@@ -41,7 +41,7 @@ namespace Penneo
         public string PdfFile { get; set; }        
         public string Type { get; internal set; }
         public string Options { get; set; }
-
+        public DocumentType DocumentType { get; set; }
 
         private CaseFile _caseFile;
         public CaseFile CaseFile 
@@ -101,6 +101,21 @@ namespace Penneo
             var sl = FindLinkedEntity<SignatureLine>(id);
             sl.Document = this;
             return sl;
+        }
+
+        public DocumentType GetDocumentType()
+        {
+            if (Id.HasValue && DocumentType == null)
+            {
+                var documentTypes = GetLinkedEntities<DocumentType>();
+                DocumentType = documentTypes.FirstOrDefault();
+            }
+            return DocumentType;
+        }
+
+        public void SetDocumentType(DocumentType type)
+        {
+            DocumentType = type;
         }
     }
 

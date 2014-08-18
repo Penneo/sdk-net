@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Penneo
 {
@@ -28,6 +29,7 @@ namespace Penneo
         public string Name { get; set; }
         public string SocialSecurityNumber { get; set; }
         public string OnBehalfOf { get; set; }
+        public string VATIdentificationNumber { get; set; }
         public CaseFile CaseFile { get; internal set; }
 
         internal override Entity Parent
@@ -38,6 +40,21 @@ namespace Penneo
         public SigningRequest GetSigningRequest()
         {
             return GetLinkedEntities<SigningRequest>().FirstOrDefault();
+        }
+
+        public bool AddSignerType(SignerType type)
+        {
+            return LinkEntity(type);
+        }
+
+        public bool RemoveSignerType(SignerType type)
+        {
+            return UnlinkEntity(type);
+        }
+
+        public IEnumerable<SignerType> GetSignerTypes()
+        {
+            return GetLinkedEntities<SignerType>();
         }
     }
 }

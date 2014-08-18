@@ -29,6 +29,7 @@ namespace Penneo
         public DateTime? SendAt { get; set; }
         public DateTime? ExpireAt { get; set; }
         public int? VisibilityMode { get; set; }
+        public CaseFileTemplate CaseFileTemplate { get; set; }
 
         public IEnumerable<Document> GetDocuments()
         {
@@ -66,6 +67,45 @@ namespace Penneo
             return (CaseFileStatus)Status;
         }
 
+        public IEnumerable<CaseFileTemplate> GetCaseFileTemplates()
+        {
+            return GetLinkedEntities<CaseFileTemplate>("casefile/casefiletypes");
+        }
+
+        public IEnumerable<DocumentType> GetDocumentTypes()
+        {
+            return GetLinkedEntities<DocumentType>("casefiles/" + Id + "/documenttypes");
+        }
+
+        public IEnumerable<SignerType> GetSignerTypes()
+        {
+            if (!Id.HasValue)
+            {
+                return new List<SignerType>();
+            }
+            return GetLinkedEntities<SignerType>("casefiles/" + Id + "/signertypes");
+        }
+
+        public CaseFileTemplate GetCaseFileTemplate()
+        {
+            if (Id.HasValue && CaseFileTemplate == null)
+            {
+                var caseFileTypes = GetLinkedEntities<CaseFileTemplate>();
+                CaseFileTemplate = caseFileTypes.FirstOrDefault();
+            }
+            return CaseFileTemplate;
+        }
+
+        public void SetCaseFileTemplate(CaseFileTemplate template)
+        {
+            CaseFileTemplate = template;
+        }
+
+        public IEnumerable<string> GetErrors()
+        {
+            return GetStringListAsset("errors");
+	    }
+
         public bool Send()
         {
             return PerformAction(ACTION_SEND);
@@ -85,5 +125,6 @@ namespace Penneo
             Signed = 4,
             Completed = 5
         }
+
     }
 }

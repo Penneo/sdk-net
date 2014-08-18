@@ -45,6 +45,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="%28Model%29\CaseFileTemplate.cs" />
+    <Compile Include="%28Model%29\DocumentType.cs" />
+    <Compile Include="%28Model%29\Folder.cs" />
+    <Compile Include="%28Model%29\SignerType.cs" />
     <Compile Include="AuthType.cs" />
     <Compile Include="Mapping\Mappings.cs" />
     <Compile Include="%28Model%29\SigningRequest.cs" />
@@ -78,7 +82,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /Y "$(TargetDir)$(TargetName).dll" "$(SolutionDir)\..\Binaries\Unsigned\$(TargetName).dll"</PostBuildEvent>
+    <PostBuildEvent>rem copy /Y "$(TargetDir)$(TargetName).dll" "$(SolutionDir)\..\Binaries\Unsigned\$(TargetName).dll"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

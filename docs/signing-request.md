@@ -57,6 +57,17 @@ mySigningRequeset.FailUrl = "http://go/here/on/failure";
 mySigningRequeset.Persist();
 ```
 
+## Protecting the signing link
+Per default, the signing link has no access control. That means that anyone who gets their hands on it is able to see and download the documents in the case file.
+
+It is possible to protect the signing link, by requiring the user to identify using their EID like so:
+
+```csharp
+// Enable access control for the signing request
+mySigningRequest.AccessControl = true;
+```
+Note that for access control to work, you must either specify a social security number or VAT identification number when creating the signer. The user will then be matched to the identification information specified.
+
 ## State variables
 A series state variables are used to describe the signing state. The methods for retrieving the state variables are described below:
 

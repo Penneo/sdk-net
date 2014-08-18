@@ -37,9 +37,16 @@ namespace PenneoTests
         [TestMethod]
         public void FindByTest()
         {
-            var query = new Dictionary<string, object>();
+            /*var query = new Dictionary<string, object>();
             var orderBy = new Dictionary<string, string>() { {"title", "asc"}};
-            FindCollectionTest(() => Query.FindBy<CaseFile>(query, orderBy, 10, 5));
+            FindCollectionTest(() => Query.FindBy<CaseFile>(query, orderBy, 10, 5));*/
+
+            FindCollectionTest(() =>  Query.FindBy<Document>(
+                new Dictionary<string, object> { { "title", "the" } },
+                new Dictionary<string, string>() { { "created", "desc" } },
+                10,5
+            ));
+
         }
 
         private static void FindCollectionTest<T>(Func<IEnumerable<T>> f)

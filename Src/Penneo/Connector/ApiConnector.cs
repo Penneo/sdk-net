@@ -95,7 +95,8 @@ namespace Penneo.Connector
             {
                 var response = CallServer(obj.RelativeUrl + "/" + obj.Id, data, Method.PUT);
                 if (response == null || !_successStatusCodes.Contains(response.StatusCode))
-                {
+                {                    
+                    Log.Write("Write Failed for " + obj.GetType().Name + ": " + (response == null ? "Empty response" : response.Content), LogSeverity.Error);
                     return false;
                 }
             }
@@ -104,6 +105,7 @@ namespace Penneo.Connector
                 var response = CallServer(obj.RelativeUrl, data, Method.POST);
                 if (response == null || !_successStatusCodes.Contains(response.StatusCode))
                 {
+                    Log.Write("Write Failed for " + obj.GetType().Name + ": " + (response == null ? "Empty response" : response.Content), LogSeverity.Error);
                     return false;
                 }
 
@@ -152,12 +154,38 @@ namespace Penneo.Connector
         }
 
         /// <summary>
+        /// <see cref="IApiConnector.UnlinkEntity"/>
+        /// </summary>
+        public bool UnlinkEntity(Entity parent, Entity child)
+        {
+            var url = parent.RelativeUrl + "/" + parent.Id + "/" + _restResources.GetResource(child.GetType()) + "/" + child.Id;
+
+            var response = CallServer(url, customMethod: "UNLINK");
+
+            if (response == null || !_successStatusCodes.Contains(response.StatusCode))
+            {
+                return false;
+            }
+
+            return true;
+        }      
+
+        /// <summary>
         /// <see cref="IApiConnector.GetLinkedEntities{T}"/>
         /// </summary>
-        public IEnumerable<T> GetLinkedEntities<T>(Entity obj)
+        public IEnumerable<T> GetLinkedEntities<T>(Entity obj, string url = null)
         {
-            var url = obj.RelativeUrl + "/" + obj.Id + "/" + _restResources.GetResource<T>();
-            var response = CallServer(url);
+            string actualUrl;
+            if (string.IsNullOrEmpty(url))
+            {
+                actualUrl = obj.RelativeUrl + "/" + obj.Id + "/" + _restResources.GetResource<T>();
+            }
+            else
+            {
+                actualUrl = url;
+            }
+
+            var response = CallServer(actualUrl);
             return CreateObjects<T>(response.Content);
         }
 
@@ -193,6 +221,17 @@ namespace Penneo.Connector
             var response = CallServer(url);
             var text = Json.Decode(response.Content)[0];
             return text;
+        }
+
+        /// <summary>
+        /// <see cref="IApiConnector.GetStringListAsset"/>
+        /// </summary>
+        public IEnumerable<string> GetStringListAsset(Entity obj, string assetName)
+        {
+            var url = obj.RelativeUrl + "/" + obj.Id + "/" + assetName;
+            var response = CallServer(url);
+            var result = Json.Decode<string[]>(response.Content);
+            return result;
         }
 
         /// <summary>
