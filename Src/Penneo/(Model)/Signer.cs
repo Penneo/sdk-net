@@ -56,5 +56,11 @@ namespace Penneo
         {
             return GetLinkedEntities<SignerType>();
         }
+
+        public IEnumerable<LogEntry> GetEventLog()
+        {
+            return GetLinkedEntities<LogEntry>();
+        }
+
     }
 }
