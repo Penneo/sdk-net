@@ -74,6 +74,7 @@ namespace Penneo
             r.Add<SignerType>("signertypes");
             r.Add<DocumentType>("documenttype");
             r.Add<CaseFileTemplate>("casefiletype");
+            r.Add<LogEntry>("log");
 
             ServiceLocator.Instance.RegisterInstance<RestResources>(r);
         }
