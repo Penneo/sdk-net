@@ -84,10 +84,10 @@ mySigner.Persist();
 
 // Create a new signature line on the document
 var mySignatureLine = new SignatureLine(myDocument, "MySignerRole");
+mySignatureLine.Persist();
 
 // Map the signer to the signing request
 mySignatureLine.SetSigner(mySigner);
-mySignatureLine.Persist();
 
 // Update the signing request for the new signer
 var mySigningRequest = mySigner.GetSigningRequest();
