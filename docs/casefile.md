@@ -64,6 +64,7 @@ A case file can be completely deleted from Penneos document store as long as it 
 ```csharp
 // Delete case file
 myCaseFile.Delete();
+```
 
 ## Retrieving linked objects
 A case file contains both signer and document objects. These objects can be retrieved using the following methods:
