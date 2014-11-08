@@ -11,6 +11,8 @@ namespace Penneo
         private const string TYPE_SIGNABLE = "signable";
         private const string ASSET_PDF = "pdf";
 
+        private IEnumerable<SignatureLine> _signatureLines;
+
         public Document()
         {
             MetaData = null;
@@ -88,16 +90,23 @@ namespace Penneo
 
         public IEnumerable<SignatureLine> GetSignatureLines()
         {
-            var signatureLines = GetLinkedEntities<SignatureLine>();
-            foreach(var sl in signatureLines)
+            if (_signatureLines == null)
             {
-                sl.Document = this; 
+                _signatureLines = GetLinkedEntities<SignatureLine>().ToList();
+                foreach (var sl in _signatureLines)
+                {
+                    sl.Document = this;
+                }
             }
-            return signatureLines;
+            return _signatureLines;
         }
 
         public SignatureLine FindSignatureLine(int id)
         {
+            if (_signatureLines != null)
+            {
+                return _signatureLines.FirstOrDefault(x => x.Id == id);
+            }
             var sl = FindLinkedEntity<SignatureLine>(id);
             sl.Document = this;
             return sl;

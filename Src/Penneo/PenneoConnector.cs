@@ -41,11 +41,35 @@ namespace Penneo
         }
 
         /// <summary>
+        /// Use proxy settings from Internet Explorer
+        /// </summary>
+        public static void SetUseProxySettingsFromInternetExplorer(bool use)
+        {
+            ApiConnector.SetUseProxySettingsFromInternetExplorer(use);
+        }
+
+        /// <summary>
         /// Set a logger to get log information from the Penneo connection.
         /// </summary>
         public static void SetLogger(ILogger logger)
         {
             Log.SetLogger(logger);
+        }
+
+        /// <summary>
+        /// Checks if the last Http response was an error
+        /// </summary>
+        public static bool WasLastResponseError
+        {
+            get { return ApiConnector.Instance.WasLastResponseError; }
+        }
+
+        /// <summary>
+        /// Gets the content of the last response
+        /// </summary>
+        public static string LastResponseContent
+        {
+            get { return ApiConnector.Instance.LastResponseContent; }
         }
 
         /// <summary>

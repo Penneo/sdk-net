@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Penneo.Connector
 {
@@ -67,5 +68,16 @@ namespace Penneo.Connector
         /// Performs the named action on the backend for the given object
         /// </summary>
         bool PerformAction(Entity obj, string actionName);
+
+        /// <summary>
+        /// Did the last response received contain an error
+        /// </summary>
+        bool WasLastResponseError { get; }
+
+        /// <summary>
+        /// Get the content of the last response
+        /// </summary>
+        string LastResponseContent { get; }
+
     }
 }

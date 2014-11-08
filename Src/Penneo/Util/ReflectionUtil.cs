@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Web.Helpers;
@@ -32,9 +34,36 @@ namespace Penneo.Util
                 var propInfo = obj.GetType().GetProperty(propertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.IgnoreCase | BindingFlags.Instance);
                 if (propInfo != null && propInfo.CanWrite)
                 {
-                    propInfo.SetValue(obj, ConvertToType(propInfo.PropertyType, value), null);
+                    if (value is ArrayList)
+                    {
+                        value = ConvertArrayList(value as ArrayList);
+                    }
+                    propInfo.SetValue(obj, ConvertToType(propInfo.PropertyType, value), null);                    
                 }
             }
+        }
+
+        private static object ConvertArrayList(ArrayList input)
+        {
+            if (input == null || input.Count == 0)
+            {
+                return null;
+            }
+
+            var sdkTypeName = ((Dictionary<string, object>)input[0])["sdkClassName"];
+            var sdkType = Type.GetType("Penneo." + sdkTypeName);
+            var listType = typeof (List<>).MakeGenericType(sdkType);
+            var list = Activator.CreateInstance(listType);
+            var addMethod = listType.GetMethod("Add");
+
+            foreach (var item in input)
+            {
+                var propertyDict = (Dictionary<string, object>)item;
+                var obj = Activator.CreateInstance(sdkType);
+                SetPropertiesFromDictionary(obj, propertyDict);
+                addMethod.Invoke(list, new []{ obj });
+            }
+            return list;            
         }
 
         /// <summary>

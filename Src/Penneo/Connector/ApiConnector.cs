@@ -26,6 +26,11 @@ namespace Penneo.Connector
         private static IApiConnector _instance;
 
         /// <summary>
+        /// Use proxy settings from Internet Explorer
+        /// </summary>
+        private static bool _useAutomaticProxy;
+
+        /// <summary>
         /// Success status codes
         /// </summary>
         private readonly List<HttpStatusCode> _successStatusCodes = new List<HttpStatusCode> {HttpStatusCode.OK, HttpStatusCode.Created, HttpStatusCode.NoContent};
@@ -45,6 +50,16 @@ namespace Penneo.Connector
         /// </summary>
         private Dictionary<string, string> _headers;
 
+        /// <summary>
+        /// The last Http response
+        /// </summary>
+        private IRestResponse _lastResponse;
+
+        /// <summary>
+        /// Denotes if the last response received was an error
+        /// </summary>
+        private bool _wasLastResponseError;
+        
         protected ApiConnector()
         {
             Init();
@@ -284,7 +299,7 @@ namespace Penneo.Connector
             {
                 _endpoint = PenneoConnector.Endpoint;
             }
-            _client = new RestClient(_endpoint);
+            _client = new RestClient(_endpoint);            
 
             _restResources = ServiceLocator.Instance.GetInstance<RestResources>();
 
@@ -299,11 +314,7 @@ namespace Penneo.Connector
             if (PenneoConnector.AuthenticationType == AuthType.WSSE)
             {
                 _client.Authenticator = new WSSEAuthenticator(PenneoConnector.Key, PenneoConnector.Secret);
-            }
-            else if (PenneoConnector.AuthenticationType == AuthType.Basic)
-            {
-                _client.Authenticator = new HttpBasicAuthenticator(PenneoConnector.Key, PenneoConnector.Secret);
-            }
+            }            
             else
             {
                 throw new NotSupportedException("Unknown authentication type " + PenneoConnector.AuthenticationType);
@@ -322,6 +333,14 @@ namespace Penneo.Connector
             ResetInstance();
         }
 
+        /// <summary>
+        /// Sets whether to use automatic proxy settings from Internet Explorer
+        /// </summary>
+        public static void SetUseProxySettingsFromInternetExplorer(bool use)
+        {
+            _useAutomaticProxy = use;
+        }
+
         public static void ResetInstance()
         {
             _instance = null;
@@ -332,7 +351,7 @@ namespace Penneo.Connector
         /// </summary>
         private RestRequest PrepareRequest(string url, Dictionary<string, object> data = null, Method method = Method.GET, Dictionary<string, Dictionary<string, object>> options = null)
         {
-            var request = new RestRequest(url, method);
+            var request = new RestRequest(url, method);            
             foreach (var h in _headers)
             {
                 request.AddHeader(h.Key, h.Value);
@@ -371,10 +390,35 @@ namespace Penneo.Connector
         }
 
         /// <summary>
+        /// Set the proxy information on the rest client
+        /// </summary>
+        private void SetProxy()
+        {
+            if (_useAutomaticProxy)
+            {
+                var proxyWrapper = WebRequest.DefaultWebProxy;
+                if (proxyWrapper != null)
+                {
+                    var proxy = proxyWrapper.GetProxy(new Uri(_endpoint));
+                    if (proxy != null && !_endpoint.Equals(proxy.ToString(), StringComparison.OrdinalIgnoreCase))
+                    {
+                        Log.Write("Proxy URL: " + proxy, LogSeverity.Information);
+                        _client.Proxy = new WebProxy(proxy);
+                    }
+                }
+            }
+            else
+            {
+                _client.Proxy = null;
+            }
+        }
+
+        /// <summary>
         /// Calls the Penneo server with a rest request
         /// </summary>
         public IRestResponse CallServer(string url, Dictionary<string, object> data = null, Method method = Method.GET, Dictionary<string, Dictionary<string, object>> options = null, string customMethod = null)
         {
+            SetProxy();
             try
             {
                 var request = PrepareRequest(url, data, method, options);
@@ -384,20 +428,39 @@ namespace Penneo.Connector
                 if (string.IsNullOrEmpty(customMethod))
                 {
                     actualMethod = method.ToString();
-                    response = _client.Execute(request);
+                    response = _client.Execute(request);                    
                 }
                 else
                 {
                     actualMethod = customMethod;
-                    response = _client.ExecuteAsGet(request, customMethod);
-                }
+                    response = _client.ExecuteAsGet(request, customMethod);                    
+                }                
                 Log.Write("Request " + actualMethod + " " + url + " /  Response '" + response.StatusCode + "'", LogSeverity.Trace);
+                
+                _lastResponse = response;
+                _wasLastResponseError = !_successStatusCodes.Contains(_lastResponse.StatusCode);
                 return response;
             }
             catch (Exception ex)
             {
                 Log.Write(ex.ToString(), LogSeverity.Fatal);
                 return null;
+            }
+        }
+
+        /// <summary>
+        /// Was the last response an error
+        /// </summary>
+        public bool WasLastResponseError { get { return _wasLastResponseError;  } }
+
+        /// <summary>
+        /// Get the content of the last response
+        /// </summary>
+        public string LastResponseContent
+        {
+            get
+            {
+                return _lastResponse != null ? _lastResponse.Content : null;
             }
         }
 

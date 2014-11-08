@@ -8,7 +8,10 @@ namespace Penneo
     {
         private const string ACTION_SEND = "send";
         private const string ACTION_ACTIVATE = "activate";
-        
+
+        private IEnumerable<Document> _documents;
+        private IEnumerable<Signer> _signers;
+
         public CaseFile()
         {
             MetaData = null;
@@ -33,26 +36,38 @@ namespace Penneo
 
         public IEnumerable<Document> GetDocuments()
         {
-            var documents = GetLinkedEntities<Document>().ToList();
-            foreach (var doc in documents)
+            if (_documents == null)
             {
-                doc.CaseFile = this;
+                _documents = GetLinkedEntities<Document>().ToList();
+                foreach (var doc in _documents)
+                {
+                    doc.CaseFile = this;
+                }
             }
-            return documents;
+            return _documents;
         }
+    
 
         public IEnumerable<Signer> GetSigners()
         {
-            var signers = GetLinkedEntities<Signer>().ToList();
-            foreach (var s in signers)
+            if (_signers == null)
             {
-                s.CaseFile = this;
+                _signers = GetLinkedEntities<Signer>().ToList();
+                foreach (var s in _signers)
+                {
+                    s.CaseFile = this;
+                }
             }
-            return signers;
+            return _signers;
         }
 
         public Signer FindSigner(int id)
         {
+            if (_signers != null)
+            {
+                return _signers.FirstOrDefault(x => x.Id == id);
+            }
+
             var linked = FindLinkedEntity<Signer>(id);
             linked.CaseFile = this;
             return linked;
