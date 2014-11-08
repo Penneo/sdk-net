@@ -21,7 +21,7 @@
             {
                 return SigningRequestStatus.New;
             }
-            return (SigningRequestStatus)Status;
+            return (SigningRequestStatus) Status;
         }
 
         public string GetLink()

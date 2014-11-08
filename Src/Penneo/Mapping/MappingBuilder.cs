@@ -9,9 +9,9 @@ namespace Penneo.Mapping
     internal class MappingBuilder<T>
         where T : Entity
     {
+        private readonly Mappings _container;
         private readonly Mapping<T> _mapping;
         private MethodProperties<T> _currentMethodProperties;
-        private readonly Mappings _container;
 
         public MappingBuilder(Mappings container = null)
         {

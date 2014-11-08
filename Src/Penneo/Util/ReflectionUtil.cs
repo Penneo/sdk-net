@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using Newtonsoft.Json;
@@ -37,13 +35,13 @@ namespace Penneo.Util
                 {
                     if (value is JArray)
                     {
-                        value = ConvertArrayList((JArray)value);
+                        value = ConvertArrayList((JArray) value);
                     }
                     if (value is long || value is long?)
                     {
                         value = Convert.ToInt32(value);
                     }
-                    propInfo.SetValue(obj, ConvertToType(propInfo.PropertyType, value), null);                    
+                    propInfo.SetValue(obj, ConvertToType(propInfo.PropertyType, value), null);
                 }
             }
         }
@@ -63,10 +61,10 @@ namespace Penneo.Util
             var addMethod = listType.GetMethod("Add");
 
             foreach (var propertyDict in inputList)
-            {                
+            {
                 var obj = Activator.CreateInstance(sdkType);
                 SetPropertiesFromDictionary(obj, propertyDict);
-                addMethod.Invoke(list, new []{ obj });
+                addMethod.Invoke(list, new[] {obj});
             }
             return list;
         }
@@ -80,7 +78,7 @@ namespace Penneo.Util
             {
                 return Convert.ToBoolean(value);
             }
-            if (type == typeof (DateTime) || type == typeof(DateTime?))
+            if (type == typeof (DateTime) || type == typeof (DateTime?))
             {
                 return TimeUtil.FromUnixTime(Convert.ToInt64(value));
             }

@@ -41,11 +41,6 @@ namespace Penneo.Connector
         private RestClient _client;
 
         /// <summary>
-        /// Rest resources
-        /// </summary>
-        private RestResources _restResources;
-
-        /// <summary>
         /// Http headers
         /// </summary>
         private Dictionary<string, string> _headers;
@@ -56,10 +51,15 @@ namespace Penneo.Connector
         private IRestResponse _lastResponse;
 
         /// <summary>
+        /// Rest resources
+        /// </summary>
+        private RestResources _restResources;
+
+        /// <summary>
         /// Denotes if the last response received was an error
         /// </summary>
         private bool _wasLastResponseError;
-        
+
         protected ApiConnector()
         {
             Init();
@@ -110,7 +110,7 @@ namespace Penneo.Connector
             {
                 var response = CallServer(obj.RelativeUrl + "/" + obj.Id, data, Method.PUT);
                 if (response == null || !_successStatusCodes.Contains(response.StatusCode))
-                {                    
+                {
                     Log.Write("Write Failed for " + obj.GetType().Name + ": " + (response == null ? "Empty response" : response.Content), LogSeverity.Error);
                     return false;
                 }
@@ -183,7 +183,7 @@ namespace Penneo.Connector
             }
 
             return true;
-        }      
+        }
 
         /// <summary>
         /// <see cref="IApiConnector.GetLinkedEntities{T}"/>
@@ -244,7 +244,7 @@ namespace Penneo.Connector
         public IEnumerable<string> GetStringListAsset(Entity obj, string assetName)
         {
             var url = obj.RelativeUrl + "/" + obj.Id + "/" + assetName;
-            var response = CallServer(url);            
+            var response = CallServer(url);
             var result = JsonConvert.DeserializeObject<string[]>(response.Content);
             return result;
         }
@@ -288,6 +288,22 @@ namespace Penneo.Connector
             return true;
         }
 
+        /// <summary>
+        /// Was the last response an error
+        /// </summary>
+        public bool WasLastResponseError
+        {
+            get { return _wasLastResponseError; }
+        }
+
+        /// <summary>
+        /// Get the content of the last response
+        /// </summary>
+        public string LastResponseContent
+        {
+            get { return _lastResponse != null ? _lastResponse.Content : null; }
+        }
+
         #endregion
 
         /// <summary>
@@ -299,7 +315,7 @@ namespace Penneo.Connector
             {
                 _endpoint = PenneoConnector.Endpoint;
             }
-            _client = new RestClient(_endpoint);            
+            _client = new RestClient(_endpoint);
 
             _restResources = ServiceLocator.Instance.GetInstance<RestResources>();
 
@@ -314,7 +330,7 @@ namespace Penneo.Connector
             if (PenneoConnector.AuthenticationType == AuthType.WSSE)
             {
                 _client.Authenticator = new WSSEAuthenticator(PenneoConnector.Key, PenneoConnector.Secret);
-            }            
+            }
             else
             {
                 throw new NotSupportedException("Unknown authentication type " + PenneoConnector.AuthenticationType);
@@ -351,7 +367,7 @@ namespace Penneo.Connector
         /// </summary>
         private RestRequest PrepareRequest(string url, Dictionary<string, object> data = null, Method method = Method.GET, Dictionary<string, Dictionary<string, object>> options = null)
         {
-            var request = new RestRequest(url, method);            
+            var request = new RestRequest(url, method);
             foreach (var h in _headers)
             {
                 request.AddHeader(h.Key, h.Value);
@@ -428,15 +444,15 @@ namespace Penneo.Connector
                 if (string.IsNullOrEmpty(customMethod))
                 {
                     actualMethod = method.ToString();
-                    response = _client.Execute(request);                    
+                    response = _client.Execute(request);
                 }
                 else
                 {
                     actualMethod = customMethod;
-                    response = _client.ExecuteAsGet(request, customMethod);                    
-                }                
+                    response = _client.ExecuteAsGet(request, customMethod);
+                }
                 Log.Write("Request " + actualMethod + " " + url + " /  Response '" + response.StatusCode + "'", LogSeverity.Trace);
-                
+
                 _lastResponse = response;
                 _wasLastResponseError = !_successStatusCodes.Contains(_lastResponse.StatusCode);
                 return response;
@@ -449,28 +465,12 @@ namespace Penneo.Connector
         }
 
         /// <summary>
-        /// Was the last response an error
-        /// </summary>
-        public bool WasLastResponseError { get { return _wasLastResponseError;  } }
-
-        /// <summary>
-        /// Get the content of the last response
-        /// </summary>
-        public string LastResponseContent
-        {
-            get
-            {
-                return _lastResponse != null ? _lastResponse.Content : null;
-            }
-        }
-
-        /// <summary>
         /// Create objects from a json string
         /// </summary>
         private static IEnumerable<T> CreateObjects<T>(string json)
-        {            
+        {
             var direct = JsonConvert.DeserializeObject<List<T>>(json);
-            return direct;          
+            return direct;
         }
 
         /// <summary>
@@ -479,7 +479,7 @@ namespace Penneo.Connector
         private static T CreateObject<T>(string json)
         {
             var direct = JsonConvert.DeserializeObject<T>(json);
-            return direct;            
+            return direct;
         }
     }
 }

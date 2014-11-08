@@ -10,6 +10,7 @@ namespace Penneo
         private const string TYPE_ATTACHMENT = "attachment";
         private const string TYPE_SIGNABLE = "signable";
         private const string ASSET_PDF = "pdf";
+        private CaseFile _caseFile;
 
         private IEnumerable<SignatureLine> _signatureLines;
 
@@ -40,23 +41,22 @@ namespace Penneo
         public DateTime Modified { get; internal set; }
         public DateTime Completed { get; internal set; }
         public int? Status { get; internal set; }
-        public string PdfFile { get; set; }        
+        public string PdfFile { get; set; }
         public string Type { get; internal set; }
         public string Options { get; set; }
         public DocumentType DocumentType { get; set; }
 
-        private CaseFile _caseFile;
-        public CaseFile CaseFile 
+        public CaseFile CaseFile
         {
-            get 
+            get
             {
                 if (_caseFile == null)
                 {
                     _caseFile = GetLinkedEntities<CaseFile>().FirstOrDefault();
-                }                
-                return _caseFile;                               
+                }
+                return _caseFile;
             }
-            internal set { _caseFile = value; } 
+            internal set { _caseFile = value; }
         }
 
         public void MakeSignable()
@@ -70,7 +70,7 @@ namespace Penneo
             {
                 return DocumentStatus.New;
             }
-            return (DocumentStatus)Status;
+            return (DocumentStatus) Status;
         }
 
         public byte[] GetPdf()

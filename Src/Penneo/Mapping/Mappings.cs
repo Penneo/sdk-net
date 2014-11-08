@@ -14,7 +14,7 @@ namespace Penneo.Mapping
         {
             _mappings = new Dictionary<Type, IMapping>();
         }
-        
+
         /// <summary>
         /// Adds a mapping to the container
         /// </summary>

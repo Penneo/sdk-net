@@ -18,7 +18,23 @@ namespace Penneo
         internal static string Endpoint;
         internal static string User;
         internal static Dictionary<string, string> Headers;
-   
+
+        /// <summary>
+        /// Checks if the last Http response was an error
+        /// </summary>
+        public static bool WasLastResponseError
+        {
+            get { return ApiConnector.Instance.WasLastResponseError; }
+        }
+
+        /// <summary>
+        /// Gets the content of the last response
+        /// </summary>
+        public static string LastResponseContent
+        {
+            get { return ApiConnector.Instance.LastResponseContent; }
+        }
+
         /// <summary>
         /// Initialize the connection to Penneo.
         /// </summary>        
@@ -54,22 +70,6 @@ namespace Penneo
         public static void SetLogger(ILogger logger)
         {
             Log.SetLogger(logger);
-        }
-
-        /// <summary>
-        /// Checks if the last Http response was an error
-        /// </summary>
-        public static bool WasLastResponseError
-        {
-            get { return ApiConnector.Instance.WasLastResponseError; }
-        }
-
-        /// <summary>
-        /// Gets the content of the last response
-        /// </summary>
-        public static string LastResponseContent
-        {
-            get { return ApiConnector.Instance.LastResponseContent; }
         }
 
         /// <summary>
@@ -115,8 +115,8 @@ namespace Penneo
                 .ForCreate()
                 .Map(x => x.Title)
                 .Map(x => x.MetaData)
-                .Map(x => x.SendAt, convert: x => TimeUtil.ToUnixTime((DateTime)x))
-                .Map(x => x.ExpireAt, convert: x => TimeUtil.ToUnixTime((DateTime)x))
+                .Map(x => x.SendAt, convert: x => TimeUtil.ToUnixTime((DateTime) x))
+                .Map(x => x.ExpireAt, convert: x => TimeUtil.ToUnixTime((DateTime) x))
                 .Map(x => x.VisibilityMode)
                 .Map(x => x.CaseFileTemplate.Id, "caseFileTypeId")
                 .ForUpdate()
@@ -202,8 +202,6 @@ namespace Penneo
                 .ForUpdate()
                 .Map(x => x.Title)
                 .Create();
-
-            
         }
     }
 }

@@ -22,7 +22,7 @@ namespace Penneo.Util
         public static long ToUnixTime(DateTime dt)
         {
             var timeSpan = (dt - new DateTime(1970, 1, 1, 0, 0, 0));
-            return (long)timeSpan.TotalSeconds;
+            return (long) timeSpan.TotalSeconds;
         }
     }
 }

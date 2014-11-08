@@ -66,6 +66,5 @@ namespace Penneo
         {
             return GetLinkedEntities<LogEntry>();
         }
-
     }
 }

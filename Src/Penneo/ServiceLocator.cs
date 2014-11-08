@@ -6,7 +6,7 @@ namespace Penneo
     {
         private static ServiceLocator _instance;
 
-        private Dictionary<string, object> _objects;
+        private readonly Dictionary<string, object> _objects;
 
         protected ServiceLocator()
         {
@@ -32,7 +32,7 @@ namespace Penneo
 
         public void RegisterInstance<T>(object o)
         {
-            _objects[typeof(T).Name] = o;
+            _objects[typeof (T).Name] = o;
         }
 
         public T GetInstance<T>(string name)
