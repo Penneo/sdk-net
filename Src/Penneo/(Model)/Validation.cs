@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace Penneo
 {
@@ -29,6 +31,9 @@ namespace Penneo
         public string EmailSubject { get; set; }
         public string EmailText { get; set; }
         public int? Status { get; internal set; }
+        public string SuccessUrl { get; set; }
+        public string CustomText { get; set; }
+        public int? ReminderInterval { get; set; }
 
         public ValidationStatus GetStatus()
         {
@@ -63,6 +68,11 @@ namespace Penneo
         {
             return PerformAction(ACTION_SEND);
         }
+
+        public IEnumerable<LogEntry> GetEventLog()
+        {
+            return GetLinkedEntities<LogEntry>();
+        }       
     }
 
     public enum ValidationStatus

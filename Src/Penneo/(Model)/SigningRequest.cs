@@ -13,6 +13,7 @@
         public string FailUrl { get; set; }
         public int? Status { get; internal set; }
         public int? ReminderInterval { get; set; }
+        public bool AccessControl { get; set; }
 
         public SigningRequestStatus GetStatus()
         {

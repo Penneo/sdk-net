@@ -41,11 +41,35 @@ namespace Penneo
         }
 
         /// <summary>
+        /// Use proxy settings from Internet Explorer
+        /// </summary>
+        public static void SetUseProxySettingsFromInternetExplorer(bool use)
+        {
+            ApiConnector.SetUseProxySettingsFromInternetExplorer(use);
+        }
+
+        /// <summary>
         /// Set a logger to get log information from the Penneo connection.
         /// </summary>
         public static void SetLogger(ILogger logger)
         {
             Log.SetLogger(logger);
+        }
+
+        /// <summary>
+        /// Checks if the last Http response was an error
+        /// </summary>
+        public static bool WasLastResponseError
+        {
+            get { return ApiConnector.Instance.WasLastResponseError; }
+        }
+
+        /// <summary>
+        /// Gets the content of the last response
+        /// </summary>
+        public static string LastResponseContent
+        {
+            get { return ApiConnector.Instance.LastResponseContent; }
         }
 
         /// <summary>
@@ -70,6 +94,11 @@ namespace Penneo
             r.Add<Signer>("signers");
             r.Add<SigningRequest>("signingrequests");
             r.Add<Validation>("validations");
+            r.Add<Folder>("folders");
+            r.Add<SignerType>("signertypes");
+            r.Add<DocumentType>("documenttype");
+            r.Add<CaseFileTemplate>("casefiletype");
+            r.Add<LogEntry>("log");
 
             ServiceLocator.Instance.RegisterInstance<RestResources>(r);
         }
@@ -89,9 +118,11 @@ namespace Penneo
                 .Map(x => x.SendAt, convert: x => TimeUtil.ToUnixTime((DateTime)x))
                 .Map(x => x.ExpireAt, convert: x => TimeUtil.ToUnixTime((DateTime)x))
                 .Map(x => x.VisibilityMode)
+                .Map(x => x.CaseFileTemplate.Id, "caseFileTypeId")
                 .ForUpdate()
                 .Map(x => x.Title)
                 .Map(x => x.MetaData)
+                .Map(x => x.CaseFileTemplate.Id, "caseFileTypeId")
                 .Create();
 
             new MappingBuilder<Document>(mappings)
@@ -102,6 +133,7 @@ namespace Penneo
                 .Map(x => x.Type)
                 .Map(x => x.Options)
                 .MapFile(x => x.PdfFile)
+                .Map(x => x.DocumentType.Id, "documentTypeId")
                 .ForUpdate()
                 .Map(x => x.Title)
                 .Map(x => x.MetaData)
@@ -123,10 +155,12 @@ namespace Penneo
                 .ForCreate()
                 .Map(x => x.Name)
                 .Map(x => x.SocialSecurityNumber, "SocialSecurityNumberPlain")
+                .Map(x => x.VATIdentificationNumber)
                 .Map(x => x.OnBehalfOf)
                 .ForUpdate()
                 .Map(x => x.Name)
                 .Map(x => x.SocialSecurityNumber, "SocialSecurityNumberPlain")
+                .Map(x => x.VATIdentificationNumber)
                 .Map(x => x.OnBehalfOf)
                 .Create();
 
@@ -137,6 +171,8 @@ namespace Penneo
                 .Map(x => x.EmailSubject)
                 .Map(x => x.SuccessUrl)
                 .Map(x => x.FailUrl)
+                .Map(x => x.ReminderInterval)
+                .Map(x => x.AccessControl)
                 .Create();
 
             new MappingBuilder<Validation>(mappings)
@@ -146,13 +182,28 @@ namespace Penneo
                 .Map(x => x.Email)
                 .Map(x => x.EmailSubject)
                 .Map(x => x.EmailText)
+                .Map(x => x.SuccessUrl)
+                .Map(x => x.CustomText)
+                .Map(x => x.ReminderInterval)
                 .ForUpdate()
                 .Map(x => x.Name)
                 .Map(x => x.Title)
                 .Map(x => x.Email)
                 .Map(x => x.EmailSubject)
                 .Map(x => x.EmailText)
+                .Map(x => x.SuccessUrl)
+                .Map(x => x.CustomText)
+                .Map(x => x.ReminderInterval)
                 .Create();
+
+            new MappingBuilder<Folder>(mappings)
+                .ForCreate()
+                .Map(x => x.Title)
+                .ForUpdate()
+                .Map(x => x.Title)
+                .Create();
+
+            
         }
     }
 }

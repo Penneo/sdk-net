@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Penneo.Connector
 {
@@ -28,9 +29,14 @@ namespace Penneo.Connector
         bool LinkEntity(Entity parent, Entity child);
 
         /// <summary>
+        /// Unlink two objects on the backend.
+        /// </summary>
+        bool UnlinkEntity(Entity parent, Entity child);
+
+        /// <summary>
         /// Gets all entities linked with obj from the backend.
         /// </summary>
-        IEnumerable<T> GetLinkedEntities<T>(Entity obj);
+        IEnumerable<T> GetLinkedEntities<T>(Entity obj, string url = null);
 
         /// <summary>
         /// Find a specific linked entity
@@ -48,6 +54,11 @@ namespace Penneo.Connector
         string GetTextAssets(Entity obj, string assetName);
 
         /// <summary>
+        /// Get list of string asset for the given obj and asset name
+        /// </summary>
+        IEnumerable<string> GetStringListAsset(Entity obj, string assetName);
+
+        /// <summary>
         /// Find objects on the backend based on query parameters
         /// </summary>
         bool FindBy<T>(Dictionary<string, object> query, out IEnumerable<T> objects)
@@ -57,5 +68,16 @@ namespace Penneo.Connector
         /// Performs the named action on the backend for the given object
         /// </summary>
         bool PerformAction(Entity obj, string actionName);
+
+        /// <summary>
+        /// Did the last response received contain an error
+        /// </summary>
+        bool WasLastResponseError { get; }
+
+        /// <summary>
+        /// Get the content of the last response
+        /// </summary>
+        string LastResponseContent { get; }
+
     }
 }

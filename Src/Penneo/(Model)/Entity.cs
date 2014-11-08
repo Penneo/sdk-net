@@ -97,11 +97,26 @@ namespace Penneo
         }
 
         /// <summary>
+        /// Unlink this entity with the given child in the storage
+        /// </summary>
+        protected bool UnlinkEntity(Entity child)
+        {
+            Log.Write("Unlinking " +
+                      GetType().Name + " (" + (Id.HasValue ? Id.ToString() : "new") + ") TO " +
+                      child.GetType().Name + " (" + (child.Id.HasValue ? Id.ToString() : "new") + ")", LogSeverity.Information);
+            if (!ApiConnector.Instance.UnlinkEntity(this, child))
+            {
+                throw new Exception("Penneo: Could not unlink the " + GetType().Name + " and the " + child.GetType().Name);
+            }
+            return true;
+        }
+
+        /// <summary>
         /// Get all entities linked with this entity in the storage
         /// </summary>
-        protected IEnumerable<T> GetLinkedEntities<T>()
+        protected IEnumerable<T> GetLinkedEntities<T>(string url = null)
         {
-            return ApiConnector.Instance.GetLinkedEntities<T>(this);
+            return ApiConnector.Instance.GetLinkedEntities<T>(this, url);
         }
 
         /// <summary>
@@ -126,6 +141,14 @@ namespace Penneo
         protected string GetTextAssets(string assetName)
         {
             return ApiConnector.Instance.GetTextAssets(this, assetName);
+        }
+
+        /// <summary>
+        /// Get list of string asset with the given name for this entity
+        /// </summary>
+        protected IEnumerable<string> GetStringListAsset(string assetName)
+        {
+            return ApiConnector.Instance.GetStringListAsset(this, assetName);
         }
 
         /// <summary>

@@ -8,7 +8,10 @@ namespace Penneo
     {
         private const string ACTION_SEND = "send";
         private const string ACTION_ACTIVATE = "activate";
-        
+
+        private IEnumerable<Document> _documents;
+        private IEnumerable<Signer> _signers;
+
         public CaseFile()
         {
             MetaData = null;
@@ -29,29 +32,42 @@ namespace Penneo
         public DateTime? SendAt { get; set; }
         public DateTime? ExpireAt { get; set; }
         public int? VisibilityMode { get; set; }
+        public CaseFileTemplate CaseFileTemplate { get; set; }
 
         public IEnumerable<Document> GetDocuments()
         {
-            var documents = GetLinkedEntities<Document>().ToList();
-            foreach (var doc in documents)
+            if (_documents == null)
             {
-                doc.CaseFile = this;
+                _documents = GetLinkedEntities<Document>().ToList();
+                foreach (var doc in _documents)
+                {
+                    doc.CaseFile = this;
+                }
             }
-            return documents;
+            return _documents;
         }
+    
 
         public IEnumerable<Signer> GetSigners()
         {
-            var signers = GetLinkedEntities<Signer>().ToList();
-            foreach (var s in signers)
+            if (_signers == null)
             {
-                s.CaseFile = this;
+                _signers = GetLinkedEntities<Signer>().ToList();
+                foreach (var s in _signers)
+                {
+                    s.CaseFile = this;
+                }
             }
-            return signers;
+            return _signers;
         }
 
         public Signer FindSigner(int id)
         {
+            if (_signers != null)
+            {
+                return _signers.FirstOrDefault(x => x.Id == id);
+            }
+
             var linked = FindLinkedEntity<Signer>(id);
             linked.CaseFile = this;
             return linked;
@@ -65,6 +81,45 @@ namespace Penneo
             }
             return (CaseFileStatus)Status;
         }
+
+        public IEnumerable<CaseFileTemplate> GetCaseFileTemplates()
+        {
+            return GetLinkedEntities<CaseFileTemplate>("casefile/casefiletypes");
+        }
+
+        public IEnumerable<DocumentType> GetDocumentTypes()
+        {
+            return GetLinkedEntities<DocumentType>("casefiles/" + Id + "/documenttypes");
+        }
+
+        public IEnumerable<SignerType> GetSignerTypes()
+        {
+            if (!Id.HasValue)
+            {
+                return new List<SignerType>();
+            }
+            return GetLinkedEntities<SignerType>("casefiles/" + Id + "/signertypes");
+        }
+
+        public CaseFileTemplate GetCaseFileTemplate()
+        {
+            if (Id.HasValue && CaseFileTemplate == null)
+            {
+                var caseFileTypes = GetLinkedEntities<CaseFileTemplate>();
+                CaseFileTemplate = caseFileTypes.FirstOrDefault();
+            }
+            return CaseFileTemplate;
+        }
+
+        public void SetCaseFileTemplate(CaseFileTemplate template)
+        {
+            CaseFileTemplate = template;
+        }
+
+        public IEnumerable<string> GetErrors()
+        {
+            return GetStringListAsset("errors");
+	    }
 
         public bool Send()
         {
@@ -85,5 +140,6 @@ namespace Penneo
             Signed = 4,
             Completed = 5
         }
+
     }
 }

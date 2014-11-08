@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Penneo.Util
 {
@@ -32,14 +35,40 @@ namespace Penneo.Util
                 var propInfo = obj.GetType().GetProperty(propertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.IgnoreCase | BindingFlags.Instance);
                 if (propInfo != null && propInfo.CanWrite)
                 {
-                    if (value is long && propInfo.PropertyType == typeof(int) || propInfo.PropertyType == typeof(int?))
-                    {                        
+                    if (value is JArray)
+                    {
+                        value = ConvertArrayList((JArray)value);
+                    }
+                    if (value is long || value is long?)
+                    {
                         value = Convert.ToInt32(value);
                     }
-
-                    propInfo.SetValue(obj, ConvertToType(propInfo.PropertyType, value), null);
+                    propInfo.SetValue(obj, ConvertToType(propInfo.PropertyType, value), null);                    
                 }
             }
+        }
+
+        private static object ConvertArrayList(JArray input)
+        {
+            if (input == null || input.Count == 0)
+            {
+                return null;
+            }
+            var inputList = input.ToObject<List<Dictionary<string, object>>>();
+
+            var sdkTypeName = inputList[0]["sdkClassName"];
+            var sdkType = Type.GetType("Penneo." + sdkTypeName);
+            var listType = typeof (List<>).MakeGenericType(sdkType);
+            var list = Activator.CreateInstance(listType);
+            var addMethod = listType.GetMethod("Add");
+
+            foreach (var propertyDict in inputList)
+            {                
+                var obj = Activator.CreateInstance(sdkType);
+                SetPropertiesFromDictionary(obj, propertyDict);
+                addMethod.Invoke(list, new []{ obj });
+            }
+            return list;
         }
 
         /// <summary>

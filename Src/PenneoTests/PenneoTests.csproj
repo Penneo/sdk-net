@@ -60,6 +60,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="QueryTests.cs" />
+    <Compile Include="FolderTests.cs" />
     <Compile Include="ValidationTests.cs" />
     <Compile Include="SigningRequestTests.cs" />
     <Compile Include="SignatureLineTests.cs" />

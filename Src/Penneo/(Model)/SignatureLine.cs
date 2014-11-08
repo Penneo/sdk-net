@@ -36,6 +36,7 @@ namespace Penneo
         public string Conditions { get; set; }
         public int SignOrder { get; set; }
         public DateTime SignedAt { get; internal set; }
+        public int? SignerId { get; set; }
 
         internal override Entity Parent
         {
@@ -49,8 +50,18 @@ namespace Penneo
             {
                 if (_signer == null)
                 {
-                    _signer = GetLinkedEntities<Signer>().FirstOrDefault();
-                    _signer.CaseFile = Document.CaseFile;
+                    if (SignerId.HasValue)
+                    {
+                        _signer = Document.CaseFile.FindSigner(SignerId.Value);
+                    }
+                    else
+                    {
+                        _signer = GetLinkedEntities<Signer>().FirstOrDefault();
+                        if (_signer != null)
+                        {
+                            _signer.CaseFile = Document.CaseFile;
+                        }
+                    }
                 }
                 return _signer; 
             }
