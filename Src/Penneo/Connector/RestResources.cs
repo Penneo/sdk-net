@@ -14,7 +14,7 @@ namespace Penneo.Connector
         {
             _resources = new Dictionary<Type, string>();
         }
-        
+
         /// <summary>
         /// Adds a rest resource to a given type
         /// </summary>

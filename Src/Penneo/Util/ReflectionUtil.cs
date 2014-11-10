@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Web.Helpers;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Penneo.Util
 {
@@ -16,7 +17,7 @@ namespace Penneo.Util
         /// </summary>
         public static void SetPropertiesFromJson(object obj, string json)
         {
-            var values = Json.Decode<Dictionary<string, object>>(json);
+            var values = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
             SetPropertiesFromDictionary(obj, values);
         }
 
@@ -32,9 +33,40 @@ namespace Penneo.Util
                 var propInfo = obj.GetType().GetProperty(propertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.IgnoreCase | BindingFlags.Instance);
                 if (propInfo != null && propInfo.CanWrite)
                 {
+                    if (value is JArray)
+                    {
+                        value = ConvertArrayList((JArray) value);
+                    }
+                    if (value is long || value is long?)
+                    {
+                        value = Convert.ToInt32(value);
+                    }
                     propInfo.SetValue(obj, ConvertToType(propInfo.PropertyType, value), null);
                 }
             }
+        }
+
+        private static object ConvertArrayList(JArray input)
+        {
+            if (input == null || input.Count == 0)
+            {
+                return null;
+            }
+            var inputList = input.ToObject<List<Dictionary<string, object>>>();
+
+            var sdkTypeName = inputList[0]["sdkClassName"];
+            var sdkType = Type.GetType("Penneo." + sdkTypeName);
+            var listType = typeof (List<>).MakeGenericType(sdkType);
+            var list = Activator.CreateInstance(listType);
+            var addMethod = listType.GetMethod("Add");
+
+            foreach (var propertyDict in inputList)
+            {
+                var obj = Activator.CreateInstance(sdkType);
+                SetPropertiesFromDictionary(obj, propertyDict);
+                addMethod.Invoke(list, new[] {obj});
+            }
+            return list;
         }
 
         /// <summary>
@@ -46,7 +78,7 @@ namespace Penneo.Util
             {
                 return Convert.ToBoolean(value);
             }
-            if (type == typeof (DateTime) || type == typeof(DateTime?))
+            if (type == typeof (DateTime) || type == typeof (DateTime?))
             {
                 return TimeUtil.FromUnixTime(Convert.ToInt64(value));
             }

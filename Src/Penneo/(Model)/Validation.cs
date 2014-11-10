@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices.ComTypes;
 
 namespace Penneo
 {
@@ -14,13 +13,13 @@ namespace Penneo
         {
         }
 
-		public Validation(string name)
+        public Validation(string name)
         {
-            Name = name;    
+            Name = name;
         }
-		
+
         public Validation(string name, string email)
-		 : this(name)
+            : this(name)
         {
             Email = email;
         }
@@ -41,7 +40,7 @@ namespace Penneo
             {
                 return ValidationStatus.New;
             }
-            return (ValidationStatus)Status;
+            return (ValidationStatus) Status;
         }
 
         public byte[] GetPdf()
@@ -72,7 +71,7 @@ namespace Penneo
         public IEnumerable<LogEntry> GetEventLog()
         {
             return GetLinkedEntities<LogEntry>();
-        }       
+        }
     }
 
     public enum ValidationStatus

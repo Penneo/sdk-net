@@ -6,9 +6,26 @@ namespace Penneo
 {
     public class CaseFile : Entity
     {
+        #region CaseFileStatus enum
+
+        public enum CaseFileStatus
+        {
+            New = 0,
+            Pending = 1,
+            Rejected = 2,
+            Deleted = 3,
+            Signed = 4,
+            Completed = 5
+        }
+
+        #endregion
+
         private const string ACTION_SEND = "send";
         private const string ACTION_ACTIVATE = "activate";
-        
+
+        private IEnumerable<Document> _documents;
+        private IEnumerable<Signer> _signers;
+
         public CaseFile()
         {
             MetaData = null;
@@ -33,26 +50,38 @@ namespace Penneo
 
         public IEnumerable<Document> GetDocuments()
         {
-            var documents = GetLinkedEntities<Document>().ToList();
-            foreach (var doc in documents)
+            if (_documents == null)
             {
-                doc.CaseFile = this;
+                _documents = GetLinkedEntities<Document>().ToList();
+                foreach (var doc in _documents)
+                {
+                    doc.CaseFile = this;
+                }
             }
-            return documents;
+            return _documents;
         }
+
 
         public IEnumerable<Signer> GetSigners()
         {
-            var signers = GetLinkedEntities<Signer>().ToList();
-            foreach (var s in signers)
+            if (_signers == null)
             {
-                s.CaseFile = this;
+                _signers = GetLinkedEntities<Signer>().ToList();
+                foreach (var s in _signers)
+                {
+                    s.CaseFile = this;
+                }
             }
-            return signers;
+            return _signers;
         }
 
         public Signer FindSigner(int id)
         {
+            if (_signers != null)
+            {
+                return _signers.FirstOrDefault(x => x.Id == id);
+            }
+
             var linked = FindLinkedEntity<Signer>(id);
             linked.CaseFile = this;
             return linked;
@@ -64,7 +93,7 @@ namespace Penneo
             {
                 return CaseFileStatus.New;
             }
-            return (CaseFileStatus)Status;
+            return (CaseFileStatus) Status;
         }
 
         public IEnumerable<CaseFileTemplate> GetCaseFileTemplates()
@@ -104,7 +133,7 @@ namespace Penneo
         public IEnumerable<string> GetErrors()
         {
             return GetStringListAsset("errors");
-	    }
+        }
 
         public bool Send()
         {
@@ -115,16 +144,5 @@ namespace Penneo
         {
             return PerformAction(ACTION_ACTIVATE);
         }
-
-        public enum CaseFileStatus
-        {
-            New = 0,
-            Pending = 1,
-            Rejected = 2,
-            Deleted = 3,
-            Signed = 4,
-            Completed = 5
-        }
-
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Security.Authentication;
-using System.Web.Helpers;
+using Newtonsoft.Json;
 using Penneo.Util;
 using RestSharp;
 
@@ -26,6 +26,11 @@ namespace Penneo.Connector
         private static IApiConnector _instance;
 
         /// <summary>
+        /// Use proxy settings from Internet Explorer
+        /// </summary>
+        private static bool _useAutomaticProxy;
+
+        /// <summary>
         /// Success status codes
         /// </summary>
         private readonly List<HttpStatusCode> _successStatusCodes = new List<HttpStatusCode> {HttpStatusCode.OK, HttpStatusCode.Created, HttpStatusCode.NoContent};
@@ -36,14 +41,24 @@ namespace Penneo.Connector
         private RestClient _client;
 
         /// <summary>
+        /// Http headers
+        /// </summary>
+        private Dictionary<string, string> _headers;
+
+        /// <summary>
+        /// The last Http response
+        /// </summary>
+        private IRestResponse _lastResponse;
+
+        /// <summary>
         /// Rest resources
         /// </summary>
         private RestResources _restResources;
 
         /// <summary>
-        /// Http headers
+        /// Denotes if the last response received was an error
         /// </summary>
-        private Dictionary<string, string> _headers;
+        private bool _wasLastResponseError;
 
         protected ApiConnector()
         {
@@ -95,7 +110,7 @@ namespace Penneo.Connector
             {
                 var response = CallServer(obj.RelativeUrl + "/" + obj.Id, data, Method.PUT);
                 if (response == null || !_successStatusCodes.Contains(response.StatusCode))
-                {                    
+                {
                     Log.Write("Write Failed for " + obj.GetType().Name + ": " + (response == null ? "Empty response" : response.Content), LogSeverity.Error);
                     return false;
                 }
@@ -168,7 +183,7 @@ namespace Penneo.Connector
             }
 
             return true;
-        }      
+        }
 
         /// <summary>
         /// <see cref="IApiConnector.GetLinkedEntities{T}"/>
@@ -219,8 +234,8 @@ namespace Penneo.Connector
         {
             var url = obj.RelativeUrl + "/" + obj.Id + "/" + assetName;
             var response = CallServer(url);
-            var text = Json.Decode(response.Content)[0];
-            return text;
+            var text = JsonConvert.DeserializeObject(response.Content);
+            return Convert.ToString(text);
         }
 
         /// <summary>
@@ -230,7 +245,7 @@ namespace Penneo.Connector
         {
             var url = obj.RelativeUrl + "/" + obj.Id + "/" + assetName;
             var response = CallServer(url);
-            var result = Json.Decode<string[]>(response.Content);
+            var result = JsonConvert.DeserializeObject<string[]>(response.Content);
             return result;
         }
 
@@ -273,6 +288,22 @@ namespace Penneo.Connector
             return true;
         }
 
+        /// <summary>
+        /// Was the last response an error
+        /// </summary>
+        public bool WasLastResponseError
+        {
+            get { return _wasLastResponseError; }
+        }
+
+        /// <summary>
+        /// Get the content of the last response
+        /// </summary>
+        public string LastResponseContent
+        {
+            get { return _lastResponse != null ? _lastResponse.Content : null; }
+        }
+
         #endregion
 
         /// <summary>
@@ -300,10 +331,6 @@ namespace Penneo.Connector
             {
                 _client.Authenticator = new WSSEAuthenticator(PenneoConnector.Key, PenneoConnector.Secret);
             }
-            else if (PenneoConnector.AuthenticationType == AuthType.Basic)
-            {
-                _client.Authenticator = new HttpBasicAuthenticator(PenneoConnector.Key, PenneoConnector.Secret);
-            }
             else
             {
                 throw new NotSupportedException("Unknown authentication type " + PenneoConnector.AuthenticationType);
@@ -320,6 +347,14 @@ namespace Penneo.Connector
 
             //Null instance if a new factory is provided
             ResetInstance();
+        }
+
+        /// <summary>
+        /// Sets whether to use automatic proxy settings from Internet Explorer
+        /// </summary>
+        public static void SetUseProxySettingsFromInternetExplorer(bool use)
+        {
+            _useAutomaticProxy = use;
         }
 
         public static void ResetInstance()
@@ -371,10 +406,35 @@ namespace Penneo.Connector
         }
 
         /// <summary>
+        /// Set the proxy information on the rest client
+        /// </summary>
+        private void SetProxy()
+        {
+            if (_useAutomaticProxy)
+            {
+                var proxyWrapper = WebRequest.DefaultWebProxy;
+                if (proxyWrapper != null)
+                {
+                    var proxy = proxyWrapper.GetProxy(new Uri(_endpoint));
+                    if (proxy != null && !_endpoint.Equals(proxy.ToString(), StringComparison.OrdinalIgnoreCase))
+                    {
+                        Log.Write("Proxy URL: " + proxy, LogSeverity.Information);
+                        _client.Proxy = new WebProxy(proxy);
+                    }
+                }
+            }
+            else
+            {
+                _client.Proxy = null;
+            }
+        }
+
+        /// <summary>
         /// Calls the Penneo server with a rest request
         /// </summary>
         public IRestResponse CallServer(string url, Dictionary<string, object> data = null, Method method = Method.GET, Dictionary<string, Dictionary<string, object>> options = null, string customMethod = null)
         {
+            SetProxy();
             try
             {
                 var request = PrepareRequest(url, data, method, options);
@@ -392,6 +452,9 @@ namespace Penneo.Connector
                     response = _client.ExecuteAsGet(request, customMethod);
                 }
                 Log.Write("Request " + actualMethod + " " + url + " /  Response '" + response.StatusCode + "'", LogSeverity.Trace);
+
+                _lastResponse = response;
+                _wasLastResponseError = !_successStatusCodes.Contains(_lastResponse.StatusCode);
                 return response;
             }
             catch (Exception ex)
@@ -406,15 +469,8 @@ namespace Penneo.Connector
         /// </summary>
         private static IEnumerable<T> CreateObjects<T>(string json)
         {
-            var result = new List<T>();
-            var values = Json.Decode<List<Dictionary<string, object>>>(json);
-            foreach (var v in values)
-            {
-                var instance = Activator.CreateInstance<T>();
-                ReflectionUtil.SetPropertiesFromDictionary(instance, v);
-                result.Add(instance);
-            }
-            return result;
+            var direct = JsonConvert.DeserializeObject<List<T>>(json);
+            return direct;
         }
 
         /// <summary>
@@ -422,10 +478,8 @@ namespace Penneo.Connector
         /// </summary>
         private static T CreateObject<T>(string json)
         {
-            var instance = Activator.CreateInstance<T>();
-            var values = Json.Decode<Dictionary<string, object>>(json);
-            ReflectionUtil.SetPropertiesFromDictionary(instance, values);
-            return instance;
+            var direct = JsonConvert.DeserializeObject<T>(json);
+            return direct;
         }
     }
 }

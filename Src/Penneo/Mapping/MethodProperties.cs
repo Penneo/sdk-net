@@ -11,8 +11,8 @@ namespace Penneo.Mapping
     internal class MethodProperties<T>
         where T : Entity
     {
-        private readonly HashSet<string> _isFile;
         private readonly Dictionary<string, Func<object, object>> _convert;
+        private readonly HashSet<string> _isFile;
         private readonly Dictionary<string, Func<T, object>> _properties;
 
         public MethodProperties()
@@ -78,7 +78,7 @@ namespace Penneo.Mapping
                 }
 
                 //Store value
-                values[propertyName] = value;              
+                values[propertyName] = value;
             }
             return values;
         }

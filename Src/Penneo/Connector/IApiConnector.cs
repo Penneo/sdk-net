@@ -8,6 +8,16 @@ namespace Penneo.Connector
     internal interface IApiConnector
     {
         /// <summary>
+        /// Did the last response received contain an error
+        /// </summary>
+        bool WasLastResponseError { get; }
+
+        /// <summary>
+        /// Get the content of the last response
+        /// </summary>
+        string LastResponseContent { get; }
+
+        /// <summary>
         /// Write the given entity to the backend
         /// </summary>        
         bool WriteObject(Entity obj);

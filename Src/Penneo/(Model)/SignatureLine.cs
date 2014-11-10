@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Linq;
+
 namespace Penneo
 {
     public class SignatureLine : Entity
     {
+        private Signer _signer;
+
         public SignatureLine()
         {
         }
@@ -13,7 +16,7 @@ namespace Penneo
             Document = doc;
         }
 
-		public SignatureLine(Document doc, string role)
+        public SignatureLine(Document doc, string role)
             : this(doc)
         {
             Role = role;
@@ -23,7 +26,7 @@ namespace Penneo
             : this(doc, role)
         {
             SignOrder = signOrder;
-        }		
+        }
 
         public SignatureLine(Document doc, string role, int signOrder, string conditions)
             : this(doc, role, signOrder)
@@ -31,28 +34,38 @@ namespace Penneo
             Conditions = conditions;
         }
 
-        public Document Document { get; internal set; }        
+        public Document Document { get; internal set; }
         public string Role { get; set; }
         public string Conditions { get; set; }
         public int SignOrder { get; set; }
         public DateTime SignedAt { get; internal set; }
+        public int? SignerId { get; set; }
 
         internal override Entity Parent
         {
             get { return Document; }
         }
 
-        private Signer _signer;
         public Signer Signer
         {
-            get 
+            get
             {
                 if (_signer == null)
                 {
-                    _signer = GetLinkedEntities<Signer>().FirstOrDefault();
-                    _signer.CaseFile = Document.CaseFile;
+                    if (SignerId.HasValue)
+                    {
+                        _signer = Document.CaseFile.FindSigner(SignerId.Value);
+                    }
+                    else
+                    {
+                        _signer = GetLinkedEntities<Signer>().FirstOrDefault();
+                        if (_signer != null)
+                        {
+                            _signer.CaseFile = Document.CaseFile;
+                        }
+                    }
                 }
-                return _signer; 
+                return _signer;
             }
             private set { _signer = value; }
         }

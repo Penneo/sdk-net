@@ -31,6 +31,7 @@ namespace Penneo
         public string OnBehalfOf { get; set; }
         public string VATIdentificationNumber { get; set; }
         public CaseFile CaseFile { get; internal set; }
+        public SigningRequest SigningRequest { get; set; }
 
         internal override Entity Parent
         {
@@ -39,7 +40,11 @@ namespace Penneo
 
         public SigningRequest GetSigningRequest()
         {
-            return GetLinkedEntities<SigningRequest>().FirstOrDefault();
+            if (SigningRequest == null)
+            {
+                SigningRequest = GetLinkedEntities<SigningRequest>().FirstOrDefault();
+            }
+            return SigningRequest;
         }
 
         public bool AddSignerType(SignerType type)
@@ -61,6 +66,5 @@ namespace Penneo
         {
             return GetLinkedEntities<LogEntry>();
         }
-
     }
 }
