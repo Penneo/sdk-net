@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Penneo.SDK</id>
-    <version>1.0.14</version>
+    <version>1.0.15</version>
     <title>Penneo .Net SDK</title>
     <authors>Penneo</authors>
     <owners>Penneo</owners>
@@ -14,8 +14,8 @@
     <copyright>Copyright 2014</copyright>
     <tags>Penneo sign signing digital</tags>
     <dependencies>
-      <dependency id="RestSharpSigned" version="104.1" />
-	  <dependency id="Newtonsoft.Json" version="6.0.3" />
+      <dependency id="RestSharpSigned" version="105.0.1" />
+	  <dependency id="Newtonsoft.Json" version="6.0.6" />
     </dependencies>
   </metadata>
 </package>

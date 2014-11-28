@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using Penneo.Connector;
 using Penneo.Mapping;
 using Penneo.Util;

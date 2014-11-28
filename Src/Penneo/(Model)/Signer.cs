@@ -30,7 +30,7 @@ namespace Penneo
         public string SocialSecurityNumber { get; set; }
         public string OnBehalfOf { get; set; }
         public string VATIdentificationNumber { get; set; }
-        public CaseFile CaseFile { get; internal set; }
+        public CaseFile CaseFile { get; set; }
         public SigningRequest SigningRequest { get; set; }
 
         internal override Entity Parent

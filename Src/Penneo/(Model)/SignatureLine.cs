@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using Newtonsoft.Json;
+using Penneo.Connector;
 
 namespace Penneo
 {
@@ -38,8 +40,10 @@ namespace Penneo
         public string Role { get; set; }
         public string Conditions { get; set; }
         public int SignOrder { get; set; }
-        public DateTime SignedAt { get; internal set; }
         public int? SignerId { get; set; }
+
+        [JsonConverter(typeof(PenneoDateConverter))]
+        public DateTime SignedAt { get; internal set; }
 
         internal override Entity Parent
         {
