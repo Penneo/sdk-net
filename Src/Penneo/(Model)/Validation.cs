@@ -29,7 +29,7 @@ namespace Penneo
         public string Email { get; set; }
         public string EmailSubject { get; set; }
         public string EmailText { get; set; }
-        public int? Status { get; internal set; }
+        public int? Status { get; set; }
         public string SuccessUrl { get; set; }
         public string CustomText { get; set; }
         public int? ReminderInterval { get; set; }

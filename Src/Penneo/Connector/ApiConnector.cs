@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Security.Authentication;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Penneo.Util;
 using RestSharp;
 
@@ -234,8 +235,8 @@ namespace Penneo.Connector
         {
             var url = obj.RelativeUrl + "/" + obj.Id + "/" + assetName;
             var response = CallServer(url);
-            var text = JsonConvert.DeserializeObject(response.Content);
-            return Convert.ToString(text);
+            var result = JsonConvert.DeserializeObject<string[]>(response.Content);
+            return result[0];
         }
 
         /// <summary>
@@ -480,6 +481,26 @@ namespace Penneo.Connector
         {
             var direct = JsonConvert.DeserializeObject<T>(json);
             return direct;
+        }
+    }
+
+    public class PenneoDateConverter : JsonConverter
+    {
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            var unixTime = TimeUtil.ToUnixTime((DateTime)value);
+            writer.WriteValue(unixTime);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            var unixTime = Convert.ToInt64(reader.Value);
+            return TimeUtil.FromUnixTime(unixTime);
+        }
+
+        public override bool CanConvert(Type objectType)
+        {
+            return true;
         }
     }
 }

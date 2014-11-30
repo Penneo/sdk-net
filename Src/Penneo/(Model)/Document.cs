@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Newtonsoft.Json;
+using Penneo.Connector;
 
 namespace Penneo
 {
@@ -37,14 +39,24 @@ namespace Penneo
         public string DocumentId { get; set; }
         public string Title { get; set; }
         public string MetaData { get; set; }
-        public DateTime Created { get; internal set; }
-        public DateTime Modified { get; internal set; }
-        public DateTime Completed { get; internal set; }
-        public int? Status { get; internal set; }
+        public int? Status { get; set; }
         public string PdfFile { get; set; }
         public string Type { get; internal set; }
         public string Options { get; set; }
         public DocumentType DocumentType { get; set; }
+
+        [JsonConverter(typeof(PenneoDateConverter))]
+        public DateTime Created { get; set; }
+        [JsonConverter(typeof(PenneoDateConverter))]
+        public DateTime Modified { get; set; }
+        [JsonConverter(typeof(PenneoDateConverter))]
+        public DateTime Completed { get; set; }
+
+        public bool Signable
+        {
+            get { return Type == TYPE_SIGNABLE; }
+            set { Type = value ? TYPE_SIGNABLE : TYPE_ATTACHMENT; }
+        }
 
         public CaseFile CaseFile
         {
@@ -86,6 +98,12 @@ namespace Penneo
                 File.Delete(path);
             }
             File.WriteAllBytes(path, data);
+        }
+
+        public IEnumerable<SignatureLine> SignatureLines
+        {
+            get { return _signatureLines; }
+            set { _signatureLines = value; }
         }
 
         public IEnumerable<SignatureLine> GetSignatureLines()

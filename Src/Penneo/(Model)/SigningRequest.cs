@@ -11,7 +11,7 @@
         public string RejectReason { get; set; }
         public string SuccessUrl { get; set; }
         public string FailUrl { get; set; }
-        public int? Status { get; internal set; }
+        public int? Status { get; set; }
         public int? ReminderInterval { get; set; }
         public bool AccessControl { get; set; }
 

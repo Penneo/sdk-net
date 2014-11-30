@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
+using Penneo.Connector;
 
 namespace Penneo
 {
@@ -40,13 +42,23 @@ namespace Penneo
 
         public string Title { get; set; }
         public string MetaData { get; set; }
-        public int? Status { get; internal set; }
-        public DateTime Created { get; internal set; }
-        public int SignIteration { get; internal set; }
-        public DateTime? SendAt { get; set; }
-        public DateTime? ExpireAt { get; set; }
+        public int? Status { get; set; }
+        public int SignIteration { get; set; }
         public int? VisibilityMode { get; set; }
         public CaseFileTemplate CaseFileTemplate { get; set; }
+
+        [JsonConverter(typeof(PenneoDateConverter))]
+        public DateTime Created { get; set; }
+        [JsonConverter(typeof(PenneoDateConverter))]
+        public DateTime? SendAt { get; set; }
+        [JsonConverter(typeof(PenneoDateConverter))]
+        public DateTime? ExpireAt { get; set; }
+
+        public IEnumerable<Document> Documents
+        {
+            get { return _documents; }
+            set { _documents = value; }
+        }
 
         public IEnumerable<Document> GetDocuments()
         {
@@ -61,6 +73,11 @@ namespace Penneo
             return _documents;
         }
 
+        public IEnumerable<Signer> Signers
+        {
+            get { return _signers; }
+            set { _signers = value; }
+        }
 
         public IEnumerable<Signer> GetSigners()
         {
