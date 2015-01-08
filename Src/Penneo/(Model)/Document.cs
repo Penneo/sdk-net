@@ -111,7 +111,10 @@ namespace Penneo
             if (_signatureLines == null)
             {
                 _signatureLines = GetLinkedEntities<SignatureLine>().ToList();
-                foreach (var sl in _signatureLines)
+            }
+            foreach (var sl in _signatureLines)
+            {
+                if (sl.Document == null)
                 {
                     sl.Document = this;
                 }
