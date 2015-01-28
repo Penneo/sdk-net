@@ -42,7 +42,16 @@ myValidation.Persist();
 myValidation.Send();
 
 // Retrieve the validation link
-myLink = myValidation.GetLink();;
+myLink = myValidation.GetLink();
+
+// Define the content of the email if you would like to send emails through Penneo as well
+myValidation.Email = "john@doe.com";
+myValidation.EmailSubject = "Validation inquiry";
+myValidation.EmailText = "Dear john. Please validate yourself using this link.";
+
+// Persist the new validation object
+myValidation.Persist();
+
 ```
 
 Note that the validation link won't be active until you call the __Send()__ method on the validation object.
