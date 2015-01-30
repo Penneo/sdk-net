@@ -44,7 +44,7 @@ myValidation.Send();
 // Retrieve the validation link
 myLink = myValidation.GetLink();
 
-// Define the content of the email if you would like to send emails through Penneo as well
+// In case you would like to re-send the validation request from Penneo at a later point, you need to set the email details
 myValidation.Email = "john@doe.com";
 myValidation.EmailSubject = "Validation inquiry";
 myValidation.EmailText = "Dear john. Please validate yourself using this link.";
