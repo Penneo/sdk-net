@@ -41,7 +41,7 @@ myValidation.Persist();
 // Activate the validation object
 myValidation.Send();
 
-// Retrieve the validation link
+// Retrieve the validation link that you would like to distribute
 myLink = myValidation.GetLink();
 
 // In case you would like to re-send the validation request from Penneo at a later point, you need to set the email details
