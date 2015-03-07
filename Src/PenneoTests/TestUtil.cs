@@ -51,12 +51,13 @@ namespace PenneoTests
         {
             var connector = CreateFakeConnector();
             var list = new List<T> { Activator.CreateInstance<T>() };
-            IEnumerable<T> ignored;
-            A.CallTo(() => connector.FindBy(null, out ignored)).WithAnyArguments().Returns(true).AssignsOutAndRefParameters(list);
+            IEnumerable<T> ignoredObjects;
+            Error ignoredError;
+            A.CallTo(() => connector.FindBy(null, out ignoredObjects, out ignoredError)).WithAnyArguments().Returns(true).AssignsOutAndRefParameters(list, null);
 
             var result = Query.FindAll<T>();
 
-            A.CallTo(() => connector.FindBy(null, out ignored)).WithAnyArguments().MustHaveHappened();
+            A.CallTo(() => connector.FindBy(null, out ignoredObjects, out ignoredError)).WithAnyArguments().MustHaveHappened();
             Assert.AreEqual(list, result);
         }
 

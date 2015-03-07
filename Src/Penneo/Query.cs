@@ -16,13 +16,30 @@ namespace Penneo
         public static T Find<T>(int id)
             where T : Entity
         {
+            var output = FindById<T>(id);
+            if (!output.Success)
+            {
+                throw new Exception(output.Errors.ErrorMessage);
+            }
+            return output.Object;
+        }
+
+        public static QuerySingleObjectOutput<T> FindById<T>(int id)
+            where T : Entity
+        {
             var obj = Activator.CreateInstance<T>();
             obj.Id = id;
-            if (!ApiConnector.Instance.ReadObject(obj))
+
+            var output = new QuerySingleObjectOutput<T>();
+            Error error;
+            output.Success = ApiConnector.Instance.ReadObject(obj, out error);
+            output.Errors = error;
+            output.Object = obj;
+            if (!output.Success)
             {
-                throw new Exception("Penneo: Could not find the requested " + typeof (T).Name + " (id = " + id + ")");
+                output.Errors.ErrorMessage = "Penneo: Could not find the requested " + typeof (T).Name + " (id = " + id + ")";
             }
-            return obj;
+            return output;
         }
 
         /// <summary>
@@ -31,18 +48,37 @@ namespace Penneo
         public static T FindOneBy<T>(Dictionary<string, object> criteria = null, Dictionary<string, string> orderBy = null)
             where T : Entity
         {
-            Log.Write("FindOneBy (" + typeof (T).Name + ")", LogSeverity.Information);
-            return FindBy<T>(criteria, orderBy).FirstOrDefault();
+            var input = new QueryInput {Criteria = criteria, OrderBy = orderBy};
+            return FindOneBy<T>(input).Object;
+        }
+
+        public static QuerySingleObjectOutput<T> FindOneBy<T>(QueryInput input)
+            where T : Entity
+        {
+            Log.Write("FindOneBy (" + typeof(T).Name + ")", LogSeverity.Information);
+            var result = new QuerySingleObjectOutput<T>(FindBy<T>(input));
+            return result;
         }
 
         /// <summary>
         /// Get all entities of the given type
-        /// </summary>        
+        /// </summary>
         public static IEnumerable<T> FindAll<T>()
             where T : Entity
         {
-            Log.Write("FindAll (" + typeof (T).Name + ")", LogSeverity.Information);
-            return FindBy<T>();
+            var input = new QueryInput();
+            return FindAll<T>(input).Objects;
+        }
+
+        public static QueryOutput<T> FindAll<T>(QueryInput input)
+            where T : Entity
+        {
+            Log.Write("FindAll (" + typeof(T).Name + ")", LogSeverity.Information);
+            if (input.Criteria != null && input.Criteria.Any())
+            {
+                throw new ArgumentException("Criteria must be empty in query FindAll");
+            }
+            return FindBy<T>(input);
         }
 
         /// <summary>
@@ -51,7 +87,33 @@ namespace Penneo
         public static IEnumerable<T> FindBy<T>(Dictionary<string, object> criteria = null, Dictionary<string, string> orderBy = null, int? limit = null, int? offset = null)
             where T : Entity
         {
-            Log.Write("FindBy (" + typeof (T).Name + ")", LogSeverity.Information);
+            var input = new QueryInput();
+            input.Criteria = criteria;
+            input.OrderBy = orderBy;
+            input.Limit = limit;
+            input.Offset = offset;
+
+            var output = FindBy<T>(input);
+            if (!output.Success)
+            {
+                if (output.Errors != null)
+                {
+                    throw new Exception(output.Errors.ErrorMessage);
+                }
+                throw new Exception("Unknown error during FindBy");
+            }
+            return output.Objects;
+        }
+
+        public static QueryOutput<T> FindBy<T>(QueryInput input)
+            where T : Entity
+        {
+            Log.Write("FindBy (" + typeof(T).Name + ")", LogSeverity.Information);
+
+            var criteria = input.Criteria;
+            var orderBy = input.OrderBy;
+            var offset = input.Offset;
+            var limit = input.Limit;
 
             var query = criteria ?? new Dictionary<string, object>();
 
@@ -72,12 +134,14 @@ namespace Penneo
                 query["order"] = order;
             }
 
-            IEnumerable<T> result;
-            if (!ApiConnector.Instance.FindBy(query, out result))
-            {
-                throw new Exception("Penneo: Internal problem encountered");
-            }
-            return result;
+            var output = new QueryOutput<T>();
+
+            IEnumerable<T> objects;
+            Error error;
+            output.Success = ApiConnector.Instance.FindBy(query, out objects, out error);
+            output.Objects = objects;
+            output.Errors = error;
+            return output;
         }
     }
 }

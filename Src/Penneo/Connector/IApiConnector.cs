@@ -30,7 +30,7 @@ namespace Penneo.Connector
         /// <summary>
         /// Reads an object from the backend, based on the given entity id.
         /// </summary>
-        bool ReadObject(Entity obj);
+        bool ReadObject(Entity obj, out Error error);
 
         /// <summary>
         /// Link two objects on the backend.
@@ -70,7 +70,7 @@ namespace Penneo.Connector
         /// <summary>
         /// Find objects on the backend based on query parameters
         /// </summary>
-        bool FindBy<T>(Dictionary<string, object> query, out IEnumerable<T> objects)
+        bool FindBy<T>(Dictionary<string, object> query, out IEnumerable<T> objects, out Error error)
             where T : Entity;
 
         /// <summary>

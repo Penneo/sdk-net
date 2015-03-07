@@ -34,7 +34,7 @@ namespace Penneo.Connector
         /// <summary>
         /// Success status codes
         /// </summary>
-        private readonly List<HttpStatusCode> _successStatusCodes = new List<HttpStatusCode> {HttpStatusCode.OK, HttpStatusCode.Created, HttpStatusCode.NoContent};
+        private readonly List<HttpStatusCode> _successStatusCodes = new List<HttpStatusCode> { HttpStatusCode.OK, HttpStatusCode.Created, HttpStatusCode.NoContent };
 
         /// <summary>
         /// The rest http client
@@ -143,14 +143,16 @@ namespace Penneo.Connector
         /// <summary>
         /// <see cref="IApiConnector.ReadObject"/>
         /// </summary>
-        public bool ReadObject(Entity obj)
+        public bool ReadObject(Entity obj, out Error error)
         {
             var response = CallServer(obj.RelativeUrl + '/' + obj.Id);
             if (response == null || response.StatusCode != HttpStatusCode.OK)
             {
+                error = BuildErrorObject(response);
                 return false;
             }
             ReflectionUtil.SetPropertiesFromJson(obj, response.Content);
+            error = null;
             return true;
         }
 
@@ -253,7 +255,7 @@ namespace Penneo.Connector
         /// <summary>
         /// <see cref="IApiConnector.FindBy{T}"/>
         /// </summary>
-        public bool FindBy<T>(Dictionary<string, object> query, out IEnumerable<T> objects)
+        public bool FindBy<T>(Dictionary<string, object> query, out IEnumerable<T> objects, out Error error)
             where T : Entity
         {
             var resource = _restResources.GetResource<T>();
@@ -268,11 +270,28 @@ namespace Penneo.Connector
             if (response == null || !_successStatusCodes.Contains(response.StatusCode))
             {
                 objects = null;
+                error = BuildErrorObject(response);
                 return false;
             }
 
             objects = CreateObjects<T>(response.Content);
+            error = null;
             return true;
+        }
+
+        private Error BuildErrorObject(IRestResponse response)
+        {
+            var error = new Error();
+            if (response != null)
+            {
+                error.ErrorMessage = response.ErrorMessage;
+                error.StatusCode = response.StatusCode;
+            }
+            else
+            {
+                error.ErrorMessage = "No Response";
+            }
+            return error;
         }
 
         /// <summary>

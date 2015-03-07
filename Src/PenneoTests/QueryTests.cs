@@ -14,12 +14,13 @@ namespace PenneoTests
         public void FindTest()
         {
             var connector = TestUtil.CreateFakeConnector();
-            A.CallTo(() => connector.ReadObject(null)).WithAnyArguments().Returns(true);
+            Error ignoredError;
+            A.CallTo(() => connector.ReadObject(null, out ignoredError)).WithAnyArguments().Returns(true);
 
             var obj = Query.Find<CaseFile>(1);
 
             Assert.AreEqual(1, obj.Id);
-            A.CallTo(() => connector.ReadObject(null)).WithAnyArguments().MustHaveHappened();
+            A.CallTo(() => connector.ReadObject(null, out ignoredError)).WithAnyArguments().MustHaveHappened();
         }
 
         [TestMethod]
@@ -37,10 +38,6 @@ namespace PenneoTests
         [TestMethod]
         public void FindByTest()
         {
-            /*var query = new Dictionary<string, object>();
-            var orderBy = new Dictionary<string, string>() { {"title", "asc"}};
-            FindCollectionTest(() => Query.FindBy<CaseFile>(query, orderBy, 10, 5));*/
-
             FindCollectionTest(() =>  Query.FindBy<Document>(
                 new Dictionary<string, object> { { "title", "the" } },
                 new Dictionary<string, string>() { { "created", "desc" } },
@@ -54,15 +51,16 @@ namespace PenneoTests
         {
             var connector = TestUtil.CreateFakeConnector();
             IEnumerable<T> returned = new[] { Activator.CreateInstance<T>() };
-            IEnumerable<T> ignored;
-            A.CallTo(() => connector.FindBy(null, out ignored)).WithAnyArguments().Returns(true).AssignsOutAndRefParameters(returned);
+            IEnumerable<T> ignoredObjects;
+            Error ignoredError;
+            A.CallTo(() => connector.FindBy(null, out ignoredObjects, out ignoredError)).WithAnyArguments().Returns(true).AssignsOutAndRefParameters(returned, null);
 
             var objects = f();
 
             Assert.IsNotNull(objects);
             CollectionAssert.AreEqual(returned.ToList(), objects.ToList());
 
-            A.CallTo(() => connector.FindBy(null, out objects)).WithAnyArguments().MustHaveHappened();
+            A.CallTo(() => connector.FindBy(null, out objects, out ignoredError)).WithAnyArguments().MustHaveHappened();
         }
 
         private static void FindOneTest<T>(Func<T> f)
@@ -71,15 +69,16 @@ namespace PenneoTests
             var connector = TestUtil.CreateFakeConnector();
             var instance = Activator.CreateInstance<T>();
             IEnumerable<T> returned = new[] { instance };
-            IEnumerable<T> ignored;
-            A.CallTo(() => connector.FindBy(null, out ignored)).WithAnyArguments().Returns(true).AssignsOutAndRefParameters(returned);
+            IEnumerable<T> ignoredObjects;
+            Error ignoredError;
+            A.CallTo(() => connector.FindBy(null, out ignoredObjects, out ignoredError)).WithAnyArguments().Returns(true).AssignsOutAndRefParameters(returned, null);
 
             var obj = f();
 
             Assert.IsNotNull(obj);
             Assert.AreEqual(instance, obj);
 
-            A.CallTo(() => connector.FindBy(null, out ignored)).WithAnyArguments().MustHaveHappened();
+            A.CallTo(() => connector.FindBy(null, out ignoredObjects, out ignoredError)).WithAnyArguments().MustHaveHappened();
         }
     }
 }
