@@ -63,7 +63,7 @@ namespace Penneo
             return GetTextAssets(ASSET_LINK);
         }
 
-        public bool Send()
+        public ActionResult Send()
         {
             return PerformAction(ACTION_SEND);
         }

@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using FakeItEasy;
 using Penneo;
 using Penneo.Connector;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RestSharp;
 
 namespace PenneoTests
 {
     internal static class TestUtil
     {
+        private static IRestResponse _response200 = new RestResponse { StatusCode = HttpStatusCode.OK };
+
         public static IApiConnector CreateFakeConnector()
         {
             var fake = A.Fake<IApiConnector>();
@@ -20,13 +24,13 @@ namespace PenneoTests
         public static void TestPersist(Func<Entity> f)
         {
             var connector = CreateFakeConnector();
-            A.CallTo(() => connector.WriteObject(null)).WithAnyArguments().Returns(true);
+            A.CallTo(() => connector.WriteObject(null)).WithAnyArguments();
 
             var e = f();
-            e.Persist();
+            e.Persist(); 
 
             A.CallTo(() => connector.WriteObject(e)).MustHaveHappened();
-        }        
+        }
 
         public static void TestPersistFail(Func<Entity> f)
         {
@@ -34,7 +38,10 @@ namespace PenneoTests
             A.CallTo(() => connector.WriteObject(null)).WithAnyArguments().Returns(false);
 
             var e = f();
-            e.Persist();
+            var result = e.Persist();
+            
+            A.CallTo(() => connector.WriteObject(e)).MustHaveHappened();
+            Assert.IsFalse(result);
         }
 
         public static void TestDelete(Func<Entity> f)
@@ -52,12 +59,12 @@ namespace PenneoTests
             var connector = CreateFakeConnector();
             var list = new List<T> { Activator.CreateInstance<T>() };
             IEnumerable<T> ignoredObjects;
-            Error ignoredError;
-            A.CallTo(() => connector.FindBy(null, out ignoredObjects, out ignoredError)).WithAnyArguments().Returns(true).AssignsOutAndRefParameters(list, null);
+            IRestResponse ignoredResponse;
+            A.CallTo(() => connector.FindBy(null, out ignoredObjects, out ignoredResponse)).WithAnyArguments().Returns(true).AssignsOutAndRefParameters(list, _response200);
 
             var result = Query.FindAll<T>();
 
-            A.CallTo(() => connector.FindBy(null, out ignoredObjects, out ignoredError)).WithAnyArguments().MustHaveHappened();
+            A.CallTo(() => connector.FindBy(null, out ignoredObjects, out ignoredResponse)).WithAnyArguments().MustHaveHappened();
             Assert.AreEqual(list, result);
         }
 
@@ -112,7 +119,7 @@ namespace PenneoTests
         public static void TestPerformActionSuccess(Action action)
         {
             var connector = CreateFakeConnector();
-            A.CallTo(() => connector.PerformAction(null, null)).WithAnyArguments().Returns(true);
+            A.CallTo(() => connector.PerformAction(null, null)).WithAnyArguments().Returns(new ActionResult());
 
             action();
 

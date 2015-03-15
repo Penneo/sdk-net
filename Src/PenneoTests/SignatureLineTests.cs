@@ -21,7 +21,7 @@ namespace PenneoTests
         {
             var s = CreateSignatureLine();
             Assert.IsNotNull(s.Document);
-            Assert.AreEqual("role", s.Role);            
+            Assert.AreEqual("role", s.Role);
             Assert.AreEqual(1, s.SignOrder);
             Assert.AreEqual("conditions", s.Conditions);
             Assert.AreEqual(s.Document, s.Parent);
@@ -34,7 +34,6 @@ namespace PenneoTests
         }
 
         [TestMethod]
-        [ExpectedException(typeof (Exception))]
         public void PersistFailTest()
         {
             TestUtil.TestPersistFail(CreateSignatureLine);

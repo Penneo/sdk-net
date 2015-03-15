@@ -61,6 +61,11 @@ namespace Penneo.Connector
         /// </summary>
         private bool _wasLastResponseError;
 
+        /// <summary>
+        /// The latest server results for each entity processed
+        /// </summary>
+        private Dictionary<Guid, ServerResult> LatestEntityServerResults { get; set; }
+
         protected ApiConnector()
         {
             Init();
@@ -102,33 +107,56 @@ namespace Penneo.Connector
         /// </summary>
         public bool WriteObject(Entity obj)
         {
+            var result = new ServerResult();
+
             var data = obj.GetRequestData();
             if (data == null)
             {
+                Log.Write("Write Failed for " + obj.GetType().Name + ": Unable to get request data", LogSeverity.Error);
+                result.Success = false;
+                result.ErrorMessage = "Unable to get request data";
+                SetLatestEntityServerResult(obj, result);
                 return false;
             }
             if (!obj.IsNew)
             {
                 var response = CallServer(obj.RelativeUrl + "/" + obj.Id, data, Method.PUT);
-                if (response == null || !_successStatusCodes.Contains(response.StatusCode))
-                {
-                    Log.Write("Write Failed for " + obj.GetType().Name + ": " + (response == null ? "Empty response" : response.Content), LogSeverity.Error);
-                    return false;
-                }
+                return ExtractResponse(obj, response, result);
             }
             else
             {
                 var response = CallServer(obj.RelativeUrl, data, Method.POST);
-                if (response == null || !_successStatusCodes.Contains(response.StatusCode))
+                var successfull = ExtractResponse(obj, response, result);
+                if (successfull)
                 {
-                    Log.Write("Write Failed for " + obj.GetType().Name + ": " + (response == null ? "Empty response" : response.Content), LogSeverity.Error);
-                    return false;
+                    //Update object with values returned from the API for the created object
+                    ReflectionUtil.SetPropertiesFromJson(obj, response.Content);
                 }
-
-                //Update object with values returned from the API for the created object
-                ReflectionUtil.SetPropertiesFromJson(obj, response.Content);
+                return successfull;
             }
-            return true;
+        }
+
+        private bool ExtractResponse(Entity obj, IRestResponse response, ServerResult result)
+        {
+            result.Success = true;
+            if (response == null)
+            {
+                Log.Write("Write Failed for " + obj.GetType().Name + ": Empty response", LogSeverity.Error);
+                result.ErrorMessage = "Empty response";
+                result.Success = false;
+            }
+            else
+            {
+                result.StatusCode = response.StatusCode;
+                result.JsonContent = response.Content;
+                if (!_successStatusCodes.Contains(response.StatusCode))
+                {
+                    Log.Write("Write Failed for " + obj.GetType().Name + ": " + response.Content, LogSeverity.Error);
+                    result.Success = false;
+                }
+            }
+            SetLatestEntityServerResult(obj, result);
+            return result.Success;
         }
 
         /// <summary>
@@ -143,16 +171,14 @@ namespace Penneo.Connector
         /// <summary>
         /// <see cref="IApiConnector.ReadObject"/>
         /// </summary>
-        public bool ReadObject(Entity obj, out Error error)
+        public bool ReadObject(Entity obj, out IRestResponse response)
         {
-            var response = CallServer(obj.RelativeUrl + '/' + obj.Id);
+            response = CallServer(obj.RelativeUrl + '/' + obj.Id);
             if (response == null || response.StatusCode != HttpStatusCode.OK)
             {
-                error = BuildErrorObject(response);
                 return false;
             }
             ReflectionUtil.SetPropertiesFromJson(obj, response.Content);
-            error = null;
             return true;
         }
 
@@ -163,12 +189,8 @@ namespace Penneo.Connector
         {
             var url = parent.RelativeUrl + "/" + parent.Id + "/" + _restResources.GetResource(child.GetType()) + "/" + child.Id;
             var response = CallServer(url, customMethod: "LINK");
-
-            if (response == null || !_successStatusCodes.Contains(response.StatusCode))
-            {
-                return false;
-            }
-            return true;
+            var result = new ServerResult();
+            return ExtractResponse(parent, response, result);
         }
 
         /// <summary>
@@ -177,15 +199,9 @@ namespace Penneo.Connector
         public bool UnlinkEntity(Entity parent, Entity child)
         {
             var url = parent.RelativeUrl + "/" + parent.Id + "/" + _restResources.GetResource(child.GetType()) + "/" + child.Id;
-
             var response = CallServer(url, customMethod: "UNLINK");
-
-            if (response == null || !_successStatusCodes.Contains(response.StatusCode))
-            {
-                return false;
-            }
-
-            return true;
+            var result = new ServerResult();
+            return ExtractResponse(parent, response, result);
         }
 
         /// <summary>
@@ -255,7 +271,7 @@ namespace Penneo.Connector
         /// <summary>
         /// <see cref="IApiConnector.FindBy{T}"/>
         /// </summary>
-        public bool FindBy<T>(Dictionary<string, object> query, out IEnumerable<T> objects, out Error error)
+        public bool FindBy<T>(Dictionary<string, object> query, out IEnumerable<T> objects, out IRestResponse response)
             where T : Entity
         {
             var resource = _restResources.GetResource<T>();
@@ -266,46 +282,34 @@ namespace Penneo.Connector
                 options = new Dictionary<string, Dictionary<string, object>>();
                 options["query"] = query;
             }
-            var response = CallServer(resource, null, Method.GET, options);
+            response = CallServer(resource, null, Method.GET, options);
             if (response == null || !_successStatusCodes.Contains(response.StatusCode))
             {
                 objects = null;
-                error = BuildErrorObject(response);
                 return false;
             }
 
             objects = CreateObjects<T>(response.Content);
-            error = null;
             return true;
-        }
-
-        private Error BuildErrorObject(IRestResponse response)
-        {
-            var error = new Error();
-            if (response != null)
-            {
-                error.ErrorMessage = response.ErrorMessage;
-                error.StatusCode = response.StatusCode;
-            }
-            else
-            {
-                error.ErrorMessage = "No Response";
-            }
-            return error;
         }
 
         /// <summary>
         /// <see cref="IApiConnector.PerformAction"/>
         /// </summary>
-        public bool PerformAction(Entity obj, string actionName)
+        public ActionResult PerformAction(Entity obj, string actionName)
         {
+            var result = new ActionResult();
             var url = obj.RelativeUrl + "/" + obj.Id + "/" + actionName;
             var response = CallServer(url, customMethod: "patch");
             if (response == null || !_successStatusCodes.Contains(response.StatusCode))
             {
-                return false;
+                result.Success = false;
+                result.StatusCode = response.StatusCode;
+                result.ErrorMessage = response.ErrorMessage;
+                return result;
             }
-            return true;
+            result.Success = true;
+            return result;
         }
 
         /// <summary>
@@ -340,7 +344,7 @@ namespace Penneo.Connector
             _restResources = ServiceLocator.Instance.GetInstance<RestResources>();
 
             _headers = PenneoConnector.Headers ?? new Dictionary<string, string>();
-            _headers["Content-type"] = "application/json";
+            _headers["JsonContent-type"] = "application/json";
 
             if (!string.IsNullOrEmpty(PenneoConnector.User))
             {
@@ -355,6 +359,8 @@ namespace Penneo.Connector
             {
                 throw new NotSupportedException("Unknown authentication type " + PenneoConnector.AuthenticationType);
             }
+            LatestEntityServerResults = new Dictionary<Guid, ServerResult>();
+
             PenneoConnector.Reset();
         }
 
@@ -480,7 +486,7 @@ namespace Penneo.Connector
             catch (Exception ex)
             {
                 Log.Write(ex.ToString(), LogSeverity.Fatal);
-                return null;
+                throw;
             }
         }
 
@@ -500,6 +506,41 @@ namespace Penneo.Connector
         {
             var direct = JsonConvert.DeserializeObject<T>(json);
             return direct;
+        }
+
+        /// <summary>
+        /// Sets the latest server result for a given entity
+        /// </summary>
+        private void SetLatestEntityServerResult(Entity entity, ServerResult result)
+        {
+            if (entity == null)
+            {
+                return;
+            }
+            lock (LatestEntityServerResults)
+            {
+                LatestEntityServerResults[entity.InternalIdentifier] = result;
+            }
+        }
+
+        /// <summary>
+        /// Get the latest server result for a given entity
+        /// </summary>
+        public ServerResult GetLatestEntityServerResult(Entity entity)
+        {
+            if (entity == null)
+            {
+                return null;
+            }
+            lock (LatestEntityServerResults)
+            {
+                ServerResult result;
+                if (LatestEntityServerResults.TryGetValue(entity.InternalIdentifier, out result))
+                {
+                    return result;
+                }
+            }
+            return null;
         }
     }
 

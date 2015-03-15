@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using RestSharp;
 
 namespace Penneo.Connector
 {
@@ -19,7 +20,7 @@ namespace Penneo.Connector
 
         /// <summary>
         /// Write the given entity to the backend
-        /// </summary>        
+        /// </summary>
         bool WriteObject(Entity obj);
 
         /// <summary>
@@ -30,7 +31,7 @@ namespace Penneo.Connector
         /// <summary>
         /// Reads an object from the backend, based on the given entity id.
         /// </summary>
-        bool ReadObject(Entity obj, out Error error);
+        bool ReadObject(Entity obj, out IRestResponse response);
 
         /// <summary>
         /// Link two objects on the backend.
@@ -70,12 +71,17 @@ namespace Penneo.Connector
         /// <summary>
         /// Find objects on the backend based on query parameters
         /// </summary>
-        bool FindBy<T>(Dictionary<string, object> query, out IEnumerable<T> objects, out Error error)
+        bool FindBy<T>(Dictionary<string, object> query, out IEnumerable<T> objects, out IRestResponse response)
             where T : Entity;
 
         /// <summary>
         /// Performs the named action on the backend for the given object
         /// </summary>
-        bool PerformAction(Entity obj, string actionName);
+        ActionResult PerformAction(Entity obj, string actionName);
+
+        /// <summary>
+        /// Get the latest server result for a given entity
+        /// </summary>
+        ServerResult GetLatestEntityServerResult(Entity entity);
     }
 }

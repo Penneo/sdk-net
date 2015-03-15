@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Penneo.Connector;
+using RestSharp;
 
 namespace Penneo
 {
@@ -19,25 +20,26 @@ namespace Penneo
             var output = FindById<T>(id);
             if (!output.Success)
             {
-                throw new Exception(output.Errors.ErrorMessage);
+                throw new Exception(output.ErrorMessage);
             }
             return output.Object;
         }
 
-        public static QuerySingleObjectOutput<T> FindById<T>(int id)
+        public static QuerySingleObjectResult<T> FindById<T>(int id)
             where T : Entity
         {
             var obj = Activator.CreateInstance<T>();
             obj.Id = id;
 
-            var output = new QuerySingleObjectOutput<T>();
-            Error error;
-            output.Success = ApiConnector.Instance.ReadObject(obj, out error);
-            output.Errors = error;
+            var output = new QuerySingleObjectResult<T>();
+            IRestResponse response;
+            output.Success = ApiConnector.Instance.ReadObject(obj, out response);
+            output.StatusCode = response.StatusCode;
+            output.ErrorMessage = response.ErrorMessage;
             output.Object = obj;
             if (!output.Success)
             {
-                output.Errors.ErrorMessage = "Penneo: Could not find the requested " + typeof (T).Name + " (id = " + id + ")";
+                output.ErrorMessage = "Penneo: Could not find the requested " + typeof (T).Name + " (id = " + id + ")";
             }
             return output;
         }
@@ -52,11 +54,11 @@ namespace Penneo
             return FindOneBy<T>(input).Object;
         }
 
-        public static QuerySingleObjectOutput<T> FindOneBy<T>(QueryInput input)
+        public static QuerySingleObjectResult<T> FindOneBy<T>(QueryInput input)
             where T : Entity
         {
             Log.Write("FindOneBy (" + typeof(T).Name + ")", LogSeverity.Information);
-            var result = new QuerySingleObjectOutput<T>(FindBy<T>(input));
+            var result = new QuerySingleObjectResult<T>(FindBy<T>(input));
             return result;
         }
 
@@ -66,21 +68,11 @@ namespace Penneo
         public static IEnumerable<T> FindAll<T>()
             where T : Entity
         {
-            var input = new QueryInput();
-            return FindAll<T>(input).Objects;
-        }
-
-        public static QueryOutput<T> FindAll<T>(QueryInput input)
-            where T : Entity
-        {
             Log.Write("FindAll (" + typeof(T).Name + ")", LogSeverity.Information);
-            if (input.Criteria != null && input.Criteria.Any())
-            {
-                throw new ArgumentException("Criteria must be empty in query FindAll");
-            }
-            return FindBy<T>(input);
+            var input = new QueryInput();
+            return FindBy<T>(input).Objects;
         }
-
+        
         /// <summary>
         /// Get entities matching the search criteria
         /// </summary>
@@ -96,16 +88,16 @@ namespace Penneo
             var output = FindBy<T>(input);
             if (!output.Success)
             {
-                if (output.Errors != null)
+                if (!string.IsNullOrEmpty(output.ErrorMessage))
                 {
-                    throw new Exception(output.Errors.ErrorMessage);
+                    throw new Exception(output.ErrorMessage);
                 }
                 throw new Exception("Unknown error during FindBy");
             }
             return output.Objects;
         }
 
-        public static QueryOutput<T> FindBy<T>(QueryInput input)
+        public static QueryResult<T> FindBy<T>(QueryInput input)
             where T : Entity
         {
             Log.Write("FindBy (" + typeof(T).Name + ")", LogSeverity.Information);
@@ -134,13 +126,14 @@ namespace Penneo
                 query["order"] = order;
             }
 
-            var output = new QueryOutput<T>();
+            var output = new QueryResult<T>();
 
             IEnumerable<T> objects;
-            Error error;
-            output.Success = ApiConnector.Instance.FindBy(query, out objects, out error);
+            IRestResponse response;
+            output.Success = ApiConnector.Instance.FindBy(query, out objects, out response);
             output.Objects = objects;
-            output.Errors = error;
+            output.StatusCode = response.StatusCode;
+            output.ErrorMessage = response.ErrorMessage;
             return output;
         }
     }
