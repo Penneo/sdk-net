@@ -3,27 +3,20 @@ using System.Linq;
 
 namespace Penneo
 {
-    public abstract class QueryOutputBase
-    {
-        public bool Success { get; set; }
-        public Error Errors { get; set; }
-    }
-
-    public class QueryOutput<T> : QueryOutputBase
+    public class QueryResult<T> : ServerResult
     {
         public IEnumerable<T> Objects { get; set; }
     }
 
-    public class QuerySingleObjectOutput<T> : QueryOutputBase
+    public class QuerySingleObjectResult<T> : ServerResult
     {
-        public QuerySingleObjectOutput()
+        public QuerySingleObjectResult()
         {
         }
 
-        public QuerySingleObjectOutput(QueryOutput<T> output)
+        public QuerySingleObjectResult(QueryResult<T> output)
         {
             Success = output.Success;
-            Errors = output.Errors;
             if (output.Objects != null)
             {
                 Object = output.Objects.FirstOrDefault();

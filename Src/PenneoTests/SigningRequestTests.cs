@@ -14,7 +14,6 @@ namespace PenneoTests
         }
 
         [TestMethod]
-        [ExpectedException(typeof (Exception))]
         public void PersistFailTest()
         {
             TestUtil.TestPersistFail(() => new SigningRequest());
