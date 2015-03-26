@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
 
 namespace Penneo.Util
 {
@@ -81,6 +82,15 @@ namespace Penneo.Util
             if (type == typeof (DateTime) || type == typeof (DateTime?))
             {
                 return TimeUtil.FromUnixTime(Convert.ToInt64(value));
+            }
+            if (value.GetType() == typeof (JObject))
+            { 
+                var obj = (JObject) value;
+                var sdkTypeName = obj.GetValue("sdkClassName");
+                var sdkType = Type.GetType("Penneo." + sdkTypeName);
+                var instance = Activator.CreateInstance(sdkType);
+                SetPropertiesFromDictionary(instance, obj.ToObject<Dictionary<string, object>>());
+                return instance;
             }
             return value;
         }
