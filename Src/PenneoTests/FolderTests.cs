@@ -2,45 +2,47 @@
 using System.IO;
 using FakeItEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Penneo;
+using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace PenneoTests
 {
-    [TestClass]
+    [TestFixture]
     public class FolderTests
     {
-        [TestMethod]
+        [Test]
         public void ConstructorTest()
         {
             var f = new Folder("title");
             Assert.AreEqual("title", f.Title);
         }
 
-        [TestMethod]
+        [Test]
         public void PersistSuccessTest()
         {
             TestUtil.TestPersist(() => new Folder());
         }
 
-        [TestMethod]
+        [Test]
         public void PersistFailTest()
         {
             TestUtil.TestPersistFail(() => new Folder());
         }
 
-        [TestMethod]
+        [Test]
         public void DeleteTest()
         {
             TestUtil.TestDelete(() => new Folder());
         }
 
-        [TestMethod]
+        [Test]
         public void GetTest()
         {
             TestUtil.TestGet<Folder>();
         }
-        
-        [TestMethod]
+
+        [Test]
         public void AddCaseFileTest()
         {
             var folder = new Folder();
@@ -48,7 +50,7 @@ namespace PenneoTests
             TestUtil.TestLink(() => folder.AddCaseFile(cf), folder, cf);
         }
 
-        [TestMethod]
+        [Test]
         public void RemoveCaseFileTest()
         {
             var folder = new Folder();

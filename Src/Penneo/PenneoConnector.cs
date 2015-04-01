@@ -11,13 +11,19 @@ namespace Penneo
     /// </summary>
     public class PenneoConnector
     {
-        public static bool IsInitialized;
+        public static bool IsInitialized
+        {
+            get { return _isInitialized; }
+            set { _isInitialized = value; }
+        }
+
         internal static AuthType AuthenticationType;
         internal static string Key;
         internal static string Secret;
         internal static string Endpoint;
         internal static string User;
         internal static Dictionary<string, string> Headers;
+        private static bool _isInitialized;
 
         /// <summary>
         /// Checks if the last Http response was an error

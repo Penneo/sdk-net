@@ -48,7 +48,7 @@ namespace PenneoTests
         {
             var connector = CreateFakeConnector();
             var e = f();
-            A.CallTo(() => connector.DeleteObject(e)).Returns(true);            
+            A.CallTo(() => connector.DeleteObject(e)).Returns(true);
             e.Delete();
             A.CallTo(() => connector.DeleteObject(e)).MustHaveHappened();
         }   
