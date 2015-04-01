@@ -75,10 +75,10 @@ namespace Penneo
         }
 
 
-        public void SetSigner(Signer signer)
+        public bool SetSigner(Signer signer)
         {
             Signer = signer;
-            LinkEntity(Signer);
+            return LinkEntity(Signer);
         }
     }
 }

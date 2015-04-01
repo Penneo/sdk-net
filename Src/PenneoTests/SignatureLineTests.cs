@@ -67,7 +67,6 @@ namespace PenneoTests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(Exception))]
         public void SetSignerFailTest()
         {
             var sl = CreateSignatureLine();
@@ -78,7 +77,8 @@ namespace PenneoTests
 
             try
             {
-                sl.SetSigner(s);
+                var result = sl.SetSigner(s);
+                Assert.IsFalse(result);
             }
             finally
             {
