@@ -10,8 +10,11 @@ namespace Penneo.Connector
     /// </summary>
     internal class WSSEAuthenticator : IAuthenticator
     {
+        private Random _rnd;
+
         public WSSEAuthenticator(string userName, string password, Func<string, string, string, string> digester = null, Func<string> noncer = null)
         {
+            _rnd = new Random(Guid.NewGuid().GetHashCode());
             UserName = userName;
             Password = password;
             Digester = digester ?? DefaultDigester;
@@ -77,10 +80,9 @@ namespace Penneo.Connector
             const int size = 16;
             var charResult = new char[size];
 
-            var rnd = new Random(Guid.NewGuid().GetHashCode());
             for (var i = 0; i < size; i++)
             {
-                charResult[i] = chars[rnd.Next(0, chars.Length - 1)];
+                charResult[i] = chars[_rnd.Next(0, chars.Length - 1)];
             }
             var result = new string(charResult);
             return result;
