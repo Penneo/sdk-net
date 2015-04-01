@@ -1,49 +1,51 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Penneo;
+using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace PenneoTests
 {
-    [TestClass]
+    [TestFixture]
     public class SigningRequestTests
     {        
-        [TestMethod]
+        [Test]
         public void PersistSuccessTest()
         {
             TestUtil.TestPersist(() => new SigningRequest());
         }
 
-        [TestMethod]
+        [Test]
         public void PersistFailTest()
         {
             TestUtil.TestPersistFail(() => new SigningRequest());
         }
 
-        [TestMethod]
+        [Test]
         public void DeleteTest()
         {
             TestUtil.TestDelete(() => new SigningRequest());
         }
 
-        [TestMethod]
+        [Test]
         public void GetTest()
         {
             TestUtil.TestGet<SigningRequest>();
         }
 
-        [TestMethod]
+        [Test]
         public void GetLinkTest()
         {
             TestUtil.TestGetTextAsset(() => new SigningRequest().GetLink());
         }
 
-        [TestMethod]
+        [Test]
         public void SendTest()
         {
             TestUtil.TestPerformActionSuccess(() => new SigningRequest().Send());
         }
 
-        [TestMethod]
+        [Test]
         public void GetStatusTest()
         {
             var s = new SigningRequest();

@@ -3,18 +3,21 @@ using System.Linq;
 using System.Net;
 using FakeItEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Penneo;
 using System.Collections.Generic;
 using RestSharp;
+using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
+using CollectionAssert = Microsoft.VisualStudio.TestTools.UnitTesting.CollectionAssert;
 
 namespace PenneoTests
 {
-    [TestClass]
+    [TestFixture]
     public class QueryTests
     {
         private static IRestResponse _response200 = new RestResponse { StatusCode = HttpStatusCode.OK};
 
-        [TestMethod]
+        [Test]
         public void FindTest()
         {
             var connector = TestUtil.CreateFakeConnector();
@@ -27,19 +30,19 @@ namespace PenneoTests
             A.CallTo(() => connector.ReadObject(null, out ignoredResponse)).WithAnyArguments().MustHaveHappened();
         }
 
-        [TestMethod]
+        [Test]
         public void FindOneByTest()
         {
             FindOneTest(() => Query.FindOneBy<CaseFile>());
         }
 
-        [TestMethod]
+        [Test]
         public void FindAllTest()
         {
             FindCollectionTest(Query.FindAll<CaseFile>);
         }
 
-        [TestMethod]
+        [Test]
         public void FindByTest()
         {
             FindCollectionTest(() =>  Query.FindBy<Document>(

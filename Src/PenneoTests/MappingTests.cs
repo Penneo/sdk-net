@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Penneo;
 using Penneo.Mapping;
 
+
 namespace PenneoTests
 {
-    [TestClass]
+    [TestFixture]
     public class MappingTests
     {
-        [TestMethod]
+        [Test]
         public void StringMappingTest()
         {
             const string title = "My Title";
@@ -33,7 +34,7 @@ namespace PenneoTests
             Assert.AreEqual(title, (string)updateValues["Title"]);
         }
 
-        [TestMethod]
+        [Test]
         public void IntegerMappingTest()
         {
             const int status = 3;
@@ -58,7 +59,7 @@ namespace PenneoTests
             Assert.AreEqual(status, (int) updateValues["Status"]);
         }
 
-        [TestMethod]
+        [Test]
         public void CreateMappingTest()
         {
             var mappings = new Mappings();
@@ -73,13 +74,13 @@ namespace PenneoTests
             Assert.IsNotNull(mappings.GetMapping(typeof(CaseFile)));
         }
 
-        [TestMethod]
+        [Test]
         [ExpectedException(typeof(KeyNotFoundException))]
         public void KeyNotFoundTest()
         {
             var mapping = new MappingBuilder<CaseFile>()
                 .ForCreate()
-                .Map(x => x.Title)              
+                .Map(x => x.Title)
                 .GetMapping();
 
             var obj = new CaseFile {Status = 3};
