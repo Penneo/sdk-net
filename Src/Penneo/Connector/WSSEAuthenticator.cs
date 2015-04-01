@@ -73,15 +73,17 @@ namespace Penneo.Connector
         /// </summary>
         public string DefaultNoncer()
         {
-            var bytes = new byte[16];
-            using (var rng = new RNGCryptoServiceProvider())
+            const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            const int size = 16;
+            var charResult = new char[size];
+
+            var rnd = new Random(Guid.NewGuid().GetHashCode());
+            for (var i = 0; i < size; i++)
             {
-                rng.GetBytes(bytes);
+                charResult[i] = chars[rnd.Next(0, chars.Length - 1)];
             }
-            using (var sha512 = new SHA512Managed())
-            {
-                return Encoding.UTF8.GetString(sha512.ComputeHash(bytes));
-            }
+            var result = new string(charResult);
+            return result;
         }
 
         #region Util
