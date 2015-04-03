@@ -296,9 +296,9 @@ namespace Penneo.Connector
         /// <summary>
         /// <see cref="IApiConnector.PerformAction"/>
         /// </summary>
-        public ActionResult PerformAction(Entity obj, string actionName)
+        public ServerResult PerformAction(Entity obj, string actionName)
         {
-            var result = new ActionResult();
+            var result = new ServerResult();
             var url = obj.RelativeUrl + "/" + obj.Id + "/" + actionName;
             var response = CallServer(url, customMethod: "patch");
             if (response == null || !_successStatusCodes.Contains(response.StatusCode))

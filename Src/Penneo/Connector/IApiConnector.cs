@@ -77,7 +77,7 @@ namespace Penneo.Connector
         /// <summary>
         /// Performs the named action on the backend for the given object
         /// </summary>
-        ActionResult PerformAction(Entity obj, string actionName);
+        ServerResult PerformAction(Entity obj, string actionName);
 
         /// <summary>
         /// Get the latest server result for a given entity

@@ -119,7 +119,7 @@ namespace PenneoTests
         public static void TestPerformActionSuccess(Action action)
         {
             var connector = CreateFakeConnector();
-            A.CallTo(() => connector.PerformAction(null, null)).WithAnyArguments().Returns(new ActionResult());
+            A.CallTo(() => connector.PerformAction(null, null)).WithAnyArguments().Returns(new ServerResult());
 
             action();
 

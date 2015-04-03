@@ -29,9 +29,9 @@
             return GetTextAssets(ASSET_LINK);
         }
 
-        public ActionResult Send()
+        public bool Send()
         {
-            return PerformAction(ACTION_SEND);
+            return PerformAction(ACTION_SEND).Success;
         }
     }
 
