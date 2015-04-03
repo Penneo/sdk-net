@@ -166,7 +166,7 @@ namespace Penneo
         /// <summary>
         /// Perform the given action on this entity
         /// </summary>
-        protected ActionResult PerformAction(string action)
+        protected ServerResult PerformAction(string action)
         {
             return ApiConnector.Instance.PerformAction(this, action);
         }

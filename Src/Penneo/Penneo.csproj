@@ -53,7 +53,6 @@
     <Compile Include="%28Model%29\DocumentType.cs" />
     <Compile Include="%28Model%29\Folder.cs" />
     <Compile Include="%28Model%29\SignerType.cs" />
-    <Compile Include="%28Result%29\ActionResult.cs" />
     <Compile Include="AuthType.cs" />
     <Compile Include="Mapping\Mappings.cs" />
     <Compile Include="%28Model%29\SigningRequest.cs" />

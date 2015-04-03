@@ -152,14 +152,14 @@ namespace Penneo
             return GetStringListAsset("errors");
         }
 
-        public ActionResult Send()
+        public bool Send()
         {
-            return PerformAction(ACTION_SEND);
+            return PerformAction(ACTION_SEND).Success;
         }
 
-        public ActionResult Activate()
+        public bool Activate()
         {
-            return PerformAction(ACTION_ACTIVATE);
+            return PerformAction(ACTION_ACTIVATE).Success;
         }
     }
 }
