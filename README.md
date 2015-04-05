@@ -18,7 +18,7 @@ Use the Nuget UI in Visual Studio for installing the Penneo SDK, or use the comm
 nuget install Penneo.SDK
 ```
 
-See additional information about the Penneo .Net SDK package at [Penneo Nuget](https://www.nuget.org/packages/Penneo.SDK/1.0.0).
+See additional information about the Penneo .Net SDK package at [Penneo Nuget](https://www.nuget.org/packages/Penneo.SDK).
 
 You can find out more on how to use Nuget and other best-practices for defining dependencies at [nuget.org](http://www.nuget.org/).
 

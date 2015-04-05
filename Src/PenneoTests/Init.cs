@@ -1,13 +1,17 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Penneo;
+using TestContext = Microsoft.VisualStudio.TestTools.UnitTesting.TestContext;
 
 namespace PenneoTests
 {
-    [TestClass]
+   
+    [SetUpFixture]
     public class Init
     {
-        [AssemblyInitialize]
-        public static void AssemblyInit(TestContext context)
+      
+        [SetUp]
+        public void AssemblyInit()
         {
             PenneoConnector.Initialize(null, null);
         }

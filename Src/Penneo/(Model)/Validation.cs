@@ -65,7 +65,7 @@ namespace Penneo
 
         public bool Send()
         {
-            return PerformAction(ACTION_SEND);
+            return PerformAction(ACTION_SEND).Success;
         }
 
         public IEnumerable<LogEntry> GetEventLog()

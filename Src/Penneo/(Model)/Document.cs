@@ -13,6 +13,7 @@ namespace Penneo
         private const string TYPE_SIGNABLE = "signable";
         private const string ASSET_PDF = "pdf";
         private CaseFile _caseFile;
+        private byte[] _pdfRaw;
 
         private IEnumerable<SignatureLine> _signatureLines;
 
@@ -87,7 +88,16 @@ namespace Penneo
 
         public byte[] GetPdf()
         {
-            return GetFileAssets(ASSET_PDF);
+            if (_pdfRaw == null)
+            {
+                _pdfRaw = GetFileAssets(ASSET_PDF);
+            }
+            return _pdfRaw;
+        }
+
+        public void SetPdf(byte[] data)
+        {
+            _pdfRaw = data;
         }
 
         public void SavePdf(string path)

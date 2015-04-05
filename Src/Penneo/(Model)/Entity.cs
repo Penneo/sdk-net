@@ -35,6 +35,11 @@ namespace Penneo
         }
 
         /// <summary>
+        /// Internal guid of the entity
+        /// </summary>
+        internal Guid InternalIdentifier { get; set; }
+
+        /// <summary>
         /// The Id of the entity
         /// </summary>
         public int? Id { get; set; }
@@ -45,6 +50,11 @@ namespace Penneo
         public bool IsNew
         {
             get { return !Id.HasValue; }
+        }
+
+        internal Entity()
+        {
+            InternalIdentifier = Guid.NewGuid();
         }
 
         /// <summary>
@@ -59,13 +69,15 @@ namespace Penneo
         /// <summary>
         /// Persist the entity to the storage
         /// </summary>
-        public void Persist()
+        public bool Persist()
         {
             Log.Write((IsNew ? "Creating" : "Updating") + " " + GetType().Name + " (" + (Id.HasValue ? Id.ToString() : "new") + ")", LogSeverity.Information);
-            if (!ApiConnector.Instance.WriteObject(this))
+            var success = ApiConnector.Instance.WriteObject(this);
+            if (!success)
             {
-                throw new Exception("Penneo: Could not persist the " + GetType().Name);
+                Log.Write((IsNew ? "Creating" : "Updating") + " " + GetType().Name + " (" + (Id.HasValue ? Id.ToString() : "new") + ") failed", LogSeverity.Information);
             }
+            return success;
         }
 
         /// <summary>
@@ -82,6 +94,14 @@ namespace Penneo
         }
 
         /// <summary>
+        /// Get the latest server result for the entity
+        /// </summary>
+        public ServerResult LatestServerResult
+        {
+            get { return ApiConnector.Instance.GetLatestEntityServerResult(this); }
+        }
+
+        /// <summary>
         /// Link this entity with the given child in the storage
         /// </summary>
         protected bool LinkEntity(Entity child)
@@ -89,11 +109,7 @@ namespace Penneo
             Log.Write("Linking " +
                       GetType().Name + " (" + (Id.HasValue ? Id.ToString() : "new") + ") TO " +
                       child.GetType().Name + " (" + (child.Id.HasValue ? Id.ToString() : "new") + ")", LogSeverity.Information);
-            if (!ApiConnector.Instance.LinkEntity(this, child))
-            {
-                throw new Exception("Penneo: Could not link the " + GetType().Name + " and the " + child.GetType().Name);
-            }
-            return true;
+            return ApiConnector.Instance.LinkEntity(this, child);
         }
 
         /// <summary>
@@ -104,11 +120,7 @@ namespace Penneo
             Log.Write("Unlinking " +
                       GetType().Name + " (" + (Id.HasValue ? Id.ToString() : "new") + ") TO " +
                       child.GetType().Name + " (" + (child.Id.HasValue ? Id.ToString() : "new") + ")", LogSeverity.Information);
-            if (!ApiConnector.Instance.UnlinkEntity(this, child))
-            {
-                throw new Exception("Penneo: Could not unlink the " + GetType().Name + " and the " + child.GetType().Name);
-            }
-            return true;
+            return ApiConnector.Instance.UnlinkEntity(this, child);
         }
 
         /// <summary>
@@ -154,7 +166,7 @@ namespace Penneo
         /// <summary>
         /// Perform the given action on this entity
         /// </summary>
-        protected bool PerformAction(string action)
+        protected ServerResult PerformAction(string action)
         {
             return ApiConnector.Instance.PerformAction(this, action);
         }

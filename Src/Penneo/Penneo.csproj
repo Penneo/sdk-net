@@ -61,7 +61,7 @@
     <Compile Include="%28Model%29\Document.cs" />
     <Compile Include="%28Model%29\Validation.cs" />
     <Compile Include="PenneoConnector.cs" />
-    <Compile Include="Query.cs" />
+    <Compile Include="%28Query%29\Query.cs" />
     <Compile Include="Connector\RestResources.cs" />
     <Compile Include="Connector\IApiConnector.cs" />
     <Compile Include="Connector\WSSEAuthenticator.cs" />
@@ -75,6 +75,9 @@
     <Compile Include="%28Model%29\Entity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="%28Logger%29\ILogger.cs" />
+    <Compile Include="%28Query%29\QueryInput.cs" />
+    <Compile Include="%28Result%29\QueryResult.cs" />
+    <Compile Include="%28Result%29\ServerResult.cs" />
     <Compile Include="ServiceLocator.cs" />
     <Compile Include="Util\FileUtil.cs" />
     <Compile Include="Util\ReflectionUtil.cs" />

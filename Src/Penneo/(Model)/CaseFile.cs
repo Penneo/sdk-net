@@ -154,12 +154,12 @@ namespace Penneo
 
         public bool Send()
         {
-            return PerformAction(ACTION_SEND);
+            return PerformAction(ACTION_SEND).Success;
         }
 
         public bool Activate()
         {
-            return PerformAction(ACTION_ACTIVATE);
+            return PerformAction(ACTION_ACTIVATE).Success;
         }
     }
 }

@@ -31,7 +31,7 @@
 
         public bool Send()
         {
-            return PerformAction(ACTION_SEND);
+            return PerformAction(ACTION_SEND).Success;
         }
     }
 
