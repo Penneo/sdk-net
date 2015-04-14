@@ -83,7 +83,7 @@ namespace Penneo.Util
             {
                 return TimeUtil.FromUnixTime(Convert.ToInt64(value));
             }
-            if (value.GetType() == typeof (JObject))
+            if (value != null && value.GetType() == typeof (JObject))
             { 
                 var obj = (JObject) value;
                 var sdkTypeName = obj.GetValue("sdkClassName");
