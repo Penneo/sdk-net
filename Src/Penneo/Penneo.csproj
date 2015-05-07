@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="%28Model%29\CaseFileTemplate.cs" />
+    <Compile Include="%28Model%29\CopyRecipient.cs" />
     <Compile Include="%28Model%29\LogEntry.cs" />
     <Compile Include="%28Model%29\DocumentType.cs" />
     <Compile Include="%28Model%29\Folder.cs" />

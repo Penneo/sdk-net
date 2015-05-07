@@ -105,6 +105,7 @@ namespace Penneo
             r.Add<DocumentType>("documenttype");
             r.Add<CaseFileTemplate>("casefiletype");
             r.Add<LogEntry>("log");
+            r.Add<CopyRecipient>("recipients");
 
             ServiceLocator.Instance.RegisterInstance<RestResources>(r);
         }
@@ -207,6 +208,15 @@ namespace Penneo
                 .Map(x => x.Title)
                 .ForUpdate()
                 .Map(x => x.Title)
+                .Create();
+
+            new MappingBuilder<CopyRecipient>(mappings)
+                .ForCreate()
+                .Map(x => x.Name)
+                .Map(x => x.Email)
+                .ForUpdate()
+                .Map(x => x.Name)
+                .Map(x => x.Email)
                 .Create();
         }
     }
