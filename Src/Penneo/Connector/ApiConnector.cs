@@ -344,7 +344,7 @@ namespace Penneo.Connector
             _restResources = ServiceLocator.Instance.GetInstance<RestResources>();
 
             _headers = PenneoConnector.Headers ?? new Dictionary<string, string>();
-            _headers["JsonContent-type"] = "application/json";
+            _headers["Content-type"] = "application/json";
 
             if (!string.IsNullOrEmpty(PenneoConnector.User))
             {
