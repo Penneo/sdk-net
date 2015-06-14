@@ -28,10 +28,8 @@ namespace Penneo.Connector
         /// </summary>
         bool DeleteObject(Entity obj);
 
-        /// <summary>
-        /// Reads an object from the backend, based on the given entity id.
-        /// </summary>
-        bool ReadObject(Entity obj, out IRestResponse response);
+        T ReadObject<T>(Entity parent, int id, out IRestResponse response)
+            where T : Entity;
 
         /// <summary>
         /// Link two objects on the backend.
@@ -46,7 +44,7 @@ namespace Penneo.Connector
         /// <summary>
         /// Gets all entities linked with obj from the backend.
         /// </summary>
-        IEnumerable<T> GetLinkedEntities<T>(Entity obj, string url = null);
+        QueryResult<T> GetLinkedEntities<T>(Entity obj, string url = null);
 
         /// <summary>
         /// Find a specific linked entity
@@ -83,5 +81,10 @@ namespace Penneo.Connector
         /// Get the latest server result for a given entity
         /// </summary>
         ServerResult GetLatestEntityServerResult(Entity entity);
+
+        /// <summary>
+        /// Custom call to the server
+        /// </summary>
+        IRestResponse CallServer(string url, Dictionary<string, object> data = null, Method method = Method.GET, Dictionary<string, Dictionary<string, object>> options = null, string customMethod = null);
     }
 }

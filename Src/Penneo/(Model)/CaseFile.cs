@@ -46,6 +46,7 @@ namespace Penneo
         public int? Status { get; set; }
         public int SignIteration { get; set; }
         public int? VisibilityMode { get; set; }
+        public Boolean SensitiveData { get; set; }
         public CaseFileTemplate CaseFileTemplate { get; set; }
 
         [JsonConverter(typeof(PenneoDateConverter))]
@@ -65,7 +66,7 @@ namespace Penneo
         {
             if (_documents == null)
             {
-                _documents = GetLinkedEntities<Document>().ToList();
+                _documents = GetLinkedEntities<Document>().Objects.ToList();
                 foreach (var doc in _documents)
                 {
                     doc.CaseFile = this;
@@ -84,7 +85,7 @@ namespace Penneo
         {
             if (_signers == null)
             {
-                _signers = GetLinkedEntities<Signer>().ToList();
+                _signers = GetLinkedEntities<Signer>().Objects.ToList();
                 foreach (var s in _signers)
                 {
                     s.CaseFile = this;
@@ -109,7 +110,7 @@ namespace Penneo
         {
             if (_copyRecipients == null)
             {
-                _copyRecipients = GetLinkedEntities<CopyRecipient>().ToList();
+                _copyRecipients = GetLinkedEntities<CopyRecipient>().Objects.ToList();
                 foreach (var doc in _copyRecipients)
                 {
                     doc.CaseFile = this;
@@ -133,14 +134,20 @@ namespace Penneo
             return (CaseFileStatus) Status;
         }
 
+        [Obsolete("Obsolete since 1.0.18. Use GetTemplates instead.")]
         public IEnumerable<CaseFileTemplate> GetCaseFileTemplates()
+        {
+            return GetLinkedEntities<CaseFileTemplate>("casefile/casefiletypes").Objects;
+        }
+
+        public QueryResult<CaseFileTemplate> GetTemplates()
         {
             return GetLinkedEntities<CaseFileTemplate>("casefile/casefiletypes");
         }
 
         public IEnumerable<DocumentType> GetDocumentTypes()
         {
-            return GetLinkedEntities<DocumentType>("casefiles/" + Id + "/documenttypes");
+            return GetLinkedEntities<DocumentType>("casefiles/" + Id + "/documenttypes").Objects;
         }
 
         public IEnumerable<SignerType> GetSignerTypes()
@@ -149,7 +156,7 @@ namespace Penneo
             {
                 return new List<SignerType>();
             }
-            return GetLinkedEntities<SignerType>("casefiles/" + Id + "/signertypes");
+            return GetLinkedEntities<SignerType>("casefiles/" + Id + "/signertypes").Objects;
         }
 
         public CaseFileTemplate GetCaseFileTemplate()
@@ -157,7 +164,7 @@ namespace Penneo
             if (Id.HasValue && CaseFileTemplate == null)
             {
                 var caseFileTypes = GetLinkedEntities<CaseFileTemplate>();
-                CaseFileTemplate = caseFileTypes.FirstOrDefault();
+                CaseFileTemplate = caseFileTypes.Objects.FirstOrDefault();
             }
             return CaseFileTemplate;
         }

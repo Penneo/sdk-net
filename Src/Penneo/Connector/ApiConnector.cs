@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Security.Authentication;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Penneo.Util;
@@ -101,7 +102,6 @@ namespace Penneo.Connector
         }
 
         #region IApiConnector Members
-
         /// <summary>
         /// <see cref="IApiConnector.WriteObject"/>
         /// </summary>
@@ -129,8 +129,9 @@ namespace Penneo.Connector
                 var successfull = ExtractResponse(obj, response, result);
                 if (successfull)
                 {
-                    //Update object with values returned from the API for the created object
-                    ReflectionUtil.SetPropertiesFromJson(obj, response.Content);
+                    //Update id given from server
+                    var fromServer = (Entity)JsonConvert.DeserializeObject(response.Content, obj.GetType());
+                    obj.Id = fromServer.Id;
                 }
                 return successfull;
             }
@@ -168,18 +169,18 @@ namespace Penneo.Connector
             return response != null && (response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.NoContent);
         }
 
-        /// <summary>
-        /// <see cref="IApiConnector.ReadObject"/>
-        /// </summary>
-        public bool ReadObject(Entity obj, out IRestResponse response)
+        public T ReadObject<T>(Entity parent, int id, out IRestResponse response)
+            where T: Entity
         {
-            response = CallServer(obj.RelativeUrl + '/' + obj.Id);
+            var relativeUrl = ServiceLocator.Instance.GetInstance<RestResources>().GetResource(typeof(T), parent);
+            response = CallServer(relativeUrl + '/' + id);
             if (response == null || response.StatusCode != HttpStatusCode.OK)
             {
-                return false;
+                return default(T);
             }
-            ReflectionUtil.SetPropertiesFromJson(obj, response.Content);
-            return true;
+            var obj = JsonConvert.DeserializeObject<T>(response.Content);
+            obj.Id = id;
+            return obj;
         }
 
         /// <summary>
@@ -207,7 +208,7 @@ namespace Penneo.Connector
         /// <summary>
         /// <see cref="IApiConnector.GetLinkedEntities{T}"/>
         /// </summary>
-        public IEnumerable<T> GetLinkedEntities<T>(Entity obj, string url = null)
+        public QueryResult<T> GetLinkedEntities<T>(Entity obj, string url = null)
         {
             string actualUrl;
             if (string.IsNullOrEmpty(url))
@@ -220,7 +221,12 @@ namespace Penneo.Connector
             }
 
             var response = CallServer(actualUrl);
-            return CreateObjects<T>(response.Content);
+            var result = new QueryResult<T>();
+            if (ExtractResponse(obj, response, result))
+            {
+                result.Objects = CreateObjects<T>(response.Content);
+            }
+            return result;
         }
 
         /// <summary>

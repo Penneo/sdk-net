@@ -58,21 +58,26 @@ namespace PenneoTests
         {
             var connector = CreateFakeConnector();
             var list = new List<T> { Activator.CreateInstance<T>() };
+            for (var i = 0; i < list.Count; i++)
+            {
+                list[i].Id = i;
+            }
             IEnumerable<T> ignoredObjects;
             IRestResponse ignoredResponse;
             A.CallTo(() => connector.FindBy(null, out ignoredObjects, out ignoredResponse)).WithAnyArguments().Returns(true).AssignsOutAndRefParameters(list, _response200);
 
-            var result = Query.FindAll<T>();
+            var result = Query.FindAll<T>().ToList();
 
             A.CallTo(() => connector.FindBy(null, out ignoredObjects, out ignoredResponse)).WithAnyArguments().MustHaveHappened();
-            Assert.AreEqual(list, result);
+            CollectionAssert.AreEqual(list, result);
         }
 
         public static void TestGetLinked<TChild>(Func<IEnumerable<TChild>> getter)
         {
             var connector = CreateFakeConnector();
             var list = new List<TChild>() {Activator.CreateInstance<TChild>()};
-            A.CallTo(() => connector.GetLinkedEntities<TChild>(null, null)).WithAnyArguments().Returns(list);
+            var mockedResult = new QueryResult<TChild>() { Objects = list, StatusCode = HttpStatusCode.OK };
+            A.CallTo(() => connector.GetLinkedEntities<TChild>(null, null)).WithAnyArguments().Returns(mockedResult);
 
             var result = getter();
 
@@ -86,7 +91,8 @@ namespace PenneoTests
             var connector = CreateFakeConnector();
             var instance = Activator.CreateInstance<TChild>();
             var list = new List<TChild> { instance };
-            A.CallTo(() => connector.GetLinkedEntities<TChild>(null, null)).WithAnyArguments().Returns(list);
+            var mockedResult = new QueryResult<TChild>() {Objects = list, StatusCode = HttpStatusCode.OK};
+            A.CallTo(() => connector.GetLinkedEntities<TChild>(null, null)).WithAnyArguments().Returns(mockedResult);
 
             var result = getter();
 
@@ -98,7 +104,8 @@ namespace PenneoTests
         public static void TestGetLinkedNotCalled<TChild>(Func<TChild> getter)
         {
             var connector = CreateFakeConnector();
-            A.CallTo(() => connector.GetLinkedEntities<TChild>(null, null)).WithAnyArguments().Returns(new List<TChild>());
+            var mockedResult = new QueryResult<TChild>() { Objects = new List<TChild>() , StatusCode = HttpStatusCode.OK};
+            A.CallTo(() => connector.GetLinkedEntities<TChild>(null, null)).WithAnyArguments().Returns(mockedResult);
             getter();
             A.CallTo(() => connector.GetLinkedEntities<TChild>(null, null)).WithAnyArguments().MustNotHaveHappened();
         }

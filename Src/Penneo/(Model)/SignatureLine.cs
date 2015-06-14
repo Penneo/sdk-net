@@ -62,7 +62,7 @@ namespace Penneo
                     }
                     else
                     {
-                        _signer = GetLinkedEntities<Signer>().FirstOrDefault();
+                        _signer = GetLinkedEntities<Signer>().Objects.FirstOrDefault();
                         if (_signer != null)
                         {
                             _signer.CaseFile = Document.CaseFile;

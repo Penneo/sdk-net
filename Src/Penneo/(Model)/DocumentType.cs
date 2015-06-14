@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Penneo
 {
@@ -7,7 +8,23 @@ namespace Penneo
         public string Name { get; set; }
         public int? UpperLimit { get; set; }
         public int? LowerLimit { get; set; }
-        public string Options { get; set; }
+        
+        [JsonProperty("Options")]
+        public string OptionsJson { get; set; }
+
+        [JsonIgnore]
+        public IEnumerable<DocumentTypeOption> Options
+        {
+            get 
+            {
+                if (OptionsJson == null)
+                {
+                    return null;
+                }
+                return JsonConvert.DeserializeObject<IEnumerable<DocumentTypeOption>>(OptionsJson); 
+            }
+        }
+
         public IEnumerable<SignerType> SignerTypes { get; set; }
     }
 }

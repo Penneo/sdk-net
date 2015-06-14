@@ -70,7 +70,7 @@ namespace Penneo
 
         public IEnumerable<LogEntry> GetEventLog()
         {
-            return GetLinkedEntities<LogEntry>();
+            return GetLinkedEntities<LogEntry>().Objects;
         }
     }
 
