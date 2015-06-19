@@ -10,8 +10,11 @@ namespace Penneo.Connector
     /// </summary>
     internal class WSSEAuthenticator : IAuthenticator
     {
+        private Random _rnd;
+
         public WSSEAuthenticator(string userName, string password, Func<string, string, string, string> digester = null, Func<string> noncer = null)
         {
+            _rnd = new Random(Guid.NewGuid().GetHashCode());
             UserName = userName;
             Password = password;
             Digester = digester ?? DefaultDigester;
@@ -73,15 +76,16 @@ namespace Penneo.Connector
         /// </summary>
         public string DefaultNoncer()
         {
-            var bytes = new byte[16];
-            using (var rng = new RNGCryptoServiceProvider())
+            const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            const int size = 16;
+            var charResult = new char[size];
+
+            for (var i = 0; i < size; i++)
             {
-                rng.GetBytes(bytes);
+                charResult[i] = chars[_rnd.Next(0, chars.Length - 1)];
             }
-            using (var sha512 = new SHA512Managed())
-            {
-                return Encoding.UTF8.GetString(sha512.ComputeHash(bytes));
-            }
+            var result = new string(charResult);
+            return result;
         }
 
         #region Util

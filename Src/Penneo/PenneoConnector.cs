@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using Penneo.Connector;
 using Penneo.Mapping;
 using Penneo.Util;
@@ -12,13 +11,19 @@ namespace Penneo
     /// </summary>
     public class PenneoConnector
     {
-        public static bool IsInitialized;
+        public static bool IsInitialized
+        {
+            get { return _isInitialized; }
+            set { _isInitialized = value; }
+        }
+
         internal static AuthType AuthenticationType;
         internal static string Key;
         internal static string Secret;
         internal static string Endpoint;
         internal static string User;
         internal static Dictionary<string, string> Headers;
+        private static bool _isInitialized;
 
         /// <summary>
         /// Checks if the last Http response was an error
@@ -100,6 +105,7 @@ namespace Penneo
             r.Add<DocumentType>("documenttype");
             r.Add<CaseFileTemplate>("casefiletype");
             r.Add<LogEntry>("log");
+            r.Add<CopyRecipient>("recipients");
 
             ServiceLocator.Instance.RegisterInstance<RestResources>(r);
         }
@@ -202,6 +208,15 @@ namespace Penneo
                 .Map(x => x.Title)
                 .ForUpdate()
                 .Map(x => x.Title)
+                .Create();
+
+            new MappingBuilder<CopyRecipient>(mappings)
+                .ForCreate()
+                .Map(x => x.Name)
+                .Map(x => x.Email)
+                .ForUpdate()
+                .Map(x => x.Name)
+                .Map(x => x.Email)
                 .Create();
         }
     }

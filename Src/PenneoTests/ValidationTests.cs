@@ -1,15 +1,17 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using FakeItEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Penneo;
+using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
+using CollectionAssert = Microsoft.VisualStudio.TestTools.UnitTesting.CollectionAssert;
 
 namespace PenneoTests
 {
-    [TestClass]
+    [TestFixture]
     public class ValidationTests
     {
-        [TestMethod]
+        [Test]
         public void ConstructorTest()
         {
             var cf = new Validation("name", "email");
@@ -17,44 +19,43 @@ namespace PenneoTests
             Assert.AreEqual("email", cf.Email);
         }
 
-        [TestMethod]
+        [Test]
         public void PersistSuccessTest()
         {
             TestUtil.TestPersist(() => new Validation());
         }
 
-        [TestMethod]
-        [ExpectedException(typeof (Exception))]
+        [Test]
         public void PersistFailTest()
         {
             TestUtil.TestPersistFail(() => new Validation());
         }
 
-        [TestMethod]
+        [Test]
         public void DeleteTest()
         {
             TestUtil.TestDelete(() => new Validation());
         }
 
-        [TestMethod]
+        [Test]
         public void GetTest()
         {
             TestUtil.TestGet<Validation>();
         }
 
-        [TestMethod]
+        [Test]
         public void GetLinkTest()
         {
             TestUtil.TestGetTextAsset(() => new Validation().GetLink());
         }
 
-        [TestMethod]
+        [Test]
         public void GetPdfTest()
         {
             TestUtil.TestGetFileAsset(() => new Validation().GetPdf());
         }
 
-        [TestMethod]
+        [Test]
         public void SavePdfTest()
         {
             var connector = TestUtil.CreateFakeConnector();
@@ -76,7 +77,7 @@ namespace PenneoTests
             A.CallTo(() => connector.GetFileAssets(null, null)).WithAnyArguments().MustHaveHappened();
         }
 
-        [TestMethod]
+        [Test]
         public void SendTest()
         {
             TestUtil.TestPerformActionSuccess(() => new Validation().Send());

@@ -1,10 +1,11 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Penneo;
+using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace PenneoTests
 {
-    [TestClass]
+    [TestFixture]
     public class SignerTests
     {
         private static Signer CreateSigner()
@@ -14,7 +15,7 @@ namespace PenneoTests
             return s;
         }
 
-        [TestMethod]
+        [Test]
         public void ConstructorTest()
         {
             var s = CreateSigner();
@@ -23,33 +24,32 @@ namespace PenneoTests
             Assert.AreEqual("1111111111", s.SocialSecurityNumber);
             Assert.AreEqual(s.CaseFile, s.Parent);
         }
-        
-        [TestMethod]
+
+        [Test]
         public void PersistSuccessTest()
         {
             TestUtil.TestPersist(CreateSigner);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof (Exception))]
+        [Test]
         public void PersistFailTest()
         {
             TestUtil.TestPersistFail(CreateSigner);
         }
 
-        [TestMethod]
+        [Test]
         public void DeleteTest()
         {
             TestUtil.TestDelete(CreateSigner);
         }
 
-        [TestMethod]
+        [Test]
         public void GetTest()
         {
             TestUtil.TestGet<Signer>();
         }
 
-        [TestMethod]
+        [Test]
         public void GetSigningRequestTest()
         {
             TestUtil.TestGetLinked(() => CreateSigner().GetSigningRequest());

@@ -2,11 +2,14 @@
 using System.IO;
 using FakeItEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Penneo;
+using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
+using CollectionAssert = Microsoft.VisualStudio.TestTools.UnitTesting.CollectionAssert;
 
 namespace PenneoTests
 {
-    [TestClass]
+    [TestFixture]
     public class DocumentTests
     {
         private static Document CreateDocument()
@@ -17,7 +20,7 @@ namespace PenneoTests
             return doc;
         }
 
-        [TestMethod]
+        [Test]
         public void ConstructorTest()
         {
             var doc = CreateDocument();
@@ -26,39 +29,38 @@ namespace PenneoTests
             Assert.AreEqual("path", doc.PdfFile);
         }
 
-        [TestMethod]
+        [Test]
         public void GetCaseFileTest()
         {
             var doc = new Document();
             TestUtil.TestGetLinked(() => doc.CaseFile);
         }
 
-        [TestMethod]
+        [Test]
         public void PersistSuccessTest()
         {
             TestUtil.TestPersist(CreateDocument);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof (Exception))]
+        [Test]
         public void PersistFailTest()
         {
             TestUtil.TestPersistFail(CreateDocument);
         }
 
-        [TestMethod]
+        [Test]
         public void DeleteTest()
         {
             TestUtil.TestDelete(CreateDocument);
         }
-        
-        [TestMethod]
+
+        [Test]
         public void GetTest()
         {
             TestUtil.TestGet<Document>();
         }
 
-        [TestMethod]
+        [Test]
         public void MakeSignableTest()
         {
             var doc = CreateDocument();
@@ -66,26 +68,26 @@ namespace PenneoTests
             Assert.AreEqual("signable", doc.Type);
         }
 
-        
-        [TestMethod]
+
+        [Test]
         public void GetSignatureLinesTest()
         {
             TestUtil.TestGetLinked(CreateDocument().GetSignatureLines);
         }
 
-        [TestMethod]
+        [Test]
         public void FindSignatureLineTest()
         {
             TestUtil.TestFindLinked(() => CreateDocument().FindSignatureLine(0));
         }
 
-        [TestMethod]
+        [Test]
         public void GetPdfTest()
         {
             TestUtil.TestGetFileAsset(() => CreateDocument().GetPdf());
         }
 
-        [TestMethod]
+        [Test]
         public void SavePdfTest()
         {
             var connector = TestUtil.CreateFakeConnector();
@@ -107,7 +109,7 @@ namespace PenneoTests
             A.CallTo(() => connector.GetFileAssets(null, null)).WithAnyArguments().MustHaveHappened();
         }
 
-        [TestMethod]
+        [Test]
         public void GetDocumentTypeTest()
         {
             var doc1 = CreateDocument();
@@ -119,7 +121,7 @@ namespace PenneoTests
             Assert.AreEqual(doc2.GetDocumentType(), doc2.DocumentType);
         }
 
-        [TestMethod]
+        [Test]
         public void SetDocumentTypeTest()
         {
             var dt = new DocumentType();
@@ -128,7 +130,7 @@ namespace PenneoTests
             Assert.AreEqual(dt, doc.DocumentType);
         }
 
-        [TestMethod]
+        [Test]
         public void GetStatusTest()
         {
             var doc = CreateDocument();

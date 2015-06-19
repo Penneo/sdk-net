@@ -2,76 +2,77 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
+using NUnit.Framework;
 using Penneo;
+using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace PenneoTests
 {
-    [TestClass]
+    [TestFixture]
     public class CastFileTests
     {
-        [TestMethod]
+        [Test]
         public void ConstructorTest()
         {
             var cf = new CaseFile("CF");
             Assert.AreEqual("CF", cf.Title);
         }
 
-        [TestMethod]
+        [Test]
         public void PersistSuccessTest()
         {
             TestUtil.TestPersist(() => new CaseFile());
         }
 
-        [TestMethod]
-        [ExpectedException(typeof (Exception))]
+        [Test]
         public void PersistFailTest()
         {
             TestUtil.TestPersistFail(() => new CaseFile());
         }
 
-        [TestMethod]
+        [Test]
         public void DeleteTest()
         {
             TestUtil.TestDelete(() => new CaseFile());
         }
 
-        [TestMethod]
+        [Test]
         public void GetTest()
         {
             TestUtil.TestGet<CaseFile>();
         }
 
-        [TestMethod]
+        [Test]
         public void GetDocumentsTest()
         {
             TestUtil.TestGetLinked(new CaseFile().GetDocuments);
         }
 
-        [TestMethod]
+        [Test]
         public void GetSignersTest()
         {
             TestUtil.TestGetLinked(new CaseFile().GetSigners);
         }
 
-        [TestMethod]
+        [Test]
         public void FindSignerTest()
         {
             TestUtil.TestFindLinked(() => new CaseFile().FindSigner(0));
         }
 
-        [TestMethod]
+        [Test]
         public void SendTest()
         {
             TestUtil.TestPerformActionSuccess(() => new CaseFile().Send());
         }
 
-        [TestMethod]
+        [Test]
         public void ActivateTest()
         {
             TestUtil.TestPerformActionSuccess(() => new CaseFile().Activate());
         }
 
-        [TestMethod]
+        [Test]
         public void TestJsonDeserialization()
         {
             const string json = "{\"signers\":[{\"sdkClassName\":\"Signer\",\"id\":334,\"name\":\"A signer\",\"signingRequest\":{\"sdkClassName\":\"SigningRequest\",\"id\":334,\"email\":\"test@example.com\",\"emailSubject\":\"Test subject\",\"emailText\":\"Test text\",\"status\":1,\"accessControl\":true}}],\"sdkClassName\":\"CaseFile\",\"id\":245,\"title\":\"CF\",\"status\":1,\"documents\":[{\"sdkClassName\":\"Document\",\"id\":359,\"documentId\":\"CB5VL-GS115-G5KDD-GFHKH-IPGAX-3J0LZ\",\"title\":\"My Doc\",\"status\":0,\"signable\":true,\"signatureLines\":[{\"signerId\":334,\"sdkClassName\":\"SignatureLine\",\"id\":477,\"signOrder\":0}],\"created\":\"1412092744\",\"modified\":\"1412092744\",\"completed\":\"1412092744\"}],\"signIteration\":2,\"visibilityMode\":3,\"created\":\"1412092736\"}";

@@ -27,6 +27,7 @@ namespace Penneo
 
         private IEnumerable<Document> _documents;
         private IEnumerable<Signer> _signers;
+        private IEnumerable<CopyRecipient> _copyRecipients;
 
         public CaseFile()
         {
@@ -104,6 +105,25 @@ namespace Penneo
             return linked;
         }
 
+        public IEnumerable<CopyRecipient> GetCopyRecipients()
+        {
+            if (_copyRecipients == null)
+            {
+                _copyRecipients = GetLinkedEntities<CopyRecipient>().ToList();
+                foreach (var doc in _copyRecipients)
+                {
+                    doc.CaseFile = this;
+                }
+            }
+            return _copyRecipients;
+        }
+
+        public IEnumerable<CopyRecipient> CopyRecipients
+        {
+            get { return _copyRecipients; }
+            set { _copyRecipients = value; }
+        }
+
         public CaseFileStatus GetStatus()
         {
             if (!Status.HasValue)
@@ -154,12 +174,12 @@ namespace Penneo
 
         public bool Send()
         {
-            return PerformAction(ACTION_SEND);
+            return PerformAction(ACTION_SEND).Success;
         }
 
         public bool Activate()
         {
-            return PerformAction(ACTION_ACTIVATE);
+            return PerformAction(ACTION_ACTIVATE).Success;
         }
     }
 }

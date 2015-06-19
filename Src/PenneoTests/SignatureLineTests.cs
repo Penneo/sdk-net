@@ -1,11 +1,13 @@
 ﻿using System;
 using FakeItEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Penneo;
+using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace PenneoTests
 {
-    [TestClass]
+    [TestFixture]
     public class SignatureLineTests
     {
         private static SignatureLine CreateSignatureLine()
@@ -16,43 +18,42 @@ namespace PenneoTests
             return s;
         }
 
-        [TestMethod]
+        [Test]
         public void ConstructorTest()
         {
             var s = CreateSignatureLine();
             Assert.IsNotNull(s.Document);
-            Assert.AreEqual("role", s.Role);            
+            Assert.AreEqual("role", s.Role);
             Assert.AreEqual(1, s.SignOrder);
             Assert.AreEqual("conditions", s.Conditions);
             Assert.AreEqual(s.Document, s.Parent);
         }
-        
-        [TestMethod]
+
+        [Test]
         public void PersistSuccessTest()
         {
             TestUtil.TestPersist(CreateSignatureLine);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof (Exception))]
+        [Test]
         public void PersistFailTest()
         {
             TestUtil.TestPersistFail(CreateSignatureLine);
         }
 
-        [TestMethod]
+        [Test]
         public void DeleteTest()
         {
             TestUtil.TestDelete(CreateSignatureLine);
         }
 
-        [TestMethod]
+        [Test]
         public void GetTest()
         {
             TestUtil.TestGet<SignatureLine>();
         }
 
-        [TestMethod]
+        [Test]
         public void SetSignerSuccessTest()
         {
             var sl = CreateSignatureLine();
@@ -67,8 +68,7 @@ namespace PenneoTests
             A.CallTo(() => connector.LinkEntity(sl, s)).MustHaveHappened();
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(Exception))]
+        [Test]
         public void SetSignerFailTest()
         {
             var sl = CreateSignatureLine();
@@ -79,7 +79,8 @@ namespace PenneoTests
 
             try
             {
-                sl.SetSigner(s);
+                var result = sl.SetSigner(s);
+                Assert.IsFalse(result);
             }
             finally
             {
