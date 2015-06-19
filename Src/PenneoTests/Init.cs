@@ -1,7 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Penneo;
-using TestContext = Microsoft.VisualStudio.TestTools.UnitTesting.TestContext;
 
 namespace PenneoTests
 {

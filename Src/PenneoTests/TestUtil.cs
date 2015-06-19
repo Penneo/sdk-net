@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using FakeItEasy;
+using NUnit.Framework;
 using Penneo;
 using Penneo.Connector;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RestSharp;
 
 namespace PenneoTests

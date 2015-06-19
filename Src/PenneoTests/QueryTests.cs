@@ -2,13 +2,10 @@
 using System.Linq;
 using System.Net;
 using FakeItEasy;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
 using Penneo;
 using System.Collections.Generic;
 using RestSharp;
-using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
-using CollectionAssert = Microsoft.VisualStudio.TestTools.UnitTesting.CollectionAssert;
 
 namespace PenneoTests
 {
