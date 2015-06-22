@@ -15,38 +15,53 @@ namespace PenneoTests
         [Test]
         public void AddKeyValueTest()
         {
-            var metaData = new Dictionary<string, object>();
             const string key = "myKey";
             const string val = "myValue";
-            metaData.Add(key, val);
-            Assert.AreEqual(1, metaData.Count);
-            Assert.AreEqual(val, metaData[key]);
-            Assert.AreEqual(val, metaData.GetMetaDataValue(key));
+            var helper = new KeyValueMetaDataHelper();
+            helper.Add(key, val);
+            Assert.AreEqual(1, helper.Count);
+            Assert.AreEqual(val, helper.GetMetaDataValue(key));
+
+            var json = helper.ToJson();
+            Assert.IsNotNullOrEmpty(json);
+            Assert.IsTrue(json.Contains(key));
+            Assert.IsTrue(json.Contains(val));
         }
 
         [Test]
         public void AddBytesTest()
         {
-            var metaData = new Dictionary<string, object>();
             const string key = "myKey";
             var val = new byte[] { 1, 2, 3 };
-            metaData.AddBytes(key, val);
-            Assert.AreEqual(1, metaData.Count);
-            CollectionAssert.AreEqual(val, (byte[])metaData.GetMetaDataValue(key));
+            var helper = new KeyValueMetaDataHelper();
+            helper.AddBytes(key, val);
+            Assert.AreEqual(1, helper.Count);
+            CollectionAssert.AreEqual(val, (byte[])helper.GetMetaDataValue(key));
         }
 
         [Test]
         public void AddFileTest()
         {
-            var metaData = new Dictionary<string, object>();
+            var helper = new KeyValueMetaDataHelper();
             const string key = "myKey";
-            var filePath = Path.GetTempFileName();
             const string content = "myContent";
+            var filePath = Path.GetTempFileName();
+
             File.WriteAllText(filePath, content, Encoding.UTF8);
-            metaData.AddFile(key, filePath);
-            var bytes = (byte[])metaData.GetMetaDataValue(key);
+            helper.AddFile(key, filePath);
+            var bytes = (byte[])helper.GetMetaDataValue(key);
             var text = Encoding.UTF8.GetString(bytes);
             Assert.IsTrue(content.Equals(text, StringComparison.InvariantCulture));
+        }
+
+        [Test]
+        public void ExistingMetaDataTest()
+        {
+            const string key = "myKey";
+            const string val = "myValue";
+            var helper = new KeyValueMetaDataHelper("{'" + key + "':'" + val + "'}");
+            var result = (string)helper.GetMetaDataValue(key);
+            Assert.IsTrue(val.Equals(result, StringComparison.InvariantCulture));
         }
     }
 }

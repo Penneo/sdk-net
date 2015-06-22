@@ -114,34 +114,6 @@ namespace Penneo
         public string MetaData { get; set; }
 
         /// <summary>
-        /// Key/Value meta data for the document
-        /// NOTE: Call <see cref="EndKeyValueMetaData"/> to apply the key/value pairs to the document meta data string
-        /// NOTE: Call <see cref="BeginKeyValueMetaData"/> to build the key/value pairs from the document meta data string
-        /// </summary>
-        [JsonIgnore]
-        public Dictionary<string, object> KeyValueMetaData { get; set; }
-
-        /// <summary>
-        /// Build the key/value meta data from the document meta data string
-        /// </summary>
-        public void BeginKeyValueMetaData()
-        {
-            if (string.IsNullOrEmpty(MetaData))
-            {
-                KeyValueMetaData = new Dictionary<string, object>();
-            }
-            KeyValueMetaData = MetaData.ToKeyValueMetaData();
-        }
-
-        /// <summary>
-        /// Apply key/value meta data to the document meta data string
-        /// </summary>
-        public void EndKeyValueMetaData()
-        {
-            MetaData = KeyValueMetaData.ToJson();
-        }
-
-        /// <summary>
         /// The data the document was created
         /// </summary>
         [JsonConverter(typeof(PenneoDateConverter))]

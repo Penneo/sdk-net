@@ -100,34 +100,6 @@ namespace Penneo
         public string MetaData { get; set; }
 
         /// <summary>
-        /// Key/Value meta data for the case file.
-        /// NOTE: Call <see cref="EndKeyValueMetaData"/> to apply the key/value pairs to the case file meta data string
-        /// NOTE: Call <see cref="BeginKeyValueMetaData"/> to build the key/value pairs from the case file meta data string
-        /// </summary>
-        [JsonIgnore]
-        public Dictionary<string, object> KeyValueMetaData { get; set; }
-
-        /// <summary>
-        /// Build the key/value meta data from the case file meta data string
-        /// </summary>
-        public void BeginKeyValueMetaData()
-        {
-            if (string.IsNullOrEmpty(MetaData))
-            {
-                KeyValueMetaData = new Dictionary<string, object>();
-            }
-            KeyValueMetaData = MetaData.ToKeyValueMetaData();
-        }
-
-        /// <summary>
-        /// Apply key/value meta data to the case file meta data string
-        /// </summary>
-        public void EndKeyValueMetaData()
-        {
-            MetaData = KeyValueMetaData.ToJson();
-        }
-
-        /// <summary>
         /// The documents in the case file
         /// Note: This property will only return already loaded documents
         /// </summary>
