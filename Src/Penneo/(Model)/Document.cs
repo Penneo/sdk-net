@@ -98,14 +98,14 @@ namespace Penneo
         /// Options as list of document options
         /// </summary>
         [JsonIgnore]
-        public IEnumerable<DocumentOption> Options {
+        public Dictionary<string, object> Options {
             get
             {
                 if (OptionsJson == null)
                 {
                     return null;
                 }
-                return JsonConvert.DeserializeObject<IEnumerable<DocumentOption>>(OptionsJson);
+                return JsonConvert.DeserializeObject<Dictionary<string, object>>(OptionsJson);
             } }
 
         /// <summary>
