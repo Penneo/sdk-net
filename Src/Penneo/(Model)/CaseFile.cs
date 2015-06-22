@@ -96,14 +96,20 @@ namespace Penneo
 
         public Signer FindSigner(int id)
         {
+            Signer signer = null;
             if (_signers != null)
             {
-                return _signers.FirstOrDefault(x => x.Id == id);
+                signer = _signers.FirstOrDefault(x => x.Id == id);
             }
-
-            var linked = FindLinkedEntity<Signer>(id);
-            linked.CaseFile = this;
-            return linked;
+            if (signer == null)
+            {
+                signer = FindLinkedEntity<Signer>(id);
+            }
+            if (signer != null)
+            {
+                signer.CaseFile = this;
+            }
+            return signer;
         }
 
         public IEnumerable<CopyRecipient> GetCopyRecipients()
