@@ -50,9 +50,12 @@
   <ItemGroup>
     <Compile Include="%28Model%29\CaseFileTemplate.cs" />
     <Compile Include="%28Model%29\CopyRecipient.cs" />
+    <Compile Include="%28Model%29\DocumentOption.cs" />
+    <Compile Include="%28Model%29\DocumentTypeOption.cs" />
     <Compile Include="%28Model%29\LogEntry.cs" />
     <Compile Include="%28Model%29\DocumentType.cs" />
     <Compile Include="%28Model%29\Folder.cs" />
+    <Compile Include="%28Model%29\MessageTemplate.cs" />
     <Compile Include="%28Model%29\SignerType.cs" />
     <Compile Include="AuthType.cs" />
     <Compile Include="Mapping\Mappings.cs" />
@@ -81,6 +84,7 @@
     <Compile Include="%28Result%29\ServerResult.cs" />
     <Compile Include="ServiceLocator.cs" />
     <Compile Include="Util\FileUtil.cs" />
+    <Compile Include="Util\LinqExtensions.cs" />
     <Compile Include="Util\ReflectionUtil.cs" />
     <Compile Include="Util\StringUtil.cs" />
     <Compile Include="Util\TimeUtil.cs" />

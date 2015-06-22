@@ -43,7 +43,18 @@ namespace Penneo
         public int? Status { get; set; }
         public string PdfFile { get; set; }
         public string Type { get; internal set; }
-        public string Options { get; set; }
+        [JsonProperty("Options")]
+        public string OptionsJson { get; set; }
+        [JsonIgnore]
+        public IEnumerable<DocumentOption> Options {
+            get
+            {
+                if (OptionsJson == null)
+                {
+                    return null;
+                }
+                return JsonConvert.DeserializeObject<IEnumerable<DocumentOption>>(OptionsJson);
+            } }
         public DocumentType DocumentType { get; set; }
 
         [JsonConverter(typeof(PenneoDateConverter))]
@@ -65,7 +76,7 @@ namespace Penneo
             {
                 if (_caseFile == null)
                 {
-                    _caseFile = GetLinkedEntities<CaseFile>().FirstOrDefault();
+                    _caseFile = GetLinkedEntities<CaseFile>().Objects.FirstOrDefault();
                 }
                 return _caseFile;
             }
@@ -120,7 +131,7 @@ namespace Penneo
         {
             if (_signatureLines == null)
             {
-                _signatureLines = GetLinkedEntities<SignatureLine>().ToList();
+                _signatureLines = GetLinkedEntities<SignatureLine>().Objects.ToList();
             }
             foreach (var sl in _signatureLines)
             {
@@ -148,7 +159,7 @@ namespace Penneo
             if (Id.HasValue && DocumentType == null)
             {
                 var documentTypes = GetLinkedEntities<DocumentType>();
-                DocumentType = documentTypes.FirstOrDefault();
+                DocumentType = documentTypes.Objects.FirstOrDefault();
             }
             return DocumentType;
         }

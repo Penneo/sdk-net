@@ -1,9 +1,6 @@
-﻿using System;
-using FakeItEasy;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using FakeItEasy;
 using NUnit.Framework;
 using Penneo;
-using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace PenneoTests
 {

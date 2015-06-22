@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using Penneo;
-using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace PenneoTests
 {

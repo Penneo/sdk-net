@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using Penneo.Connector;
+using Penneo.Mapping;
 using RestSharp;
 
 namespace Penneo
@@ -11,6 +13,13 @@ namespace Penneo
     /// </summary>
     public static class Query
     {
+        private static Dictionary<Type, Func<object, object>> _postProcessors = new Dictionary<Type, Func<object, object>>(); 
+
+        internal static void AddPostProcessor<T>(Func<object, object> processor)
+        {
+            _postProcessors[typeof (T)] = processor;
+        }
+
         /// <summary>
         /// Get an entity by its Id
         /// </summary>
@@ -27,13 +36,11 @@ namespace Penneo
 
         public static QuerySingleObjectResult<T> FindById<T>(int id)
             where T : Entity
-        {
-            var obj = Activator.CreateInstance<T>();
-            obj.Id = id;
-
+        {            
             var output = new QuerySingleObjectResult<T>();
             IRestResponse response;
-            output.Success = ApiConnector.Instance.ReadObject(obj, out response);
+            var obj = ApiConnector.Instance.ReadObject<T>(null, id, out response);
+            output.Success = obj != null;
             output.StatusCode = response.StatusCode;
             output.ErrorMessage = response.ErrorMessage;
             output.Object = obj;
@@ -72,7 +79,7 @@ namespace Penneo
             var input = new QueryInput();
             return FindBy<T>(input).Objects;
         }
-        
+
         /// <summary>
         /// Get entities matching the search criteria
         /// </summary>
@@ -134,7 +141,25 @@ namespace Penneo
             output.Objects = objects;
             output.StatusCode = response.StatusCode;
             output.ErrorMessage = response.ErrorMessage;
+            
+            if (output.Success)
+            {
+                Func<object, object> processor;
+                if (_postProcessors.TryGetValue(typeof (T), out processor))
+                {
+                    output.Objects = (IEnumerable<T>) processor(output.Objects);
+                }
+            }
             return output;
+        }
+
+        public static QueryResult<MessageTemplate> GetDefaultMessageTemplate()
+        {
+            var resource = ServiceLocator.Instance.GetInstance<RestResources>().GetResource(typeof(MessageTemplate)) + "/default";
+            var result = ApiConnector.Instance.CallServer(resource);
+            var obj = JsonConvert.DeserializeObject<MessageTemplate>(result.Content);
+            obj.Title = "Standard";
+            return new QueryResult<MessageTemplate>(){ Objects = new []{ obj }, Success = true };
         }
     }
 }

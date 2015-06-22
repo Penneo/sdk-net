@@ -2,13 +2,10 @@
 using System.Linq;
 using System.Net;
 using FakeItEasy;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
 using Penneo;
 using System.Collections.Generic;
 using RestSharp;
-using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
-using CollectionAssert = Microsoft.VisualStudio.TestTools.UnitTesting.CollectionAssert;
 
 namespace PenneoTests
 {
@@ -22,12 +19,14 @@ namespace PenneoTests
         {
             var connector = TestUtil.CreateFakeConnector();
             IRestResponse ignoredResponse;
-            A.CallTo(() => connector.ReadObject(null, out ignoredResponse)).WithAnyArguments().Returns(true).AssignsOutAndRefParameters(_response200);
+            var expected = new CaseFile("Test"){ Id = 1 };
+            A.CallTo(() => connector.ReadObject<CaseFile>(null, 1, out ignoredResponse)).WithAnyArguments().Returns(expected).AssignsOutAndRefParameters(_response200);
 
             var obj = Query.Find<CaseFile>(1);
 
             Assert.AreEqual(1, obj.Id);
-            A.CallTo(() => connector.ReadObject(null, out ignoredResponse)).WithAnyArguments().MustHaveHappened();
+            Assert.AreEqual(expected.Title, obj.Title);
+            A.CallTo(() => connector.ReadObject<CaseFile>(null, 1, out ignoredResponse)).WithAnyArguments().MustHaveHappened();
         }
 
         [Test]

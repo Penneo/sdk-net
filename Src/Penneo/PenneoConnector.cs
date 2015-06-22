@@ -43,7 +43,7 @@ namespace Penneo
 
         /// <summary>
         /// Initialize the connection to Penneo.
-        /// </summary>        
+        /// </summary>
         public static void Initialize(string key, string secret, string endpoint = null, string user = null, Dictionary<string, string> headers = null, AuthType authType = AuthType.WSSE)
         {
             Key = key;
@@ -55,11 +55,24 @@ namespace Penneo
 
             InitializeRestResources();
             InitializeMappings();
+            InitializePostProcessors();
 
             //Reset the api-connector if it was created earlier (to reset any cached authentication)
             ApiConnector.ResetInstance();
 
             IsInitialized = true;
+        }
+
+        /// <summary>
+        /// Change the key/secret
+        /// </summary>        
+        public static void ChangeKeySecret(string key, string secret)
+        {
+            Key = key;
+            Secret = secret;
+
+            //Reset the api-connector if it was created earlier (to reset any cached authentication)
+            ApiConnector.ResetInstance();
         }
 
         /// <summary>
@@ -106,6 +119,7 @@ namespace Penneo
             r.Add<CaseFileTemplate>("casefiletype");
             r.Add<LogEntry>("log");
             r.Add<CopyRecipient>("recipients");
+            r.Add<MessageTemplate>("casefile/message/templates");
 
             ServiceLocator.Instance.RegisterInstance<RestResources>(r);
         }
@@ -125,6 +139,7 @@ namespace Penneo
                 .Map(x => x.SendAt, convert: x => TimeUtil.ToUnixTime((DateTime) x))
                 .Map(x => x.ExpireAt, convert: x => TimeUtil.ToUnixTime((DateTime) x))
                 .Map(x => x.VisibilityMode)
+                .Map(x => x.SensitiveData)
                 .Map(x => x.CaseFileTemplate.Id, "caseFileTypeId")
                 .ForUpdate()
                 .Map(x => x.Title)
@@ -138,13 +153,13 @@ namespace Penneo
                 .Map(x => x.CaseFile.Id, "CaseFileId")
                 .Map(x => x.MetaData)
                 .Map(x => x.Type)
-                .Map(x => x.Options)
+                .Map(x => x.OptionsJson, "Options")
                 .MapFile(x => x.PdfFile)
                 .Map(x => x.DocumentType.Id, "documentTypeId")
                 .ForUpdate()
                 .Map(x => x.Title)
                 .Map(x => x.MetaData)
-                .Map(x => x.Options)
+                .Map(x => x.OptionsJson, "Options")
                 .Create();
 
             new MappingBuilder<SignatureLine>(mappings)
@@ -218,6 +233,22 @@ namespace Penneo
                 .Map(x => x.Name)
                 .Map(x => x.Email)
                 .Create();
+
+            new MappingBuilder<MessageTemplate>(mappings)
+                .ForCreate()
+                .Map(x => x.Title)
+                .Map(x => x.Subject)
+                .Map(x => x.Message)
+                .ForUpdate()
+                .Map(x => x.Title)
+                .Map(x => x.Subject)
+                .Map(x => x.Message)
+                .Create();
+        }
+
+        private static void InitializePostProcessors()
+        {
+            Query.AddPostProcessor<Folder>(Folder.QueryPostProcessor);
         }
     }
 }

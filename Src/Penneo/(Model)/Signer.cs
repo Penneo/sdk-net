@@ -42,7 +42,7 @@ namespace Penneo
         {
             if (SigningRequest == null)
             {
-                SigningRequest = GetLinkedEntities<SigningRequest>().FirstOrDefault();
+                SigningRequest = GetLinkedEntities<SigningRequest>().Objects.FirstOrDefault();
             }
             return SigningRequest;
         }
@@ -59,12 +59,12 @@ namespace Penneo
 
         public IEnumerable<SignerType> GetSignerTypes()
         {
-            return GetLinkedEntities<SignerType>();
+            return GetLinkedEntities<SignerType>().Objects;
         }
 
         public IEnumerable<LogEntry> GetEventLog()
         {
-            return GetLinkedEntities<LogEntry>();
+            return GetLinkedEntities<LogEntry>().Objects;
         }
     }
 }
