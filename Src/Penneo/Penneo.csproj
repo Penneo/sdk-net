@@ -84,7 +84,9 @@
     <Compile Include="%28Result%29\ServerResult.cs" />
     <Compile Include="ServiceLocator.cs" />
     <Compile Include="Util\FileUtil.cs" />
+    <Compile Include="Util\KeyValueMetaDataHelper.cs" />
     <Compile Include="Util\LinqExtensions.cs" />
+    <Compile Include="Util\MetaDataExtensions.cs" />
     <Compile Include="Util\ReflectionUtil.cs" />
     <Compile Include="Util\StringUtil.cs" />
     <Compile Include="Util\TimeUtil.cs" />

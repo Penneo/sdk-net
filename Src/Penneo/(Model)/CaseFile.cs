@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using Penneo.Connector;
+using Penneo.Util;
 
 namespace Penneo
 {
@@ -10,6 +11,9 @@ namespace Penneo
     {
         #region CaseFileStatus enum
 
+        /// <summary>
+        /// Available case file statuses
+        /// </summary>
         public enum CaseFileStatus
         {
             New = 0,
@@ -41,27 +45,74 @@ namespace Penneo
             Title = title;
         }
 
+        /// <summary>
+        /// Case file title
+        /// </summary>
         public string Title { get; set; }
-        public string MetaData { get; set; }
+
+        /// <summary>
+        /// Case file status
+        /// <see cref="CaseFileStatus"/>
+        /// </summary>
         public int? Status { get; set; }
+
+        /// <summary>
+        /// Break the sign process into iterations
+        /// </summary>
         public int SignIteration { get; set; }
+
+        /// <summary>
+        /// The visibility mode of the case file
+        /// </summary>
         public int? VisibilityMode { get; set; }
-        public Boolean SensitiveData { get; set; }
+
+        /// <summary>
+        /// Indicates if the case file contains sensitive data
+        /// </summary>
+        public bool SensitiveData { get; set; }
+
+        /// <summary>
+        /// The case file template
+        /// </summary>
         public CaseFileTemplate CaseFileTemplate { get; set; }
 
+        /// <summary>
+        /// The data when the case file was created
+        /// </summary>
         [JsonConverter(typeof(PenneoDateConverter))]
         public DateTime Created { get; set; }
+
+        /// <summary>
+        /// The date where the case file was sent
+        /// </summary>
         [JsonConverter(typeof(PenneoDateConverter))]
         public DateTime? SendAt { get; set; }
+
+        /// <summary>
+        /// The data where the case file will expire
+        /// </summary>
         [JsonConverter(typeof(PenneoDateConverter))]
         public DateTime? ExpireAt { get; set; }
 
+        /// <summary>
+        /// Custom meta data for the case file.
+        /// </summary>
+        public string MetaData { get; set; }
+
+        /// <summary>
+        /// The documents in the case file
+        /// Note: This property will only return already loaded documents
+        /// </summary>
         public IEnumerable<Document> Documents
         {
             get { return _documents; }
             set { _documents = value; }
         }
 
+        /// <summary>
+        /// Get documents for the case file. If the documents are not loaded, they will be fetched
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<Document> GetDocuments()
         {
             if (_documents == null)
@@ -75,12 +126,19 @@ namespace Penneo
             return _documents;
         }
 
+        /// <summary>
+        /// The signers in the case file.
+        /// NOTE: This property will only return already loaded signers
+        /// </summary>
         public IEnumerable<Signer> Signers
         {
             get { return _signers; }
             set { _signers = value; }
         }
 
+        /// <summary>
+        /// The signers in the case file. If the signers are not loaded, they will be fetched
+        /// </summary>
         public IEnumerable<Signer> GetSigners()
         {
             if (_signers == null)
@@ -94,6 +152,9 @@ namespace Penneo
             return _signers;
         }
 
+        /// <summary>
+        /// Find a given signer on the case file. If the signer is not found in the list loaded signers, an attempt will be made to find the signer on the backend.
+        /// </summary>
         public Signer FindSigner(int id)
         {
             Signer signer = null;
@@ -112,6 +173,10 @@ namespace Penneo
             return signer;
         }
 
+        /// <summary>
+        /// Get copy recipients of the case file. If the copy recipients are not already loaded, they will be fetched
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<CopyRecipient> GetCopyRecipients()
         {
             if (_copyRecipients == null)
@@ -125,12 +190,19 @@ namespace Penneo
             return _copyRecipients;
         }
 
+        /// <summary>
+        /// Get copy recipients of the case file.
+        /// NOTE: This property will only return already loaded copy recipients
+        /// </summary>
         public IEnumerable<CopyRecipient> CopyRecipients
         {
             get { return _copyRecipients; }
             set { _copyRecipients = value; }
         }
 
+        /// <summary>
+        /// Get the status of the case file
+        /// </summary>
         public CaseFileStatus GetStatus()
         {
             if (!Status.HasValue)
@@ -146,16 +218,25 @@ namespace Penneo
             return GetLinkedEntities<CaseFileTemplate>("casefile/casefiletypes").Objects;
         }
 
+        /// <summary>
+        /// Get all available case file templates
+        /// </summary>
         public QueryResult<CaseFileTemplate> GetTemplates()
         {
             return GetLinkedEntities<CaseFileTemplate>("casefile/casefiletypes");
         }
 
+        /// <summary>
+        /// Get all available documents types for this case file
+        /// </summary>
         public IEnumerable<DocumentType> GetDocumentTypes()
         {
             return GetLinkedEntities<DocumentType>("casefiles/" + Id + "/documenttypes").Objects;
         }
 
+        /// <summary>
+        /// Get all available signer types for this case file
+        /// </summary>
         public IEnumerable<SignerType> GetSignerTypes()
         {
             if (!Id.HasValue)
@@ -165,6 +246,9 @@ namespace Penneo
             return GetLinkedEntities<SignerType>("casefiles/" + Id + "/signertypes").Objects;
         }
 
+        /// <summary>
+        /// Get the case file template for this case file
+        /// </summary>
         public CaseFileTemplate GetCaseFileTemplate()
         {
             if (Id.HasValue && CaseFileTemplate == null)
@@ -175,21 +259,33 @@ namespace Penneo
             return CaseFileTemplate;
         }
 
+        /// <summary>
+        /// Set the case file template for this case file
+        /// </summary>
         public void SetCaseFileTemplate(CaseFileTemplate template)
         {
             CaseFileTemplate = template;
         }
 
+        /// <summary>
+        /// Get all errors associated with the case file
+        /// </summary>
         public IEnumerable<string> GetErrors()
         {
             return GetStringListAsset("errors");
         }
 
+        /// <summary>
+        /// Send the case file for signing
+        /// </summary>
         public bool Send()
         {
             return PerformAction(ACTION_SEND).Success;
         }
 
+        /// <summary>
+        /// Activate the case file
+        /// </summary>
         public bool Activate()
         {
             return PerformAction(ACTION_ACTIVATE).Success;

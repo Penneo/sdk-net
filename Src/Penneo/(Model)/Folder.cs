@@ -46,13 +46,13 @@ namespace Penneo
             return Title + "(" + Id + (ParentFolder != null ? "," + ParentFolder.Id : null) + ")";
         }
 
-        public static int GetDept(List<Folder> list, Folder folder)
+        public static int GetDepth(List<Folder> list, Folder folder)
         {
             if (folder.ParentFolder == null)
             {
                 return 0;
             }
-            return GetDept(list, list.First(p => p.Title == folder.ParentFolder.Title)) + 1;
+            return GetDepth(list, list.First(p => p.Title == folder.ParentFolder.Title)) + 1;
         }
 
         internal static object QueryPostProcessor(object input)
