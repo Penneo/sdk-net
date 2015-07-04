@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace Penneo
@@ -10,9 +11,11 @@ namespace Penneo
         public int? LowerLimit { get; set; }
         
         [JsonProperty("Options")]
+        [Obsolete("Obsolete since 1.0.20. Use Opts")]
         public string OptionsJson { get; set; }
 
         [JsonIgnore]
+        [Obsolete("Obsolete since 1.0.20. Use Opts")]
         public IEnumerable<DocumentTypeOption> Options
         {
             get 
@@ -24,6 +27,8 @@ namespace Penneo
                 return JsonConvert.DeserializeObject<IEnumerable<DocumentTypeOption>>(OptionsJson); 
             }
         }
+
+        public IEnumerable<DocumentTypeOption> Opts { get; set; }
 
         public IEnumerable<SignerType> SignerTypes { get; set; }
     }

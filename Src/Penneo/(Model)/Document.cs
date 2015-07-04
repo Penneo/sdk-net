@@ -92,13 +92,16 @@ namespace Penneo
         /// Options as json
         /// </summary>
         [JsonProperty("Options")]
+        [Obsolete("Obsolete since 1.0.20. Use Opts")]
         public string OptionsJson { get; set; }
 
         /// <summary>
-        /// Options as list of document options
+        /// Options for the document
         /// </summary>
         [JsonIgnore]
-        public Dictionary<string, object> Options {
+        [Obsolete("Obsolete since 1.0.20. Use Opts")]
+        public Dictionary<string, object> Options
+        {
             get
             {
                 if (OptionsJson == null)
@@ -106,7 +109,13 @@ namespace Penneo
                     return null;
                 }
                 return JsonConvert.DeserializeObject<Dictionary<string, object>>(OptionsJson);
-            } }
+            }
+        }
+
+        /// <summary>
+        /// Options for the document
+        /// </summary>
+        public Dictionary<string, object> Opts { get; set; }
 
         /// <summary>
         /// Custom meta data for the document
@@ -173,7 +182,7 @@ namespace Penneo
             {
                 return DocumentStatus.New;
             }
-            return (DocumentStatus) Status;
+            return (DocumentStatus)Status;
         }
 
         /// <summary>
