@@ -153,13 +153,13 @@ namespace Penneo
                 .Map(x => x.CaseFile.Id, "CaseFileId")
                 .Map(x => x.MetaData)
                 .Map(x => x.Type)
-                .Map(x => x.OptionsJson, "Options")
+                .Map(x => x.Opts)
                 .MapFile(x => x.PdfFile)
                 .Map(x => x.DocumentType.Id, "documentTypeId")
                 .ForUpdate()
                 .Map(x => x.Title)
                 .Map(x => x.MetaData)
-                .Map(x => x.OptionsJson, "Options")
+                .Map(x => x.Opts)
                 .Create();
 
             new MappingBuilder<SignatureLine>(mappings)
