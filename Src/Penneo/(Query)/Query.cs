@@ -36,19 +36,10 @@ namespace Penneo
 
         public static QuerySingleObjectResult<T> FindById<T>(int id)
             where T : Entity
-        {            
-            var output = new QuerySingleObjectResult<T>();
+        {
             IRestResponse response;
             var obj = ApiConnector.Instance.ReadObject<T>(null, id, out response);
-            output.Success = obj != null;
-            output.StatusCode = response.StatusCode;
-            output.ErrorMessage = response.ErrorMessage;
-            output.Object = obj;
-            if (!output.Success)
-            {
-                output.ErrorMessage = "Penneo: Could not find the requested " + typeof (T).Name + " (id = " + id + ")";
-            }
-            return output;
+            return CreateSingleObjectResult(response, obj, id);
         }
 
         /// <summary>
@@ -161,5 +152,33 @@ namespace Penneo
             obj.Title = "Standard";
             return new QueryResult<MessageTemplate>(){ Objects = new []{ obj }, Success = true };
         }
+
+        public static QuerySingleObjectResult<User> GetUser()
+        {
+            IRestResponse response;
+            var user = ApiConnector.Instance.ReadObject<User>(null, null, "user", out response);
+            return CreateSingleObjectResult(response, user, null);
+        }
+
+        private static QuerySingleObjectResult<T> CreateSingleObjectResult<T>(IRestResponse response, T obj, int? id)
+        {
+            var output = new QuerySingleObjectResult<T>
+            {
+                Success = obj != null,
+                StatusCode = response.StatusCode,
+                ErrorMessage = response.ErrorMessage,
+                Object = obj
+            };
+            if (!output.Success)
+            {
+                output.ErrorMessage = "Penneo: Could not find the requested " + typeof(T).Name;
+                if (id.HasValue)
+                {
+                    output.ErrorMessage += " (id = " + id + ")";
+                }
+            }
+            return output;
+        }
+
     }
 }
