@@ -11,11 +11,11 @@ namespace Penneo
         public int? LowerLimit { get; set; }
         
         [JsonProperty("Options")]
-        [Obsolete("Obsolete since 1.0.20. Use Opts")]
+        [Obsolete("Obsolete. Use Opts")]
         public string OptionsJson { get; set; }
 
         [JsonIgnore]
-        [Obsolete("Obsolete since 1.0.20. Use Opts")]
+        [Obsolete("Obsolete. Use Opts")]
         public IEnumerable<DocumentTypeOption> Options
         {
             get 

@@ -92,14 +92,14 @@ namespace Penneo
         /// Options as json
         /// </summary>
         [JsonProperty("Options")]
-        [Obsolete("Obsolete since 1.0.20. Use Opts")]
+        [Obsolete("Obsolete. Use Opts")]
         public string OptionsJson { get; set; }
 
         /// <summary>
         /// Options for the document
         /// </summary>
         [JsonIgnore]
-        [Obsolete("Obsolete since 1.0.20. Use Opts")]
+        [Obsolete("Obsolete. Use Opts")]
         public Dictionary<string, object> Options
         {
             get
