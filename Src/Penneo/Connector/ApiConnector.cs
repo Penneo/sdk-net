@@ -169,19 +169,34 @@ namespace Penneo.Connector
             return response != null && (response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.NoContent);
         }
 
-        public T ReadObject<T>(Entity parent, int id, out IRestResponse response)
+        public T ReadObject<T>(Entity parent, int? id, out IRestResponse response)
+            where T : Entity
+        {
+            return ReadObject<T>(parent, id, null, out response);
+        }
+
+        public T ReadObject<T>(Entity parent, int? id, string relativeUrl, out IRestResponse response)
             where T: Entity
         {
-            var relativeUrl = ServiceLocator.Instance.GetInstance<RestResources>().GetResource(typeof(T), parent);
-            response = CallServer(relativeUrl + '/' + id);
+            var url = !string.IsNullOrEmpty(relativeUrl) ? relativeUrl : ServiceLocator.Instance.GetInstance<RestResources>().GetResource(typeof(T), parent);
+            if (id.HasValue)
+            {
+                url += "/" + id;
+            }
+            response = CallServer(url);
             if (response == null || response.StatusCode != HttpStatusCode.OK)
             {
                 return default(T);
             }
             var obj = JsonConvert.DeserializeObject<T>(response.Content);
-            obj.Id = id;
+            if (id.HasValue)
+            {
+                obj.Id = id;
+            }
             return obj;
         }
+
+
 
         /// <summary>
         /// <see cref="IApiConnector.LinkEntity"/>

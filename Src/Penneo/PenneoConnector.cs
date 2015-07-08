@@ -120,6 +120,8 @@ namespace Penneo
             r.Add<LogEntry>("log");
             r.Add<CopyRecipient>("recipients");
             r.Add<MessageTemplate>("casefile/message/templates");
+            r.Add<User>("users");
+            r.Add<Customer>("customers");
 
             ServiceLocator.Instance.RegisterInstance<RestResources>(r);
         }

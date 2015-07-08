@@ -28,7 +28,17 @@ namespace Penneo.Connector
         /// </summary>
         bool DeleteObject(Entity obj);
 
-        T ReadObject<T>(Entity parent, int id, out IRestResponse response)
+        /// <summary>
+        /// Read an object from the backend
+        /// </summary>
+        T ReadObject<T>(Entity parent, int? id, out IRestResponse response)
+            where T : Entity;
+
+        /// <summary>
+        /// Read an object from the backend
+        /// If relative url is specifically provided, then that overrides general resource setup
+        /// </summary>
+        T ReadObject<T>(Entity parent, int? id, string relativeUrl, out IRestResponse response)
             where T : Entity;
 
         /// <summary>
