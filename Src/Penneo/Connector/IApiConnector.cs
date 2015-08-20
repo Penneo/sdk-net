@@ -72,6 +72,11 @@ namespace Penneo.Connector
         string GetTextAssets(Entity obj, string assetName);
 
         /// <summary>
+        /// Get an asset object
+        /// </summary>
+        T GetAsset<T>(Entity obj, string assetName);
+
+        /// <summary>
         /// Get list of string asset for the given obj and asset name
         /// </summary>
         IEnumerable<string> GetStringListAsset(Entity obj, string assetName);
