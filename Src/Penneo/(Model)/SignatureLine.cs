@@ -43,7 +43,7 @@ namespace Penneo
         public int? SignerId { get; set; }
 
         [JsonConverter(typeof(PenneoDateConverter))]
-        public DateTime SignedAt { get; internal set; }
+        public DateTime SignedAt { get; set; }
 
         internal override Entity Parent
         {
