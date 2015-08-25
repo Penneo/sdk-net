@@ -176,7 +176,7 @@ namespace Penneo.Connector
         }
 
         public T ReadObject<T>(Entity parent, int? id, string relativeUrl, out IRestResponse response)
-            where T: Entity
+            where T : Entity
         {
             var url = !string.IsNullOrEmpty(relativeUrl) ? relativeUrl : ServiceLocator.Instance.GetInstance<RestResources>().GetResource(typeof(T), parent);
             if (id.HasValue)
@@ -256,6 +256,18 @@ namespace Penneo.Connector
                 throw new Exception("Penneo: Internal problem encountered");
             }
             return CreateObject<T>(response.Content);
+        }
+
+        public T GetAsset<T>(Entity obj, string assetName)
+        {
+            var url = obj.RelativeUrl + "/" + obj.Id + "/" + assetName;
+            var response = CallServer(url);
+            if (response == null || string.IsNullOrEmpty(response.Content) || !_successStatusCodes.Contains(response.StatusCode))
+            {
+                return default(T);
+            }
+            var json = response.Content;
+            return JsonConvert.DeserializeObject<T>(json);
         }
 
         /// <summary>

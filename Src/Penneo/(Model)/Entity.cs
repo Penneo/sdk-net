@@ -156,6 +156,11 @@ namespace Penneo
             return ApiConnector.Instance.GetTextAssets(this, assetName);
         }
 
+        protected T GetAsset<T>(string assetName)
+        {
+            return ApiConnector.Instance.GetAsset<T>(this, assetName);
+        }
+
         /// <summary>
         /// Get list of string asset with the given name for this entity
         /// </summary>

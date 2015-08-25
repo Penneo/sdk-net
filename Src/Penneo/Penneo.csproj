@@ -58,6 +58,7 @@
     <Compile Include="%28Model%29\MessageTemplate.cs" />
     <Compile Include="%28Model%29\SignerType.cs" />
     <Compile Include="%28Model%29\User.cs" />
+	<Compile Include="%28Model%29\ValidationContents.cs" />
     <Compile Include="AuthType.cs" />
     <Compile Include="Mapping\Mappings.cs" />
     <Compile Include="%28Model%29\SigningRequest.cs" />

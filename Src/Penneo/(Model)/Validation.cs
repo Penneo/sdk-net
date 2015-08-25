@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace Penneo
 {
@@ -7,6 +8,7 @@ namespace Penneo
     {
         private const string ASSET_PDF = "pdf";
         private const string ASSET_LINK = "link";
+        private const string ASSET_CONTENTS = "contents";
         private const string ACTION_SEND = "send";
 
         public Validation()
@@ -61,6 +63,11 @@ namespace Penneo
         public string GetLink()
         {
             return GetTextAssets(ASSET_LINK);
+        }
+
+        public ValidationContents GetContents()
+        {
+            return GetAsset<ValidationContents>(ASSET_CONTENTS);
         }
 
         public bool Send()
