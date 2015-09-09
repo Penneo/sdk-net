@@ -27,6 +27,14 @@ namespace Penneo.Util
         /// <summary>
         /// Get the property name from a property get expression
         /// </summary>
+        public static string GetPropertyName<T>(Expression<Func<T, byte[]>> property)
+        {
+            return ((MemberExpression)property.Body).Member.Name;
+        }
+
+        /// <summary>
+        /// Get the property name from a property get expression
+        /// </summary>
         public static string GetPropertyName<T>(Expression<Func<T, string>> property)
         {
             return ((MemberExpression) property.Body).Member.Name;

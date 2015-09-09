@@ -63,6 +63,12 @@ namespace Penneo.Mapping
             return this;
         }
 
+        public MappingBuilder<T> MapBase64(Expression<Func<T, byte[]>> property, string alias = null)
+        {
+            _currentMethodProperties.AddBase64Property(property, alias);
+            return this;
+        }
+
         /// <summary>
         /// Gets the mapping instance from the build
         /// </summary>
