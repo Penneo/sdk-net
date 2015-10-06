@@ -132,7 +132,17 @@ namespace Penneo
         /// </summary>
         public IEnumerable<Signer> Signers
         {
-            get { return _signers; }
+            get
+            {
+                if (_signers != null)
+                {
+                    foreach(var signer in _signers.Where(x => x.CaseFile == null))
+                    {
+                        signer.CaseFile = this;
+                    }
+                }
+                return _signers;
+            }
             set { _signers = value; }
         }
 
