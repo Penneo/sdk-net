@@ -14,9 +14,9 @@ namespace Penneo
         private const string TYPE_SIGNABLE = "signable";
         private const string ASSET_PDF = "pdf";
         private CaseFile _caseFile;
-        private byte[] _pdfRaw;
 
         private IEnumerable<SignatureLine> _signatureLines;
+        private byte[] _pdfRaw;
 
         public Document()
         {
@@ -55,6 +55,25 @@ namespace Penneo
         /// Reference to the pdf file on disk, which will be uploaded to the document
         /// </summary>
         public string PdfFile { get; set; }
+
+        /// <summary>
+        /// The raw byte array of the pdf
+        /// </summary>
+        public byte[] PdfRaw
+        {
+            get
+            {
+                if (_pdfRaw == null && !string.IsNullOrEmpty(PdfFile))
+                {
+                    _pdfRaw = File.ReadAllBytes(PdfFile);
+                }
+                return _pdfRaw;
+            }
+            set
+            {
+                _pdfRaw = value;
+            }
+        }
 
         /// <summary>
         /// The document type. See <see cref="DocumentType"/>.
@@ -191,11 +210,11 @@ namespace Penneo
         /// <returns></returns>
         public byte[] GetPdf()
         {
-            if (_pdfRaw == null)
+            if (PdfRaw == null)
             {
-                _pdfRaw = GetFileAssets(ASSET_PDF);
+                PdfRaw = GetFileAssets(ASSET_PDF);
             }
-            return _pdfRaw;
+            return PdfRaw;
         }
 
         /// <summary>
@@ -203,7 +222,7 @@ namespace Penneo
         /// </summary>
         public void SetPdf(byte[] data)
         {
-            _pdfRaw = data;
+            PdfRaw = data;
         }
 
         /// <summary>

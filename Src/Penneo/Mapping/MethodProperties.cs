@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using Penneo.Util;
@@ -13,12 +14,14 @@ namespace Penneo.Mapping
     {
         private readonly Dictionary<string, Func<object, object>> _convert;
         private readonly HashSet<string> _isFile;
+        private readonly HashSet<string> _isBase64;
         private readonly Dictionary<string, Func<T, object>> _properties;
 
         public MethodProperties()
         {
             _properties = new Dictionary<string, Func<T, object>>();
             _isFile = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            _isBase64 = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             _convert = new Dictionary<string, Func<object, object>>(StringComparer.OrdinalIgnoreCase);
         }
 
@@ -45,6 +48,13 @@ namespace Penneo.Mapping
             _isFile.Add(name);
         }
 
+        public void AddBase64Property(Expression<Func<T, byte[]>> property, string alias = null)
+        {
+            var name = alias ?? ReflectionUtil.GetPropertyName(property);
+            _properties[name] = property.Compile();
+            _isBase64.Add(name);
+        }
+
         /// <summary>
         /// Gets property values as a key/value dictionary
         /// </summary>        
@@ -68,8 +78,21 @@ namespace Penneo.Mapping
                 {
                     continue;
                 }
-                var value = _isFile.Contains(propertyName) ? FileUtil.GetBase64((string) v) : v;
 
+                object value;
+                if (_isFile.Contains(propertyName))
+                {
+                    value = FileUtil.GetBase64((string) v);
+                }
+                else if (_isBase64.Contains(propertyName))
+                {
+                    value = Convert.ToBase64String((byte[]) v);
+                }
+                else
+                {
+                    value = v;
+                }
+               
                 //Convert value if converter is defined
                 Func<object, object> convert;
                 if (_convert.TryGetValue(propertyName, out convert))

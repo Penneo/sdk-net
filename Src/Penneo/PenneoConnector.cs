@@ -156,7 +156,7 @@ namespace Penneo
                 .Map(x => x.MetaData)
                 .Map(x => x.Type)
                 .Map(x => x.Opts)
-                .MapFile(x => x.PdfFile)
+                .MapBase64(x => x.PdfRaw, "PdfFile")
                 .Map(x => x.DocumentType.Id, "documentTypeId")
                 .ForUpdate()
                 .Map(x => x.Title)
