@@ -63,7 +63,7 @@ namespace Penneo
         {
             get
             {
-                if (_pdfRaw == null && !string.IsNullOrEmpty(PdfFile))
+                if (_pdfRaw == null && !string.IsNullOrEmpty(PdfFile) && File.Exists(PdfFile))
                 {
                     _pdfRaw = File.ReadAllBytes(PdfFile);
                 }
