@@ -134,16 +134,19 @@ namespace Penneo
         {
             get
             {
+                return _signers;
+            }
+            set
+            {
+                _signers = value;
                 if (_signers != null)
                 {
-                    foreach(var signer in _signers.Where(x => x.CaseFile == null))
+                    foreach (var signer in _signers)
                     {
                         signer.CaseFile = this;
                     }
                 }
-                return _signers;
             }
-            set { _signers = value; }
         }
 
         /// <summary>
@@ -151,13 +154,9 @@ namespace Penneo
         /// </summary>
         public IEnumerable<Signer> GetSigners()
         {
-            if (_signers == null)
+            if (Signers == null)
             {
-                _signers = GetLinkedEntities<Signer>().Objects.ToList();
-                foreach (var s in _signers)
-                {
-                    s.CaseFile = this;
-                }
+                Signers = GetLinkedEntities<Signer>().Objects.ToList();
             }
             return _signers;
         }
