@@ -158,7 +158,7 @@ namespace Penneo
             {
                 Signers = GetLinkedEntities<Signer>().Objects.ToList();
             }
-            return _signers;
+            return Signers;
         }
 
         /// <summary>
