@@ -1,0 +1,13 @@
+sudo: required
+
+language: bash
+
+services:
+  - docker
+
+before_install:
+  - docker pull penneo/mono
+  - docker run -it --rm -w '/shared' -v `pwd`:'/shared' penneo/mono /bin/sh -c "nuget install Src/Penneo/packages.config -o Src/packages; nuget install Src/PenneoTests/packages.config -o Src/packages; xbuild Src/Penneo.sln"
+
+script:
+  - docker run -it --rm -w '/shared' -v `pwd`:'/shared' penneo/mono /bin/sh -c "mono /opt/NUnit-2.6.4/bin/nunit-console.exe Src/PenneoTests/bin/Debug/PenneoTests.dll"
