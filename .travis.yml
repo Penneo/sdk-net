@@ -1,0 +1,15 @@
+sudo: required
+
+language: bash
+
+services:
+  - docker
+
+before_install:
+  - docker pull penneo/mono:1.0.1
+
+install:
+  - docker run -w '/shared' -v `pwd`:'/shared' penneo/mono:1.0.1 ./scripts/linux/install.sh
+
+script:
+  - docker run -w '/shared' -v `pwd`:'/shared' penneo/mono:1.0.1 ./scripts/linux/runtests.sh

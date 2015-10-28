@@ -39,3 +39,5 @@ nuget/*.nupkg
 #ignore test data
 TestData
 
+#ignore linux backup files
+*~
