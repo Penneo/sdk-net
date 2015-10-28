@@ -6,8 +6,10 @@ services:
   - docker
 
 before_install:
-  - docker pull penneo/mono
-  - docker run -it --rm -w '/shared' -v `pwd`:'/shared' penneo/mono /bin/sh -c "nuget install Src/Penneo/packages.config -o Src/packages; nuget install Src/PenneoTests/packages.config -o Src/packages; xbuild Src/Penneo.sln"
+  - docker pull penneo/mono:1.0.1
+
+install:
+  - docker run -w '/shared' -v `pwd`:'/shared' penneo/mono:1.0.1 ./scripts/linux/install.sh
 
 script:
-  - docker run -it --rm -w '/shared' -v `pwd`:'/shared' penneo/mono /bin/sh -c "mono /opt/NUnit-2.6.4/bin/nunit-console.exe Src/PenneoTests/bin/Debug/PenneoTests.dll"
+  - docker run -w '/shared' -v `pwd`:'/shared' penneo/mono:1.0.1 ./scripts/linux/runtests.sh
