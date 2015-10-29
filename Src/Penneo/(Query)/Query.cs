@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using Penneo.Connector;
 using Penneo.Mapping;
 using RestSharp;
+using Penneo.Util;
 
 namespace Penneo
 {
@@ -105,6 +106,7 @@ namespace Penneo
             var offset = input.Offset;
             var limit = input.Limit;
 
+            UpdateCriteriaDateTimesToUnix(input);
             var query = criteria ?? new Dictionary<string, object>();
 
             if (limit.HasValue)
@@ -142,6 +144,22 @@ namespace Penneo
                 }
             }
             return output;
+        }
+
+        private static void UpdateCriteriaDateTimesToUnix(QueryInput input)
+        {
+            if (input.Criteria == null)
+            {
+                return;
+            }
+            var criteria = input.Criteria.Where(x => x.Value != null && x.Value.GetType() == typeof(DateTime)).ToList();
+            foreach(var entry in criteria)
+            {
+                var key = entry.Key;
+                var val = entry.Value;
+                var newVal = TimeUtil.ToUnixTime((DateTime)val);
+                input.Criteria[key] = newVal;
+            }
         }
 
         public static QueryResult<MessageTemplate> GetDefaultMessageTemplate()
