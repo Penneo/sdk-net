@@ -11,7 +11,7 @@ Let's try to create a new case file based on a pre-existing case file template:
 var myCaseFile = new CaseFile();
 
 // Get the case file templates available to the authenticated user
-var availableTemplates = myCaseFile.GetCaseFileTemplates();
+var availableTemplates = myCaseFile.GetTemplates().Objects;
 
 // Assign the first list item as the case file template
 myCaseFile.SetCaseFileTemplate(availableTemplates.First());
