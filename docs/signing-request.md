@@ -19,7 +19,7 @@ mySigningRequest.EmailSubject = "Contract for signing";
 mySigningRequest.EmailText = "Dear john. Please sign the contract.";
 
 // Store the changes to the signing request
-mySigningRequest.Persist(mySigningRequest);
+mySigningRequest.Persist();
 ```
 
 Note that the signing request emails won't actually be send out until you call the __Send()__ method on the owning case file object.
