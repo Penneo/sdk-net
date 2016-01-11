@@ -147,6 +147,7 @@ namespace Penneo
                 .Map(x => x.Title)
                 .Map(x => x.MetaData)
                 .Map(x => x.CaseFileTemplate.Id, "caseFileTypeId")
+                .Map(x => x.VisibilityMode)
                 .Create();
 
             new MappingBuilder<Document>(mappings)
