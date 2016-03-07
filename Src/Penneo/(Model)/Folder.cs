@@ -27,8 +27,11 @@ namespace Penneo
 
         public IEnumerable<CaseFile> GetCaseFiles()
         {
-            var caseFiles = GetLinkedEntities<CaseFile>(@"Penneo\SDK\CaseFile");
-            return caseFiles.Objects;
+            if (!Id.HasValue)
+            {
+                return new List<CaseFile>();
+            }
+            return GetLinkedEntities<CaseFile>("folders/" + Id + "/casefiles").Objects;
         }
 
         public bool AddCaseFile(CaseFile caseFile)
