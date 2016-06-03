@@ -44,7 +44,7 @@ namespace Penneo
             return UnlinkEntity(caseFile);
         }
 
-        public IEnumerable<CaseFile> GetValidations()
+        public IEnumerable<Validation> GetValidations()
         {
             if (!Id.HasValue)
             {
