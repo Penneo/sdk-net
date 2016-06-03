@@ -52,5 +52,21 @@ namespace PenneoTests
             var cf = new CaseFile();
             TestUtil.TestUnlink(() => folder.RemoveCaseFile(cf), folder, cf);
         }
+
+        [Test]
+        public void AddValidationTest()
+        {
+            var folder = new Folder();
+            var validation = new Validation();
+            TestUtil.TestLink(() => folder.AddValidation(validation), folder, validation);
+        }
+
+        [Test]
+        public void RemoveValidationTest()
+        {
+            var folder = new Folder();
+            var validation = new Validation();
+            TestUtil.TestUnlink(() => folder.RemoveValidation(validation), folder, validation);
+        }
     }
 }
