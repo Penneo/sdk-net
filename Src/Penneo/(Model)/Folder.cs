@@ -44,6 +44,25 @@ namespace Penneo
             return UnlinkEntity(caseFile);
         }
 
+        public IEnumerable<Validation> GetValidations()
+        {
+            if (!Id.HasValue)
+            {
+                return new List<Validation>();
+            }
+            return GetLinkedEntities<Validation>("folders/" + Id + "/validations").Objects;
+        }
+
+        public bool AddValidation(Validation validation)
+        {
+            return LinkEntity(validation);
+        }
+
+        public bool RemoveValidation(Validation validation)
+        {
+            return UnlinkEntity(validation);
+        }
+
         public override string ToString()
         {
             return Title + "(" + Id + (ParentFolder != null ? "," + ParentFolder.Id : null) + ")";

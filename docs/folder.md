@@ -16,7 +16,9 @@ myFolder.Persist();
 ```
 
 ## Manipulating folder contents
-An empty folder is not much fun. The example below shows how to assign and unassign case files, and how to list the contents of a folder:
+An empty folder is not much fun. The examples below shows how to assign and unassign case files and validations, and how to list the contents of a folder:
+
+### Case files
 
 ```csharp
 // Assign a case file to a folder
@@ -30,6 +32,23 @@ for (var caseFile in caseFiles) {
 
 // Now, remove that same case file again
 myFolder.RemoveCaseFile(caseFile);
+
+```
+
+### Validations
+
+```csharp
+// Assign a validation to a folder
+myFolder.AddValidation(validation1);
+
+// Get a list of all the validations in the folder
+var validations = myFolder.GetValidations();
+for (var validation in validations) {
+    Console.WriteLine(validation.Title);  
+}
+
+// Now, remove that same validation again
+myFolder.RemoveValidation(validation);
 
 ```
 
