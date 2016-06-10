@@ -15,8 +15,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [comment]: # (Build Comparison Links)
 
-[unreleased]: https://github.com/Penneo/penneo-fe-react/compare/1.1.0...HEAD
-[1.1.0]:     https://github.com/Penneo/penneo-fe-react/compare/1.0.23...1.1.0
+[unreleased]: https://github.com/Penneo/sdk-net/compare/1.1.0...HEAD
+[1.1.0]:     https://github.com/Penneo/sdk-net/compare/1.0.23...1.1.0
 
 [comment]: # (Issue Links)
 
