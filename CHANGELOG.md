@@ -9,14 +9,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-## 1.1.0
+## [1.1.0]
 ### Added
 - [\#59] Moving validations to folders
 
 [comment]: # (Build Comparison Links)
 
 [unreleased]: https://github.com/Penneo/penneo-fe-react/compare/1.1.0...HEAD
-[1.0.10]:     https://github.com/Penneo/penneo-fe-react/compare/1.0.23...1.1.0
+[1.1.0]:     https://github.com/Penneo/penneo-fe-react/compare/1.0.23...1.1.0
 
 [comment]: # (Issue Links)
 
