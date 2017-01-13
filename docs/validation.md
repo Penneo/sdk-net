@@ -81,6 +81,15 @@ The custom text can't contain any HTML tags, except for the <br> tag.
 
 
 
+## Retrieving the validation contents
+When the user completes the validation process, the contents can be retrieved as follows:
+
+```csharp
+myValidation.GetContents();
+```
+
+If the validation is ready (when __GetStatus()__ returns _Ready_), the social security number is returned. However, if the validation is completed (when __GetStatus()__ returns _Completed_), information from the public registry is also returned.
+
 ## Retrieving the validation document
 Once the validation is completed (when __GetStatus()__ returns _Completed_), the resulting validation document can be retrieved:
 
