@@ -27,6 +27,7 @@ namespace Penneo
         }
 
         public string Name { get; set; }
+        public string ValidatedName { get; set; }
         public string SocialSecurityNumber { get; set; }
         public string OnBehalfOf { get; set; }
         public string VATIdentificationNumber { get; set; }
