@@ -292,6 +292,8 @@ namespace Penneo
         Rejected = 2,
         Deleted = 3,
         Signed = 4,
-        Completed = 5
+        Completed = 5,
+        Quarantined = 6,
+        Failed = 7
     }
 }
