@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -58,7 +58,7 @@
     <Compile Include="%28Model%29\MessageTemplate.cs" />
     <Compile Include="%28Model%29\SignerType.cs" />
     <Compile Include="%28Model%29\User.cs" />
-	<Compile Include="%28Model%29\ValidationContents.cs" />
+    <Compile Include="%28Model%29\ValidationContents.cs" />
     <Compile Include="AuthType.cs" />
     <Compile Include="Mapping\Mappings.cs" />
     <Compile Include="%28Model%29\SigningRequest.cs" />
@@ -89,6 +89,7 @@
     <Compile Include="Util\KeyValueMetaDataHelper.cs" />
     <Compile Include="Util\LinqExtensions.cs" />
     <Compile Include="Util\MetaDataExtensions.cs" />
+    <Compile Include="Util\PaginationUtil.cs" />
     <Compile Include="Util\ReflectionUtil.cs" />
     <Compile Include="Util\StringUtil.cs" />
     <Compile Include="Util\TimeUtil.cs" />

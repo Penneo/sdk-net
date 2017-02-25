@@ -224,6 +224,7 @@ namespace Penneo.Connector
         /// <see cref="IApiConnector.GetLinkedEntities{T}"/>
         /// </summary>
         public QueryResult<T> GetLinkedEntities<T>(Entity obj, string url = null)
+            where T: Entity
         {
             string actualUrl;
             if (string.IsNullOrEmpty(url))
@@ -304,7 +305,7 @@ namespace Penneo.Connector
         /// <summary>
         /// <see cref="IApiConnector.FindBy{T}"/>
         /// </summary>
-        public bool FindBy<T>(Dictionary<string, object> query, out IEnumerable<T> objects, out IRestResponse response)
+        public bool FindBy<T>(Dictionary<string, object> query, out IEnumerable<T> objects, out IRestResponse response, int? page = null, int? perPage = null)
             where T : Entity
         {
             var resource = _restResources.GetResource<T>();
@@ -315,7 +316,7 @@ namespace Penneo.Connector
                 options = new Dictionary<string, Dictionary<string, object>>();
                 options["query"] = query;
             }
-            response = CallServer(resource, null, Method.GET, options);
+            response = CallServer(resource, null, Method.GET, options, page: page, perPage: perPage);
             if (response == null || !_successStatusCodes.Contains(response.StatusCode))
             {
                 objects = null;
@@ -424,12 +425,20 @@ namespace Penneo.Connector
         /// <summary>
         /// Prepare a rest request
         /// </summary>
-        private RestRequest PrepareRequest(string url, Dictionary<string, object> data = null, Method method = Method.GET, Dictionary<string, Dictionary<string, object>> options = null)
+        internal RestRequest PrepareRequest(string url, Dictionary<string, object> data = null, Method method = Method.GET, Dictionary<string, Dictionary<string, object>> options = null, int? page = null, int? perPage = null)
         {
             var request = new RestRequest(url, method);
-            foreach (var h in _headers)
+            if (_headers != null)
             {
-                request.AddHeader(h.Key, h.Value);
+                foreach (var h in _headers)
+                {
+                    request.AddHeader(h.Key, h.Value);
+                }
+            }
+
+            if (page.HasValue)
+            {
+                request.AddHeader("x-paginate", "true");
             }
 
             if (options != null)
@@ -443,6 +452,23 @@ namespace Penneo.Connector
                         VisitQuery(request, o);
                     }
                 }
+            }
+
+            if (perPage.HasValue)
+            {
+                if (perPage <= 0)
+                {
+                    throw new NotSupportedException("PerPage must be greater than zero");
+                }
+                request.AddParameter("per_page", perPage);
+            }
+            if (page.HasValue)
+            {
+                if (page <= 0)
+                {
+                    throw new NotSupportedException("Page must be greater than zero");
+                }
+                request.AddParameter("page", page);
             }
 
             if (data != null)
@@ -491,12 +517,12 @@ namespace Penneo.Connector
         /// <summary>
         /// Calls the Penneo server with a rest request
         /// </summary>
-        public IRestResponse CallServer(string url, Dictionary<string, object> data = null, Method method = Method.GET, Dictionary<string, Dictionary<string, object>> options = null, string customMethod = null)
+        public IRestResponse CallServer(string url, Dictionary<string, object> data = null, Method method = Method.GET, Dictionary<string, Dictionary<string, object>> options = null, string customMethod = null, int? page = null, int? perPage = null)
         {
             SetProxy();
             try
             {
-                var request = PrepareRequest(url, data, method, options);
+                var request = PrepareRequest(url, data, method, options, page, perPage);
                 IRestResponse response;
 
                 string actualMethod;

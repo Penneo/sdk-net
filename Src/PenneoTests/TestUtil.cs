@@ -64,15 +64,16 @@ namespace PenneoTests
             }
             IEnumerable<T> ignoredObjects;
             IRestResponse ignoredResponse;
-            A.CallTo(() => connector.FindBy(null, out ignoredObjects, out ignoredResponse)).WithAnyArguments().Returns(true).AssignsOutAndRefParameters(list, _response200);
+            A.CallTo(() => connector.FindBy(null, out ignoredObjects, out ignoredResponse, null, null)).WithAnyArguments().Returns(true).AssignsOutAndRefParameters(list, _response200);
 
             var result = Query.FindAll<T>().ToList();
 
-            A.CallTo(() => connector.FindBy(null, out ignoredObjects, out ignoredResponse)).WithAnyArguments().MustHaveHappened();
+            A.CallTo(() => connector.FindBy(null, out ignoredObjects, out ignoredResponse, null, null)).WithAnyArguments().MustHaveHappened();
             CollectionAssert.AreEqual(list, result);
         }
 
         public static void TestGetLinked<TChild>(Func<IEnumerable<TChild>> getter)
+            where TChild: Entity
         {
             var connector = CreateFakeConnector();
             var list = new List<TChild>() {Activator.CreateInstance<TChild>()};
@@ -87,6 +88,7 @@ namespace PenneoTests
         }
 
         public static void TestGetLinked<TChild>(Func<TChild> getter)
+            where TChild: Entity
         {
             var connector = CreateFakeConnector();
             var instance = Activator.CreateInstance<TChild>();
@@ -102,6 +104,7 @@ namespace PenneoTests
         }
 
         public static void TestGetLinkedNotCalled<TChild>(Func<TChild> getter)
+            where TChild: Entity
         {
             var connector = CreateFakeConnector();
             var mockedResult = new QueryResult<TChild>() { Objects = new List<TChild>() , StatusCode = HttpStatusCode.OK};

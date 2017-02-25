@@ -128,6 +128,7 @@ namespace Penneo
         /// Get all entities linked with this entity in the storage
         /// </summary>
         protected QueryResult<T> GetLinkedEntities<T>(string url = null)
+            where T: Entity
         {
             return ApiConnector.Instance.GetLinkedEntities<T>(this, url);
         }
