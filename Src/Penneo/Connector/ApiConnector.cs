@@ -523,20 +523,18 @@ namespace Penneo.Connector
             try
             {
                 var request = PrepareRequest(url, data, method, options, page, perPage);
-                IRestResponse response;
+                LogRequest(request, url, customMethod ?? method.ToString());
 
-                string actualMethod;
+                IRestResponse response;
                 if (string.IsNullOrEmpty(customMethod))
                 {
-                    actualMethod = method.ToString();
                     response = _client.Execute(request);
                 }
                 else
                 {
-                    actualMethod = customMethod;
                     response = _client.ExecuteAsGet(request, customMethod);
                 }
-                Log.Write("Request " + actualMethod + " " + url + " /  Response '" + response.StatusCode + "'", LogSeverity.Trace);
+                LogResponse(response, url, customMethod ?? method.ToString());
 
                 _lastResponse = response;
                 _wasLastResponseError = !_successStatusCodes.Contains(_lastResponse.StatusCode);
@@ -546,6 +544,32 @@ namespace Penneo.Connector
             {
                 Log.Write(ex.ToString(), LogSeverity.Fatal);
                 throw;
+            }
+        }
+
+        private void LogRequest(IRestRequest request, string url, string method)
+        {
+            Log.Write(string.Format("HTTP REQUEST {0}: {1}{2} ", method, _client.BaseUrl.ToString(), url), LogSeverity.Trace);
+            foreach (var p in request.Parameters)
+            {
+                Log.Write(string.Format("{0} - {1}: {2}", p.Type, p.Name, p.Value), LogSeverity.Trace);
+            }
+        }
+
+        private void LogResponse(IRestResponse response, string url, string method)
+        {
+            Log.Write(string.Format("HTTP RESPONSE {0}: {1}{2} ({3} {4}) ", method, _client.BaseUrl.ToString(), url, (int)response.StatusCode, response.StatusCode), LogSeverity.Trace);
+            if (!string.IsNullOrEmpty(response.Content))
+            {
+                Log.Write(string.Format("Content:  {0}", response.Content), LogSeverity.Trace);
+            }
+            if (!string.IsNullOrEmpty(response.ErrorMessage))
+            {
+                Log.Write(string.Format("Content:  {0}", response.ErrorMessage), LogSeverity.Trace);
+            }
+            foreach (var p in response.Headers)
+            {
+                Log.Write(string.Format("{0} - {1}: {2}", p.Type, p.Name, p.Value), LogSeverity.Trace);
             }
         }
 
