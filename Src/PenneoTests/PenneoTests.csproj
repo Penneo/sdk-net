@@ -79,6 +79,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="PaginationTests.cs" />
     <Compile Include="QueryTests.cs" />
     <Compile Include="FolderTests.cs" />
     <Compile Include="KeyValueMetaDataTests.cs" />

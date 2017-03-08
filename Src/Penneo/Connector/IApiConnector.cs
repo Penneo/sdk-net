@@ -54,7 +54,8 @@ namespace Penneo.Connector
         /// <summary>
         /// Gets all entities linked with obj from the backend.
         /// </summary>
-        QueryResult<T> GetLinkedEntities<T>(Entity obj, string url = null);
+        QueryResult<T> GetLinkedEntities<T>(Entity obj, string url = null)
+            where T: Entity;
 
         /// <summary>
         /// Find a specific linked entity
@@ -84,7 +85,7 @@ namespace Penneo.Connector
         /// <summary>
         /// Find objects on the backend based on query parameters
         /// </summary>
-        bool FindBy<T>(Dictionary<string, object> query, out IEnumerable<T> objects, out IRestResponse response)
+        bool FindBy<T>(Dictionary<string, object> query, out IEnumerable<T> objects, out IRestResponse response, int? page = null, int? perPage = null)
             where T : Entity;
 
         /// <summary>
@@ -100,6 +101,6 @@ namespace Penneo.Connector
         /// <summary>
         /// Custom call to the server
         /// </summary>
-        IRestResponse CallServer(string url, Dictionary<string, object> data = null, Method method = Method.GET, Dictionary<string, Dictionary<string, object>> options = null, string customMethod = null);
+        IRestResponse CallServer(string url, Dictionary<string, object> data = null, Method method = Method.GET, Dictionary<string, Dictionary<string, object>> options = null, string customMethod = null, int? page = null, int? perPage = null);
     }
 }

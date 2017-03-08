@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Penneo.Connector;
 using Penneo.Mapping;
 using RestSharp;
 using Penneo.Util;
+using RestSharp.Contrib;
 
 namespace Penneo
 {
@@ -96,6 +98,10 @@ namespace Penneo
             return output.Objects;
         }
 
+        /// <summary>
+        /// Find entities based on an input object.
+        /// Returns output with data and metadata
+        /// </summary>
         public static QueryResult<T> FindBy<T>(QueryInput input)
             where T : Entity
         {
@@ -127,20 +133,38 @@ namespace Penneo
             }
 
             var output = new QueryResult<T>();
+            output.Input = input;
 
             IEnumerable<T> objects;
             IRestResponse response;
-            output.Success = ApiConnector.Instance.FindBy(query, out objects, out response);
+            output.Success = ApiConnector.Instance.FindBy(query, out objects, out response, input.Page, input.PerPage);
             output.Objects = objects;
             output.StatusCode = response.StatusCode;
             output.ErrorMessage = response.ErrorMessage;
-            
+
             if (output.Success)
             {
+                //Map objects
                 Func<object, object> processor;
                 if (_postProcessors.TryGetValue(typeof (T), out processor))
                 {
                     output.Objects = (IEnumerable<T>) processor(output.Objects);
+                }
+
+                //Pagination
+                output.Page = input.Page;
+                output.PerPage = input.PerPage;
+                var linkHeader = response.Headers.FirstOrDefault(x => x.Name.Equals("link", StringComparison.OrdinalIgnoreCase));
+                if (linkHeader != null && linkHeader.Value != null)
+                {
+                    PaginationUtil.ParseRepsonseHeadersForPagination(linkHeader.Value.ToString(), output);
+                }
+                
+
+                //If no objects were returned, assume that there is no next page - regardless of any returned Link response header
+                if (objects == null || !objects.Any())
+                {
+                    output.NextPage = null;
                 }
             }
             return output;
@@ -162,6 +186,9 @@ namespace Penneo
             }
         }
 
+        /// <summary>
+        /// Get the default message template
+        /// </summary>
         public static QueryResult<MessageTemplate> GetDefaultMessageTemplate()
         {
             var resource = ServiceLocator.Instance.GetInstance<RestResources>().GetResource(typeof(MessageTemplate)) + "/default";
@@ -171,6 +198,9 @@ namespace Penneo
             return new QueryResult<MessageTemplate>(){ Objects = new []{ obj }, Success = true };
         }
 
+        /// <summary>
+        /// Get the current user
+        /// </summary>
         public static QuerySingleObjectResult<User> GetUser()
         {
             IRestResponse response;
@@ -179,6 +209,7 @@ namespace Penneo
         }
 
         private static QuerySingleObjectResult<T> CreateSingleObjectResult<T>(IRestResponse response, T obj, int? id)
+            where T: Entity
         {
             var output = new QuerySingleObjectResult<T>
             {
@@ -198,5 +229,77 @@ namespace Penneo
             return output;
         }
 
+        /// <summary>
+        /// Get the next page based on an earlier result
+        /// </summary>
+        public static QueryResult<T> GetNextPage<T>(QueryResult<T> result)
+            where T: Entity
+        {
+            Log.Write("GetNextPage (" + typeof(T).Name + ")", LogSeverity.Information);
+            if (!result.NextPage.HasValue)
+            {
+                return null;
+            }
+            return GetPage(result, result.NextPage);
+        }
+
+        /// <summary>
+        /// Get the previous page based on an earlier result
+        /// </summary>
+        public static QueryResult<T> GetPreviousPage<T>(QueryResult<T> result)
+            where T : Entity
+        {
+            Log.Write("GetPreviousPage (" + typeof(T).Name + ")", LogSeverity.Information);
+            if (!result.PrevPage.HasValue)
+            {
+                return null;
+            }
+            return GetPage(result, result.PrevPage);
+        }
+
+        /// <summary>
+        /// Get the first page based on an earlier result
+        /// </summary>
+        public static QueryResult<T> GetFirstPage<T>(QueryResult<T> result)
+            where T : Entity
+        {
+            Log.Write("GetFirstPage (" + typeof(T).Name + ")", LogSeverity.Information);
+            if (!result.FirstPage.HasValue)
+            {
+                return null;
+            }
+            return GetPage(result, result.FirstPage);
+        }
+
+        /// <summary>
+        /// Get the first page of a given entity
+        /// </summary>
+        public static QueryResult<T> GetFirstPage<T>(int? perPage = null)
+            where T : Entity
+        {
+            Log.Write("GetFirstPage (" + typeof(T).Name + ")", LogSeverity.Information);
+            var input = new QueryInput();
+            input.Page = 1;
+            input.PerPage = perPage;
+            return FindBy<T>(input);
+        }
+
+        private static void ThrowIfNoPagination<T>(QueryResult<T> result, int? page)
+            where T : Entity
+        {
+            if (!page.HasValue || result.Input == null || !result.Input.Page.HasValue)
+            {
+                throw new NotSupportedException("Cannot use pagination, since the previous request was not using pagination");
+            }
+        }
+
+        private static QueryResult<T> GetPage<T>(QueryResult<T> result, int? page)
+            where T : Entity
+        {
+            ThrowIfNoPagination(result, page);
+            var pageInput = (QueryInput)result.Input.Clone();
+            pageInput.Page = page;
+            return FindBy<T>(pageInput);
+        }
     }
 }
