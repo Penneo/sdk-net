@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Newtonsoft.Json;
 using Penneo.Connector;
 using Penneo.Mapping;
@@ -183,6 +184,14 @@ namespace Penneo
         /// </summary>
         internal virtual void ReadInit()
         {
+        }
+
+        /// <summary>
+        /// Return a string for debugging with both type and id
+        /// </summary>
+        public override string ToString()
+        {
+            return string.Format("{0} Id: {1}", GetType().Name, Id);
         }
     }
 }
