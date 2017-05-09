@@ -84,6 +84,7 @@
     <Compile Include="%28Query%29\QueryInput.cs" />
     <Compile Include="%28Result%29\QueryResult.cs" />
     <Compile Include="%28Result%29\ServerResult.cs" />
+    <Compile Include="RestConnector.cs" />
     <Compile Include="ServiceLocator.cs" />
     <Compile Include="Util\FileUtil.cs" />
     <Compile Include="Util\KeyValueMetaDataHelper.cs" />
