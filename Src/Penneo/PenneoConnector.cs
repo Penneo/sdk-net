@@ -194,10 +194,16 @@ namespace Penneo
                 .Map(x => x.Email)
                 .Map(x => x.EmailText)
                 .Map(x => x.EmailSubject)
+                .Map(x => x.ReminderEmailSubect)
+                .Map(x => x.ReminderEmailText)
+                .Map(x => x.CompletedEmailSubect)
+                .Map(x => x.CompletedEmailText)
+                .Map(x => x.EmailFormat)
                 .Map(x => x.SuccessUrl)
                 .Map(x => x.FailUrl)
                 .Map(x => x.ReminderInterval)
                 .Map(x => x.AccessControl)
+                .Map(x => x.EnableInsecureSigning)
                 .Create();
 
             new MappingBuilder<Validation>(mappings)
