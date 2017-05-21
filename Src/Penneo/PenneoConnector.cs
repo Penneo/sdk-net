@@ -224,8 +224,10 @@ namespace Penneo
             new MappingBuilder<Folder>(mappings)
                 .ForCreate()
                 .Map(x => x.Title)
+                .Map(x => x.ParentId, "Parent")
                 .ForUpdate()
                 .Map(x => x.Title)
+                .Map(x => x.ParentId, "Parent")
                 .Create();
 
             new MappingBuilder<CopyRecipient>(mappings)

@@ -7,6 +7,9 @@ namespace Penneo
 {
     public class Folder : Entity
     {
+        private int? _parentId;
+        private Folder _parentFolder;
+
         public Folder()
         {
             ChildFolders = new List<Folder>();
@@ -21,7 +24,39 @@ namespace Penneo
         public String Title { get; set; }
 
         [JsonProperty("Parent", IsReference = true)]
-        public Folder ParentFolder { get; set; }
+        public Folder ParentFolder
+        {
+            get { return _parentFolder; }
+            set
+            {
+                _parentFolder = value;
+
+                //Synchronize ParentId with the new ParentFolder
+                if (value != null && value.Id.HasValue)
+                {
+                    _parentId = value.Id.Value;
+                }
+                else
+                {
+                    _parentId = null;
+                }
+            }
+        }
+
+        public int? ParentId
+        {
+            get { return _parentId; }
+            set
+            {
+                _parentId = value;
+
+                //Synchronize ParentFolder with the new ParentId
+                if (_parentFolder != null && _parentFolder.Id != _parentId)
+                {
+                    _parentFolder = null;
+                }
+            }
+        }
 
         public ICollection<Folder> ChildFolders { get; set; } 
 
