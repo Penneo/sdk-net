@@ -8,12 +8,18 @@
         public string Email { get; set; }
         public string EmailSubject { get; set; }
         public string EmailText { get; set; }
+        public string ReminderEmailSubect { get; set; }
+        public string ReminderEmailText { get; set; }
+        public string CompletedEmailSubect { get; set; }
+        public string CompletedEmailText { get; set; }
+        public string EmailFormat { get; set; }
         public string RejectReason { get; set; }
         public string SuccessUrl { get; set; }
         public string FailUrl { get; set; }
         public int? Status { get; set; }
         public int? ReminderInterval { get; set; }
         public bool AccessControl { get; set; }
+        public bool EnableInsecureSigning { get; set; }
 
         public SigningRequestStatus GetStatus()
         {
