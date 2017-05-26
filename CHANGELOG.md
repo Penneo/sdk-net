@@ -9,6 +9,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [1.4.0] - 2017-05-26
+### Added
+- [\#57] Make REST calls to the server
+- [\#74] Set a parent for folders
+- [\#75] Insecure signing (Touch signatures) can be enabled for signing requests
+- [\#75] Email templates can be configured for signing requests
+
 ## [1.3.0] - 2017-03-08
 ### Added
 - [\#67] Pagination support added
