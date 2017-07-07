@@ -35,7 +35,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [comment]: # (Build Comparison Links)
 
-[unreleased]: https://github.com/Penneo/sdk-net/compare/1.3.0...HEAD
+[unreleased]: https://github.com/Penneo/sdk-net/compare/1.4.0...HEAD
+[1.4.0]:     https://github.com/Penneo/sdk-net/compare/1.3.0...1.4.0
 [1.3.0]:     https://github.com/Penneo/sdk-net/compare/1.2.1...1.3.0
 [1.2.1]:     https://github.com/Penneo/sdk-net/compare/1.2.0...1.2.1
 [1.2.0]:     https://github.com/Penneo/sdk-net/compare/1.1.0...1.2.0
