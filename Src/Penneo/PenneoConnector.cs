@@ -137,6 +137,7 @@ namespace Penneo
             new MappingBuilder<CaseFile>(mappings)
                 .ForCreate()
                 .Map(x => x.Title)
+                .Map(x => x.Language)
                 .Map(x => x.MetaData)
                 .Map(x => x.SendAt, convert: x => TimeUtil.ToUnixTime((DateTime) x))
                 .Map(x => x.ExpireAt, convert: x => TimeUtil.ToUnixTime((DateTime) x))

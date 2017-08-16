@@ -51,6 +51,11 @@ namespace Penneo
         public string Title { get; set; }
 
         /// <summary>
+        /// The language of the case file
+        /// </summary>
+        public string Language { get; set; }
+
+        /// <summary>
         /// Case file status
         /// <see cref="CaseFileStatus"/>
         /// </summary>
