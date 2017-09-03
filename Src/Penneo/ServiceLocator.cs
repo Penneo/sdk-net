@@ -2,27 +2,13 @@
 
 namespace Penneo
 {
-    internal class ServiceLocator
+    public class ServiceLocator
     {
-        private static ServiceLocator _instance;
-
         private readonly Dictionary<string, object> _objects;
 
-        protected ServiceLocator()
+        public ServiceLocator()
         {
             _objects = new Dictionary<string, object>();
-        }
-
-        public static ServiceLocator Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new ServiceLocator();
-                }
-                return _instance;
-            }
         }
 
         public void RegisterInstance(string name, object o)

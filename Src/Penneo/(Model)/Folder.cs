@@ -60,42 +60,42 @@ namespace Penneo
 
         public ICollection<Folder> ChildFolders { get; set; } 
 
-        public IEnumerable<CaseFile> GetCaseFiles()
+        public IEnumerable<CaseFile> GetCaseFiles(PenneoConnector con)
         {
             if (!Id.HasValue)
             {
                 return new List<CaseFile>();
             }
-            return GetLinkedEntities<CaseFile>("folders/" + Id + "/casefiles").Objects;
+            return GetLinkedEntities<CaseFile>(con, "folders/" + Id + "/casefiles").Objects;
         }
 
-        public bool AddCaseFile(CaseFile caseFile)
+        public bool AddCaseFile(PenneoConnector con, CaseFile caseFile)
         {
-            return LinkEntity(caseFile);
+            return LinkEntity(con, caseFile);
         }
 
-        public bool RemoveCaseFile(CaseFile caseFile)
+        public bool RemoveCaseFile(PenneoConnector con, CaseFile caseFile)
         {
-            return UnlinkEntity(caseFile);
+            return UnlinkEntity(con, caseFile);
         }
 
-        public IEnumerable<Validation> GetValidations()
+        public IEnumerable<Validation> GetValidations(PenneoConnector con)
         {
             if (!Id.HasValue)
             {
                 return new List<Validation>();
             }
-            return GetLinkedEntities<Validation>("folders/" + Id + "/validations").Objects;
+            return GetLinkedEntities<Validation>(con, "folders/" + Id + "/validations").Objects;
         }
 
-        public bool AddValidation(Validation validation)
+        public bool AddValidation(PenneoConnector con, Validation validation)
         {
-            return LinkEntity(validation);
+            return LinkEntity(con, validation);
         }
 
-        public bool RemoveValidation(Validation validation)
+        public bool RemoveValidation(PenneoConnector con, Validation validation)
         {
-            return UnlinkEntity(validation);
+            return UnlinkEntity(con, validation);
         }
 
         public override string ToString()

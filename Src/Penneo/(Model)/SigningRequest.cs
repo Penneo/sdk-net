@@ -30,14 +30,14 @@
             return (SigningRequestStatus) Status;
         }
 
-        public string GetLink()
+        public string GetLink(PenneoConnector con)
         {
-            return GetTextAssets(ASSET_LINK);
+            return GetTextAssets(con, ASSET_LINK);
         }
 
-        public bool Send()
+        public bool Send(PenneoConnector con)
         {
-            return PerformAction(ACTION_SEND).Success;
+            return PerformAction(con, ACTION_SEND).Success;
         }
     }
 

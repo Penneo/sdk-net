@@ -108,5 +108,15 @@ namespace Penneo.Connector
         /// Custom call to the server
         /// </summary>
         IRestResponse CallServer(string url, Dictionary<string, object> data = null, Method method = Method.GET, Dictionary<string, Dictionary<string, object>> options = null, string customMethod = null, int? page = null, int? perPage = null);
+
+        /// <summary>
+        /// Change the key and secret on the api connector
+        /// </summary>
+        void ChangeKeySecret(string key, string secret);
+
+        /// <summary>
+        /// Enable/disable using IE proxy settings
+        /// </summary>
+        void SetUseProxySettingsFromInternetExplorer(bool use);
     }
 }

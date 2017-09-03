@@ -16,9 +16,9 @@ namespace Penneo
             set { _customers = value; }
         }
 
-        public IEnumerable<Customer> GetCustomers()
+        public IEnumerable<Customer> GetCustomers(PenneoConnector con)
         {
-            return _customers ?? (_customers = GetLinkedEntities<Customer>().Objects.ToList());
+            return _customers ?? (_customers = GetLinkedEntities<Customer>(con).Objects.ToList());
         }
     }
 }

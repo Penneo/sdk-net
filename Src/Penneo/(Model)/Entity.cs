@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using Newtonsoft.Json;
 using Penneo.Connector;
 using Penneo.Mapping;
 
@@ -12,20 +10,25 @@ namespace Penneo
     /// </summary>
     public abstract class Entity
     {
+        protected Entity()
+        {
+            InternalIdentifier = Guid.NewGuid();
+        }
+
         /// <summary>
         /// The relative url (rest resource) of the entity type
         /// </summary>
-        internal string RelativeUrl
+        internal string GetRelativeUrl(PenneoConnector con)
         {
-            get { return ServiceLocator.Instance.GetInstance<RestResources>().GetResource(GetType(), Parent); }
+            return con.ServiceLocator.GetInstance<RestResources>().GetResource(GetType(), Parent);
         }
 
         /// <summary>
         /// The entity type mapping
         /// </summary>
-        internal IMapping Mapping
+        internal IMapping GetMapping(PenneoConnector con)
         {
-            get { return ServiceLocator.Instance.GetInstance<Mappings>().GetMapping(GetType()); }
+            return con.ServiceLocator.GetInstance<Mappings>().GetMapping(GetType());
         }
 
         /// <summary>
@@ -54,30 +57,25 @@ namespace Penneo
             get { return !Id.HasValue; }
         }
 
-        internal Entity()
-        {
-            InternalIdentifier = Guid.NewGuid();
-        }
-
         /// <summary>
         /// Get request data from the entity as a property->value dictionary
         /// </summary>
-        public Dictionary<string, object> GetRequestData()
+        public Dictionary<string, object> GetRequestData(PenneoConnector con)
         {
-            var values = IsNew ? Mapping.GetCreateValues(this) : Mapping.GetUpdateValues(this);
+            var values = IsNew ? GetMapping(con).GetCreateValues(this) : GetMapping(con).GetUpdateValues(this);
             return values;
         }
 
         /// <summary>
         /// Persist the entity to the storage
         /// </summary>
-        public bool Persist()
+        public bool Persist(PenneoConnector con)
         {
-            Log.Write((IsNew ? "Creating" : "Updating") + " " + GetType().Name + " (" + (Id.HasValue ? Id.ToString() : "new") + ")", LogSeverity.Information);
-            var success = ApiConnector.Instance.WriteObject(this);
+            con.Log((IsNew ? "Creating" : "Updating") + " " + GetType().Name + " (" + (Id.HasValue ? Id.ToString() : "new") + ")", LogSeverity.Information);
+            var success = con.ApiConnector.WriteObject(this);
             if (!success)
             {
-                Log.Write((IsNew ? "Creating" : "Updating") + " " + GetType().Name + " (" + (Id.HasValue ? Id.ToString() : "new") + ") failed", LogSeverity.Information);
+                con.Log((IsNew ? "Creating" : "Updating") + " " + GetType().Name + " (" + (Id.HasValue ? Id.ToString() : "new") + ") failed", LogSeverity.Information);
             }
             return success;
         }
@@ -85,10 +83,10 @@ namespace Penneo
         /// <summary>
         /// Delete the entity from the storage
         /// </summary>
-        public void Delete()
+        public void Delete(PenneoConnector con)
         {
-            Log.Write("Deleting " + GetType().Name + " (" + (Id.HasValue ? Id.ToString() : "new") + ")", LogSeverity.Information);
-            if (!ApiConnector.Instance.DeleteObject(this))
+            con.Log("Deleting " + GetType().Name + " (" + (Id.HasValue ? Id.ToString() : "new") + ")", LogSeverity.Information);
+            if (!con.ApiConnector.DeleteObject(this))
             {
                 throw new Exception("Penneo: Could not delete the " + GetType().Name);
             }
@@ -98,40 +96,40 @@ namespace Penneo
         /// <summary>
         /// Get the latest server result for the entity
         /// </summary>
-        public ServerResult LatestServerResult
+        public ServerResult GetLatestServerResult(PenneoConnector con)
         {
-            get { return ApiConnector.Instance.GetLatestEntityServerResult(this); }
+            return con.ApiConnector.GetLatestEntityServerResult(this);
         }
 
         /// <summary>
         /// Link this entity with the given child in the storage
         /// </summary>
-        protected bool LinkEntity(Entity child)
+        protected bool LinkEntity(PenneoConnector con, Entity child)
         {
-            Log.Write("Linking " +
+            con.Log("Linking " +
                       GetType().Name + " (" + (Id.HasValue ? Id.ToString() : "new") + ") TO " +
                       child.GetType().Name + " (" + (child.Id.HasValue ? Id.ToString() : "new") + ")", LogSeverity.Information);
-            return ApiConnector.Instance.LinkEntity(this, child);
+            return con.ApiConnector.LinkEntity(this, child);
         }
 
         /// <summary>
         /// Unlink this entity with the given child in the storage
         /// </summary>
-        protected bool UnlinkEntity(Entity child)
+        protected bool UnlinkEntity(PenneoConnector con, Entity child)
         {
-            Log.Write("Unlinking " +
+            con.Log("Unlinking " +
                       GetType().Name + " (" + (Id.HasValue ? Id.ToString() : "new") + ") TO " +
                       child.GetType().Name + " (" + (child.Id.HasValue ? Id.ToString() : "new") + ")", LogSeverity.Information);
-            return ApiConnector.Instance.UnlinkEntity(this, child);
+            return con.ApiConnector.UnlinkEntity(this, child);
         }
 
         /// <summary>
         /// Get all entities linked with this entity in the storage
         /// </summary>
-        protected QueryResult<T> GetLinkedEntities<T>(string url = null)
+        protected QueryResult<T> GetLinkedEntities<T>(PenneoConnector con, string url = null)
             where T: Entity
         {
-            return ApiConnector.Instance.GetLinkedEntities<T>(this, url);
+            return con.ApiConnector.GetLinkedEntities<T>(this, url);
         }
 
         /// <summary>
@@ -146,46 +144,46 @@ namespace Penneo
         /// <summary>
         /// Find a specific linked entity
         /// </summary>
-        protected T FindLinkedEntity<T>(int id)
+        protected T FindLinkedEntity<T>(PenneoConnector con, int id)
         {
-            return ApiConnector.Instance.FindLinkedEntity<T>(this, id);
+            return con.ApiConnector.FindLinkedEntity<T>(this, id);
         }
 
         /// <summary>
         /// Get file assets with the given name for this entity
         /// </summary>
-        protected byte[] GetFileAssets(string assetName)
+        protected byte[] GetFileAssets(PenneoConnector con, string assetName)
         {
-            return ApiConnector.Instance.GetFileAssets(this, assetName);
+            return con.ApiConnector.GetFileAssets(this, assetName);
         }
 
         /// <summary>
         /// Get text assets with the given name for this entity
         /// </summary>
-        protected string GetTextAssets(string assetName)
+        protected string GetTextAssets(PenneoConnector con, string assetName)
         {
-            return ApiConnector.Instance.GetTextAssets(this, assetName);
+            return con.ApiConnector.GetTextAssets(this, assetName);
         }
 
-        protected T GetAsset<T>(string assetName)
+        protected T GetAsset<T>(PenneoConnector con, string assetName)
         {
-            return ApiConnector.Instance.GetAsset<T>(this, assetName);
+            return con.ApiConnector.GetAsset<T>(this, assetName);
         }
 
         /// <summary>
         /// Get list of string asset with the given name for this entity
         /// </summary>
-        protected IEnumerable<string> GetStringListAsset(string assetName)
+        protected IEnumerable<string> GetStringListAsset(PenneoConnector con, string assetName)
         {
-            return ApiConnector.Instance.GetStringListAsset(this, assetName);
+            return con.ApiConnector.GetStringListAsset(this, assetName);
         }
 
         /// <summary>
         /// Perform the given action on this entity
         /// </summary>
-        protected ServerResult PerformAction(string action)
+        protected ServerResult PerformAction(PenneoConnector con, string action)
         {
-            return ApiConnector.Instance.PerformAction(this, action);
+            return con.ApiConnector.PerformAction(this, action);
         }
 
         /// <summary>

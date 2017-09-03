@@ -16,6 +16,7 @@ namespace PenneoTests
         [Test]
         public void ConstructorTest()
         {
+            var con = TestUtil.CreatePenneoConnector();
             var s = CreateSigner();
             Assert.IsNotNull(s.CaseFile);
             Assert.AreEqual("john", s.Name);
@@ -26,19 +27,22 @@ namespace PenneoTests
         [Test]
         public void PersistSuccessTest()
         {
-            TestUtil.TestPersist(CreateSigner);
+            var con = TestUtil.CreatePenneoConnector();
+            TestUtil.TestPersist(con, CreateSigner);
         }
 
         [Test]
         public void PersistFailTest()
         {
-            TestUtil.TestPersistFail(CreateSigner);
+            var con = TestUtil.CreatePenneoConnector();
+            TestUtil.TestPersistFail(con, CreateSigner);
         }
 
         [Test]
         public void DeleteTest()
         {
-            TestUtil.TestDelete(CreateSigner);
+            var con = TestUtil.CreatePenneoConnector();
+            TestUtil.TestDelete(con, CreateSigner);
         }
 
         [Test]
@@ -50,7 +54,8 @@ namespace PenneoTests
         [Test]
         public void GetSigningRequestTest()
         {
-            TestUtil.TestGetLinked(() => CreateSigner().GetSigningRequest());
+            var con = TestUtil.CreatePenneoConnector();
+            TestUtil.TestGetLinked(con, () => CreateSigner().GetSigningRequest(con));
         }        
     }
 }

@@ -25,40 +25,34 @@ namespace PenneoTests
         [ExpectedException(typeof(NotSupportedException))]
         public void PageNotZeroTest()
         {
-            ApiConnector.SetFactory(null);
-            ((ApiConnector)ApiConnector.Instance).PrepareRequest(string.Empty, page: 0, perPage: 10);
+            TestUtil.CreateTestApiConnector().PrepareRequest(string.Empty, page: 0, perPage: 10);
         }
 
         [Test]
         [ExpectedException(typeof(NotSupportedException))]
         public void PerPageNotZeroTest()
         {
-            ApiConnector.SetFactory(null);
-            ((ApiConnector)ApiConnector.Instance).PrepareRequest(string.Empty, page: 5, perPage: 0);
+            TestUtil.CreateTestApiConnector().PrepareRequest(string.Empty, page: 5, perPage: 0);
         }
 
         [Test]
         [ExpectedException(typeof(NotSupportedException))]
         public void PageNotLessThanZeroTest()
         {
-            ApiConnector.SetFactory(null);
-            ((ApiConnector)ApiConnector.Instance).PrepareRequest(string.Empty, page: -2, perPage: 10);
+            TestUtil.CreateTestApiConnector().PrepareRequest(string.Empty, page: -2, perPage: 10);
         }
 
         [Test]
         [ExpectedException(typeof(NotSupportedException))]
         public void PerPageNotLessThanZeroTest()
         {
-            ApiConnector.SetFactory(null);
-            ((ApiConnector)ApiConnector.Instance).PrepareRequest(string.Empty, page: 5, perPage: -5);
+            TestUtil.CreateTestApiConnector().PrepareRequest(string.Empty, page: 5, perPage: -5);
         }
 
         [Test]
         public void PaginateRequestParametersTest()
         {
-            ApiConnector.SetFactory(null);
-
-            var connector = (ApiConnector) ApiConnector.Instance;
+            var connector = TestUtil.CreateTestApiConnector();
             var request = connector.PrepareRequest(string.Empty, page: 5, perPage: 10);
 
             var paginationHeader = request.Parameters.FirstOrDefault(x => x.Name.Equals("x-paginate"));
@@ -74,9 +68,7 @@ namespace PenneoTests
         [Test]
         public void NoPaginateRequestParametersTest()
         {
-            ApiConnector.SetFactory(null);
-
-            var connector = (ApiConnector)ApiConnector.Instance;
+            var connector = TestUtil.CreateTestApiConnector();
             var request = connector.PrepareRequest(string.Empty);
 
             var paginationHeader = request.Parameters.FirstOrDefault(x => x.Name.Equals("x-paginate"));

@@ -7,8 +7,6 @@ namespace Penneo
 {
     public class SignatureLine : Entity
     {
-        private Signer _signer;
-
         public SignatureLine()
         {
         }
@@ -50,35 +48,32 @@ namespace Penneo
             get { return Document; }
         }
 
-        public Signer Signer
+        public Signer Signer { get; private set; }
+
+        public Signer GetSigner(PenneoConnector con)
         {
-            get
+            if (Signer == null)
             {
-                if (_signer == null)
+                if (SignerId.HasValue)
                 {
-                    if (SignerId.HasValue)
+                    Signer = Document.CaseFile.FindSigner(con, SignerId.Value);
+                }
+                else
+                {
+                    Signer = GetLinkedEntities<Signer>(con).Objects.FirstOrDefault();
+                    if (Signer != null)
                     {
-                        _signer = Document.CaseFile.FindSigner(SignerId.Value);
-                    }
-                    else
-                    {
-                        _signer = GetLinkedEntities<Signer>().Objects.FirstOrDefault();
-                        if (_signer != null)
-                        {
-                            _signer.CaseFile = Document.CaseFile;
-                        }
+                        Signer.CaseFile = Document.CaseFile;
                     }
                 }
-                return _signer;
             }
-            private set { _signer = value; }
+            return Signer;
         }
 
-
-        public bool SetSigner(Signer signer)
+        public bool SetSigner(PenneoConnector con, Signer signer)
         {
             Signer = signer;
-            return LinkEntity(Signer);
+            return LinkEntity(con, Signer);
         }
     }
 }

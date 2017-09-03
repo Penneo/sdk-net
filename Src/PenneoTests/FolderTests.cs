@@ -16,19 +16,22 @@ namespace PenneoTests
         [Test]
         public void PersistSuccessTest()
         {
-            TestUtil.TestPersist(() => new Folder());
+            var con = TestUtil.CreatePenneoConnector();
+            TestUtil.TestPersist(con, () => new Folder());
         }
 
         [Test]
         public void PersistFailTest()
         {
-            TestUtil.TestPersistFail(() => new Folder());
+            var con = TestUtil.CreatePenneoConnector();
+            TestUtil.TestPersistFail(con, () => new Folder());
         }
 
         [Test]
         public void DeleteTest()
         {
-            TestUtil.TestDelete(() => new Folder());
+            var con = TestUtil.CreatePenneoConnector();
+            TestUtil.TestDelete(con, () => new Folder());
         }
 
         [Test]
@@ -40,33 +43,37 @@ namespace PenneoTests
         [Test]
         public void AddCaseFileTest()
         {
+            var con = TestUtil.CreatePenneoConnector();
             var folder = new Folder();
             var cf = new CaseFile();
-            TestUtil.TestLink(() => folder.AddCaseFile(cf), folder, cf);
+            TestUtil.TestLink(con, () => folder.AddCaseFile(con, cf), folder, cf);
         }
 
         [Test]
         public void RemoveCaseFileTest()
         {
+            var con = TestUtil.CreatePenneoConnector();
             var folder = new Folder();
             var cf = new CaseFile();
-            TestUtil.TestUnlink(() => folder.RemoveCaseFile(cf), folder, cf);
+            TestUtil.TestUnlink(con, () => folder.RemoveCaseFile(con, cf), folder, cf);
         }
 
         [Test]
         public void AddValidationTest()
         {
+            var con = TestUtil.CreatePenneoConnector();
             var folder = new Folder();
             var validation = new Validation();
-            TestUtil.TestLink(() => folder.AddValidation(validation), folder, validation);
+            TestUtil.TestLink(con, () => folder.AddValidation(con, validation), folder, validation);
         }
 
         [Test]
         public void RemoveValidationTest()
         {
+            var con = TestUtil.CreatePenneoConnector();
             var folder = new Folder();
             var validation = new Validation();
-            TestUtil.TestUnlink(() => folder.RemoveValidation(validation), folder, validation);
+            TestUtil.TestUnlink(con, () => folder.RemoveValidation(con, validation), folder, validation);
         }
     }
 }
