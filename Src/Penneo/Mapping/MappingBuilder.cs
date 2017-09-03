@@ -9,13 +9,11 @@ namespace Penneo.Mapping
     internal class MappingBuilder<T>
         where T : Entity
     {
-        private readonly Mappings _container;
         private readonly Mapping<T> _mapping;
         private MethodProperties<T> _currentMethodProperties;
 
-        public MappingBuilder(Mappings container = null)
+        public MappingBuilder()
         {
-            _container = container ?? ServiceLocator.Instance.GetInstance<Mappings>();
             _mapping = new Mapping<T>();
         }
 
@@ -81,9 +79,9 @@ namespace Penneo.Mapping
         /// <summary>
         /// Create and register the mapping instance in the Mappings container
         /// </summary>
-        public void Create()
+        public IMapping Create()
         {
-            _container.AddMapping(GetMapping());
+            return GetMapping();
         }
     }
 }

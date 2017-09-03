@@ -12,13 +12,20 @@ namespace Penneo
     /// </summary>
     public class RestConnector
     {
+        private readonly PenneoConnector _con;
+
+        public RestConnector(PenneoConnector con)
+        {
+            _con = con;
+        }
+
         /// <summary>
         /// Get the url resource string for a given entity type
         /// </summary>
         public string GetUrlFromEntityType<T>(Entity parent = null)
             where T: Entity
         {
-            return ServiceLocator.Instance.GetInstance<RestResources>().GetResource(typeof(T), parent);
+            return _con.Setup.GetRestResources().GetResource(typeof(T), parent);
         }
 
         /// <summary>
@@ -26,7 +33,7 @@ namespace Penneo
         /// </summary>
         public IRestResponse InvokeRequest(string url, Dictionary<string, object> body = null, Method method = Method.GET, Dictionary<string, Dictionary<string, object>> options = null, string customMethod = null, int? page = null, int? perPage = null)
         {
-            return ApiConnector.Instance.CallServer(url, body, method, options, customMethod, page, perPage);
+            return _con.ApiConnector.CallServer(url, body, method, options, customMethod, page, perPage);
         }
 
         /// <summary>

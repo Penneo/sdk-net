@@ -1,32 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
+using System.Runtime.InteropServices;
 using Newtonsoft.Json;
 using Penneo.Connector;
-using Penneo.Mapping;
 using RestSharp;
 using Penneo.Util;
-using RestSharp.Contrib;
 
 namespace Penneo
 {
     /// <summary>
     /// Create queries against Penneo
     /// </summary>
-    public static class Query
+    public class Query
     {
-        private static Dictionary<Type, Func<object, object>> _postProcessors = new Dictionary<Type, Func<object, object>>(); 
+        private readonly PenneoConnector _con;
 
-        internal static void AddPostProcessor<T>(Func<object, object> processor)
+        public Query(PenneoConnector con)
         {
-            _postProcessors[typeof (T)] = processor;
+            _con = con;
         }
 
         /// <summary>
         /// Get an entity by its Id
         /// </summary>
-        public static T Find<T>(int id)
+        public T Find<T>(int id)
             where T : Entity
         {
             var output = FindById<T>(id);
@@ -37,28 +35,28 @@ namespace Penneo
             return output.Object;
         }
 
-        public static QuerySingleObjectResult<T> FindById<T>(int id)
+        public QuerySingleObjectResult<T> FindById<T>(int id)
             where T : Entity
         {
             IRestResponse response;
-            var obj = ApiConnector.Instance.ReadObject<T>(null, id, out response);
+            var obj = _con.ApiConnector.ReadObject<T>(null, id, out response);
             return CreateSingleObjectResult(response, obj, id);
         }
 
         /// <summary>
         /// Get the first entity matching the search criteria
         /// </summary>
-        public static T FindOneBy<T>(Dictionary<string, object> criteria = null, Dictionary<string, string> orderBy = null)
+        public T FindOneBy<T>(Dictionary<string, object> criteria = null, Dictionary<string, string> orderBy = null)
             where T : Entity
         {
             var input = new QueryInput {Criteria = criteria, OrderBy = orderBy};
             return FindOneBy<T>(input).Object;
         }
 
-        public static QuerySingleObjectResult<T> FindOneBy<T>(QueryInput input)
+        public QuerySingleObjectResult<T> FindOneBy<T>(QueryInput input)
             where T : Entity
         {
-            Log.Write("FindOneBy (" + typeof(T).Name + ")", LogSeverity.Information);
+            _con.Log("FindOneBy (" + typeof(T).Name + ")", LogSeverity.Information);
             var result = new QuerySingleObjectResult<T>(FindBy<T>(input));
             return result;
         }
@@ -66,10 +64,10 @@ namespace Penneo
         /// <summary>
         /// Get all entities of the given type
         /// </summary>
-        public static IEnumerable<T> FindAll<T>()
+        public IEnumerable<T> FindAll<T>()
             where T : Entity
         {
-            Log.Write("FindAll (" + typeof(T).Name + ")", LogSeverity.Information);
+            _con.Log("FindAll (" + typeof(T).Name + ")", LogSeverity.Information);
             var input = new QueryInput();
             return FindBy<T>(input).Objects;
         }
@@ -77,7 +75,7 @@ namespace Penneo
         /// <summary>
         /// Get entities matching the search criteria
         /// </summary>
-        public static IEnumerable<T> FindBy<T>(Dictionary<string, object> criteria = null, Dictionary<string, string> orderBy = null, int? limit = null, int? offset = null)
+        public IEnumerable<T> FindBy<T>(Dictionary<string, object> criteria = null, Dictionary<string, string> orderBy = null, int? limit = null, int? offset = null)
             where T : Entity
         {
             var input = new QueryInput();
@@ -102,10 +100,10 @@ namespace Penneo
         /// Find entities based on an input object.
         /// Returns output with data and metadata
         /// </summary>
-        public static QueryResult<T> FindBy<T>(QueryInput input)
+        public QueryResult<T> FindBy<T>(QueryInput input)
             where T : Entity
         {
-            Log.Write("FindBy (" + typeof(T).Name + ")", LogSeverity.Information);
+            _con.Log("FindBy (" + typeof(T).Name + ")", LogSeverity.Information);
 
             var criteria = input.Criteria;
             var orderBy = input.OrderBy;
@@ -137,7 +135,7 @@ namespace Penneo
 
             IEnumerable<T> objects;
             IRestResponse response;
-            output.Success = ApiConnector.Instance.FindBy(query, out objects, out response, input.Page, input.PerPage);
+            output.Success = _con.ApiConnector.FindBy(query, out objects, out response, input.Page, input.PerPage);
             output.Objects = objects;
             output.StatusCode = response.StatusCode;
             output.ErrorMessage = response.ErrorMessage;
@@ -145,10 +143,10 @@ namespace Penneo
             if (output.Success)
             {
                 //Map objects
-                Func<object, object> processor;
-                if (_postProcessors.TryGetValue(typeof (T), out processor))
+                var postProcessor = _con.Setup.GetPostProcessor(typeof(T));
+                if (postProcessor != null)
                 {
-                    output.Objects = (IEnumerable<T>) processor(output.Objects);
+                    output.Objects = (IEnumerable<T>)postProcessor(output.Objects);
                 }
 
                 //Pagination
@@ -189,10 +187,10 @@ namespace Penneo
         /// <summary>
         /// Get the default message template
         /// </summary>
-        public static QueryResult<MessageTemplate> GetDefaultMessageTemplate()
+        public QueryResult<MessageTemplate> GetDefaultMessageTemplate()
         {
-            var resource = ServiceLocator.Instance.GetInstance<RestResources>().GetResource(typeof(MessageTemplate)) + "/default";
-            var result = ApiConnector.Instance.CallServer(resource);
+            var resource = _con.ServiceLocator.GetInstance<RestResources>().GetResource(typeof(MessageTemplate)) + "/default";
+            var result = _con.ApiConnector.CallServer(resource);
             var obj = JsonConvert.DeserializeObject<MessageTemplate>(result.Content);
             obj.Title = "Standard";
             return new QueryResult<MessageTemplate>(){ Objects = new []{ obj }, Success = true };
@@ -201,14 +199,14 @@ namespace Penneo
         /// <summary>
         /// Get the current user
         /// </summary>
-        public static QuerySingleObjectResult<User> GetUser()
+        public QuerySingleObjectResult<User> GetUser()
         {
             IRestResponse response;
-            var user = ApiConnector.Instance.ReadObject<User>(null, null, "user", out response);
+            var user = _con.ApiConnector.ReadObject<User>(null, null, "user", out response);
             return CreateSingleObjectResult(response, user, null);
         }
 
-        private static QuerySingleObjectResult<T> CreateSingleObjectResult<T>(IRestResponse response, T obj, int? id)
+        private QuerySingleObjectResult<T> CreateSingleObjectResult<T>(IRestResponse response, T obj, int? id)
             where T: Entity
         {
             var output = new QuerySingleObjectResult<T>
@@ -232,10 +230,10 @@ namespace Penneo
         /// <summary>
         /// Get the next page based on an earlier result
         /// </summary>
-        public static QueryResult<T> GetNextPage<T>(QueryResult<T> result)
+        public QueryResult<T> GetNextPage<T>(QueryResult<T> result)
             where T: Entity
         {
-            Log.Write("GetNextPage (" + typeof(T).Name + ")", LogSeverity.Information);
+            _con.Log("GetNextPage (" + typeof(T).Name + ")", LogSeverity.Information);
             if (!result.NextPage.HasValue)
             {
                 return null;
@@ -246,10 +244,10 @@ namespace Penneo
         /// <summary>
         /// Get the previous page based on an earlier result
         /// </summary>
-        public static QueryResult<T> GetPreviousPage<T>(QueryResult<T> result)
+        public QueryResult<T> GetPreviousPage<T>(QueryResult<T> result)
             where T : Entity
         {
-            Log.Write("GetPreviousPage (" + typeof(T).Name + ")", LogSeverity.Information);
+            _con.Log("GetPreviousPage (" + typeof(T).Name + ")", LogSeverity.Information);
             if (!result.PrevPage.HasValue)
             {
                 return null;
@@ -260,10 +258,10 @@ namespace Penneo
         /// <summary>
         /// Get the first page based on an earlier result
         /// </summary>
-        public static QueryResult<T> GetFirstPage<T>(QueryResult<T> result)
+        public QueryResult<T> GetFirstPage<T>(QueryResult<T> result)
             where T : Entity
         {
-            Log.Write("GetFirstPage (" + typeof(T).Name + ")", LogSeverity.Information);
+            _con.Log("GetFirstPage (" + typeof(T).Name + ")", LogSeverity.Information);
             if (!result.FirstPage.HasValue)
             {
                 return null;
@@ -274,17 +272,17 @@ namespace Penneo
         /// <summary>
         /// Get the first page of a given entity
         /// </summary>
-        public static QueryResult<T> GetFirstPage<T>(int? perPage = null)
+        public QueryResult<T> GetFirstPage<T>(int? perPage = null)
             where T : Entity
         {
-            Log.Write("GetFirstPage (" + typeof(T).Name + ")", LogSeverity.Information);
+            _con.Log("GetFirstPage (" + typeof(T).Name + ")", LogSeverity.Information);
             var input = new QueryInput();
             input.Page = 1;
             input.PerPage = perPage;
             return FindBy<T>(input);
         }
 
-        private static void ThrowIfNoPagination<T>(QueryResult<T> result, int? page)
+        private void ThrowIfNoPagination<T>(QueryResult<T> result, int? page)
             where T : Entity
         {
             if (!page.HasValue || result.Input == null || !result.Input.Page.HasValue)
@@ -293,7 +291,7 @@ namespace Penneo
             }
         }
 
-        private static QueryResult<T> GetPage<T>(QueryResult<T> result, int? page)
+        private QueryResult<T> GetPage<T>(QueryResult<T> result, int? page)
             where T : Entity
         {
             ThrowIfNoPagination(result, page);

@@ -89,11 +89,11 @@ namespace Penneo
         /// <summary>
         /// Get the document type
         /// </summary>
-        public DocumentType GetDocumentType()
+        public DocumentType GetDocumentType(PenneoConnector con)
         {
             if (Id.HasValue && DocumentType == null)
             {
-                var documentTypes = GetLinkedEntities<DocumentType>();
+                var documentTypes = GetLinkedEntities<DocumentType>(con);
                 DocumentType = documentTypes.Objects.FirstOrDefault();
             }
             return DocumentType;
@@ -173,15 +173,20 @@ namespace Penneo
         /// </summary>
         public CaseFile CaseFile
         {
-            get
-            {
-                if (_caseFile == null)
-                {
-                    _caseFile = GetLinkedEntities<CaseFile>().Objects.FirstOrDefault();
-                }
-                return _caseFile;
-            }
+            get { return _caseFile; }
             internal set { _caseFile = value; }
+        }
+
+        /// <summary>
+        /// Get the case file (load if not loaded)
+        /// </summary>
+        public CaseFile GetCaseFile(PenneoConnector con)
+        {
+            if (CaseFile == null)
+            {
+                CaseFile = GetLinkedEntities<CaseFile>(con).Objects.FirstOrDefault();
+            }
+            return CaseFile;
         }
 
         /// <summary>
@@ -208,11 +213,11 @@ namespace Penneo
         /// Get the PDF document as byte array
         /// </summary>
         /// <returns></returns>
-        public byte[] GetPdf()
+        public byte[] GetPdf(PenneoConnector con)
         {
             if (PdfRaw == null)
             {
-                PdfRaw = GetFileAssets(ASSET_PDF);
+                PdfRaw = GetFileAssets(con, ASSET_PDF);
             }
             return PdfRaw;
         }
@@ -228,9 +233,9 @@ namespace Penneo
         /// <summary>
         /// Save the PDF document to a file
         /// </summary>
-        public void SavePdf(string path)
+        public void SavePdf(PenneoConnector con, string path)
         {
-            var data = GetPdf();
+            var data = GetPdf(con);
             if (File.Exists(path))
             {
                 File.Delete(path);
@@ -251,11 +256,11 @@ namespace Penneo
         /// <summary>
         /// Get signature lines on the document. If no signature lines are loaded, the method will fetch the lines from the back-end.
         /// </summary>
-        public IEnumerable<SignatureLine> GetSignatureLines()
+        public IEnumerable<SignatureLine> GetSignatureLines(PenneoConnector con)
         {
             if (_signatureLines == null)
             {
-                _signatureLines = GetLinkedEntities<SignatureLine>().Objects.ToList();
+                _signatureLines = GetLinkedEntities<SignatureLine>(con).Objects.ToList();
             }
             foreach (var sl in _signatureLines)
             {
@@ -270,13 +275,13 @@ namespace Penneo
         /// <summary>
         /// Find a specific signature line.
         /// </summary>
-        public SignatureLine FindSignatureLine(int id)
+        public SignatureLine FindSignatureLine(PenneoConnector con, int id)
         {
             if (_signatureLines != null)
             {
                 return _signatureLines.FirstOrDefault(x => x.Id == id);
             }
-            var sl = FindLinkedEntity<SignatureLine>(id);
+            var sl = FindLinkedEntity<SignatureLine>(con, id);
             sl.Document = this;
             return sl;
         }

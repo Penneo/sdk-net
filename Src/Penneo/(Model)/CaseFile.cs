@@ -118,11 +118,11 @@ namespace Penneo
         /// Get documents for the case file. If the documents are not loaded, they will be fetched
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<Document> GetDocuments()
+        public IEnumerable<Document> GetDocuments(PenneoConnector con)
         {
             if (_documents == null)
             {
-                _documents = GetLinkedEntities<Document>().Objects.ToList();
+                _documents = GetLinkedEntities<Document>(con).Objects.ToList();
                 foreach (var doc in _documents)
                 {
                     doc.CaseFile = this;
@@ -157,11 +157,11 @@ namespace Penneo
         /// <summary>
         /// The signers in the case file. If the signers are not loaded, they will be fetched
         /// </summary>
-        public IEnumerable<Signer> GetSigners()
+        public IEnumerable<Signer> GetSigners(PenneoConnector con)
         {
             if (Signers == null)
             {
-                Signers = GetLinkedEntities<Signer>().Objects.ToList();
+                Signers = GetLinkedEntities<Signer>(con).Objects.ToList();
             }
             return Signers;
         }
@@ -169,7 +169,7 @@ namespace Penneo
         /// <summary>
         /// Find a given signer on the case file. If the signer is not found in the list loaded signers, an attempt will be made to find the signer on the backend.
         /// </summary>
-        public Signer FindSigner(int id)
+        public Signer FindSigner(PenneoConnector con, int id)
         {
             Signer signer = null;
             if (_signers != null)
@@ -178,7 +178,7 @@ namespace Penneo
             }
             if (signer == null)
             {
-                signer = FindLinkedEntity<Signer>(id);
+                signer = FindLinkedEntity<Signer>(con, id);
             }
             if (signer != null)
             {
@@ -191,11 +191,11 @@ namespace Penneo
         /// Get copy recipients of the case file. If the copy recipients are not already loaded, they will be fetched
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<CopyRecipient> GetCopyRecipients()
+        public IEnumerable<CopyRecipient> GetCopyRecipients(PenneoConnector con)
         {
             if (_copyRecipients == null)
             {
-                _copyRecipients = GetLinkedEntities<CopyRecipient>().Objects.ToList();
+                _copyRecipients = GetLinkedEntities<CopyRecipient>(con).Objects.ToList();
                 foreach (var doc in _copyRecipients)
                 {
                     doc.CaseFile = this;
@@ -227,47 +227,47 @@ namespace Penneo
         }
 
         [Obsolete("Obsolete since 1.0.18. Use GetTemplates instead.")]
-        public IEnumerable<CaseFileTemplate> GetCaseFileTemplates()
+        public IEnumerable<CaseFileTemplate> GetCaseFileTemplates(PenneoConnector con)
         {
-            return GetLinkedEntities<CaseFileTemplate>("casefile/casefiletypes").Objects;
+            return GetLinkedEntities<CaseFileTemplate>(con, "casefile/casefiletypes").Objects;
         }
 
         /// <summary>
         /// Get all available case file templates
         /// </summary>
-        public QueryResult<CaseFileTemplate> GetTemplates()
+        public QueryResult<CaseFileTemplate> GetTemplates(PenneoConnector con)
         {
-            return GetLinkedEntities<CaseFileTemplate>("casefile/casefiletypes");
+            return GetLinkedEntities<CaseFileTemplate>(con, "casefile/casefiletypes");
         }
 
         /// <summary>
         /// Get all available documents types for this case file
         /// </summary>
-        public IEnumerable<DocumentType> GetDocumentTypes()
+        public IEnumerable<DocumentType> GetDocumentTypes(PenneoConnector con)
         {
-            return GetLinkedEntities<DocumentType>("casefiles/" + Id + "/documenttypes").Objects;
+            return GetLinkedEntities<DocumentType>(con, "casefiles/" + Id + "/documenttypes").Objects;
         }
 
         /// <summary>
         /// Get all available signer types for this case file
         /// </summary>
-        public IEnumerable<SignerType> GetSignerTypes()
+        public IEnumerable<SignerType> GetSignerTypes(PenneoConnector con)
         {
             if (!Id.HasValue)
             {
                 return new List<SignerType>();
             }
-            return GetLinkedEntities<SignerType>("casefiles/" + Id + "/signertypes").Objects;
+            return GetLinkedEntities<SignerType>(con, "casefiles/" + Id + "/signertypes").Objects;
         }
 
         /// <summary>
         /// Get the case file template for this case file
         /// </summary>
-        public CaseFileTemplate GetCaseFileTemplate()
+        public CaseFileTemplate GetCaseFileTemplate(PenneoConnector con)
         {
             if (Id.HasValue && CaseFileTemplate == null)
             {
-                var caseFileTypes = GetLinkedEntities<CaseFileTemplate>();
+                var caseFileTypes = GetLinkedEntities<CaseFileTemplate>(con);
                 CaseFileTemplate = caseFileTypes.Objects.FirstOrDefault();
             }
             return CaseFileTemplate;
@@ -284,25 +284,25 @@ namespace Penneo
         /// <summary>
         /// Get all errors associated with the case file
         /// </summary>
-        public IEnumerable<string> GetErrors()
+        public IEnumerable<string> GetErrors(PenneoConnector con)
         {
-            return GetStringListAsset("errors");
+            return GetStringListAsset(con, "errors");
         }
 
         /// <summary>
         /// Send the case file for signing
         /// </summary>
-        public bool Send()
+        public bool Send(PenneoConnector con)
         {
-            return PerformAction(ACTION_SEND).Success;
+            return PerformAction(con, ACTION_SEND).Success;
         }
 
         /// <summary>
         /// Activate the case file
         /// </summary>
-        public bool Activate()
+        public bool Activate(PenneoConnector con)
         {
-            return PerformAction(ACTION_ACTIVATE).Success;
+            return PerformAction(con, ACTION_ACTIVATE).Success;
         }
     }
 }

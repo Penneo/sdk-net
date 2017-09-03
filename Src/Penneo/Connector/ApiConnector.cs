@@ -13,24 +13,39 @@ namespace Penneo.Connector
     internal class ApiConnector : IApiConnector
     {
         /// <summary>
+        /// The Penneo connector
+        /// </summary>
+        private PenneoConnector _con;
+
+        /// <summary>
         /// The Penneo server endpoint
         /// </summary>
-        private static string _endpoint = "https://sandbox.penneo.com/api/v1";
+        private string _endpoint;
 
         /// <summary>
-        /// The api connector factory
+        /// The Penneo user
         /// </summary>
-        private static Func<IApiConnector> _factory;
+        private string _user;
 
         /// <summary>
-        /// The singleton instance
+        /// The Penneo key
         /// </summary>
-        private static IApiConnector _instance;
+        private string _key;
+
+        /// <summary>
+        /// The Penneo secret
+        /// </summary>
+        private string _secret;
+
+        /// <summary>
+        /// The Penneo auth type
+        /// </summary>
+        private AuthType _authType;
 
         /// <summary>
         /// Use proxy settings from Internet Explorer
         /// </summary>
-        private static bool _useAutomaticProxy;
+        private bool _useAutomaticProxy;
 
         /// <summary>
         /// Success status codes
@@ -55,7 +70,7 @@ namespace Penneo.Connector
         /// <summary>
         /// Rest resources
         /// </summary>
-        private RestResources _restResources;
+        private readonly RestResources _restResources;
 
         /// <summary>
         /// Denotes if the last response received was an error
@@ -67,11 +82,21 @@ namespace Penneo.Connector
         /// </summary>
         private Dictionary<Guid, ServerResult> LatestEntityServerResults { get; set; }
 
-        protected ApiConnector()
+        internal ApiConnector(PenneoConnector con, RestResources restResources, string endpoint, Dictionary<string, string> headers, string user, string key, string secret, AuthType authType)
         {
+            _con = con;
+            _restResources = restResources;
+            _endpoint = endpoint;
+            _headers = headers;
+            _user = user;
+            _key = key;
+            _secret = secret;
+            _authType = authType;
+
             Init();
         }
 
+        /*
         /// <summary>
         /// Singleton instance
         /// </summary>
@@ -99,7 +124,7 @@ namespace Penneo.Connector
                 }
                 return _instance;
             }
-        }
+        }*/
 
         #region IApiConnector Members
         /// <summary>
@@ -109,10 +134,10 @@ namespace Penneo.Connector
         {
             var result = new ServerResult();
 
-            var data = obj.GetRequestData();
+            var data = obj.GetRequestData(_con);
             if (data == null)
             {
-                Log.Write("Write Failed for " + obj.GetType().Name + ": Unable to get request data", LogSeverity.Error);
+                _con.Log("Write Failed for " + obj.GetType().Name + ": Unable to get request data", LogSeverity.Error);
                 result.Success = false;
                 result.ErrorMessage = "Unable to get request data";
                 SetLatestEntityServerResult(obj, result);
@@ -120,12 +145,12 @@ namespace Penneo.Connector
             }
             if (!obj.IsNew)
             {
-                var response = CallServer(obj.RelativeUrl + "/" + obj.Id, data, Method.PUT);
+                var response = CallServer(obj.GetRelativeUrl(_con) + "/" + obj.Id, data, Method.PUT);
                 return ExtractResponse(obj, response, result);
             }
             else
             {
-                var response = CallServer(obj.RelativeUrl, data, Method.POST);
+                var response = CallServer(obj.GetRelativeUrl(_con), data, Method.POST);
                 var successfull = ExtractResponse(obj, response, result);
                 if (successfull)
                 {
@@ -142,7 +167,7 @@ namespace Penneo.Connector
             result.Success = true;
             if (response == null)
             {
-                Log.Write("Write Failed for " + obj.GetType().Name + ": Empty response", LogSeverity.Error);
+                _con.Log("Write Failed for " + obj.GetType().Name + ": Empty response", LogSeverity.Error);
                 result.ErrorMessage = "Empty response";
                 result.Success = false;
             }
@@ -152,7 +177,7 @@ namespace Penneo.Connector
                 result.JsonContent = response.Content;
                 if (!_successStatusCodes.Contains(response.StatusCode))
                 {
-                    Log.Write("Write Failed for " + obj.GetType().Name + ": " + response.Content, LogSeverity.Error);
+                    _con.Log("Write Failed for " + obj.GetType().Name + ": " + response.Content, LogSeverity.Error);
                     result.Success = false;
                 }
             }
@@ -165,7 +190,7 @@ namespace Penneo.Connector
         /// </summary>
         public bool DeleteObject(Entity obj)
         {
-            var response = CallServer(obj.RelativeUrl + '/' + obj.Id, null, Method.DELETE);
+            var response = CallServer(obj.GetRelativeUrl(_con) + '/' + obj.Id, null, Method.DELETE);
             return response != null && (response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.NoContent);
         }
 
@@ -178,7 +203,7 @@ namespace Penneo.Connector
         public T ReadObject<T>(Entity parent, int? id, string relativeUrl, out IRestResponse response)
             where T : Entity
         {
-            var url = !string.IsNullOrEmpty(relativeUrl) ? relativeUrl : ServiceLocator.Instance.GetInstance<RestResources>().GetResource(typeof(T), parent);
+            var url = !string.IsNullOrEmpty(relativeUrl) ? relativeUrl : _restResources.GetResource(typeof(T), parent);
             if (id.HasValue)
             {
                 url += "/" + id;
@@ -203,7 +228,7 @@ namespace Penneo.Connector
         /// </summary>
         public bool LinkEntity(Entity parent, Entity child)
         {
-            var url = parent.RelativeUrl + "/" + parent.Id + "/" + _restResources.GetResource(child.GetType()) + "/" + child.Id;
+            var url = parent.GetRelativeUrl(_con) + "/" + parent.Id + "/" + _restResources.GetResource(child.GetType()) + "/" + child.Id;
             var response = CallServer(url, customMethod: "LINK");
             var result = new ServerResult();
             return ExtractResponse(parent, response, result);
@@ -214,7 +239,7 @@ namespace Penneo.Connector
         /// </summary>
         public bool UnlinkEntity(Entity parent, Entity child)
         {
-            var url = parent.RelativeUrl + "/" + parent.Id + "/" + _restResources.GetResource(child.GetType()) + "/" + child.Id;
+            var url = parent.GetRelativeUrl(_con) + "/" + parent.Id + "/" + _restResources.GetResource(child.GetType()) + "/" + child.Id;
             var response = CallServer(url, customMethod: "UNLINK");
             var result = new ServerResult();
             return ExtractResponse(parent, response, result);
@@ -229,7 +254,7 @@ namespace Penneo.Connector
             string actualUrl;
             if (string.IsNullOrEmpty(url))
             {
-                actualUrl = obj.RelativeUrl + "/" + obj.Id + "/" + _restResources.GetResource<T>();
+                actualUrl = obj.GetRelativeUrl(_con) + "/" + obj.Id + "/" + _restResources.GetResource<T>();
             }
             else
             {
@@ -250,7 +275,7 @@ namespace Penneo.Connector
         /// </summary>
         public T FindLinkedEntity<T>(Entity obj, int id)
         {
-            var url = obj.RelativeUrl + "/" + obj.Id + "/" + _restResources.GetResource<T>() + "/" + id;
+            var url = obj.GetRelativeUrl(_con) + "/" + obj.Id + "/" + _restResources.GetResource<T>() + "/" + id;
             var response = CallServer(url);
             if (response == null || !_successStatusCodes.Contains(response.StatusCode))
             {
@@ -261,7 +286,7 @@ namespace Penneo.Connector
 
         public T GetAsset<T>(Entity obj, string assetName)
         {
-            var url = obj.RelativeUrl + "/" + obj.Id + "/" + assetName;
+            var url = obj.GetRelativeUrl(_con) + "/" + obj.Id + "/" + assetName;
             var response = CallServer(url);
             if (response == null || string.IsNullOrEmpty(response.Content) || !_successStatusCodes.Contains(response.StatusCode))
             {
@@ -285,7 +310,7 @@ namespace Penneo.Connector
         /// </summary>
         public string GetTextAssets(Entity obj, string assetName)
         {
-            var url = obj.RelativeUrl + "/" + obj.Id + "/" + assetName;
+            var url = obj.GetRelativeUrl(_con) + "/" + obj.Id + "/" + assetName;
             var response = CallServer(url);
             var result = JsonConvert.DeserializeObject<string[]>(response.Content);
             return result[0];
@@ -296,7 +321,7 @@ namespace Penneo.Connector
         /// </summary>
         public IEnumerable<string> GetStringListAsset(Entity obj, string assetName)
         {
-            var url = obj.RelativeUrl + "/" + obj.Id + "/" + assetName;
+            var url = obj.GetRelativeUrl(_con) + "/" + obj.Id + "/" + assetName;
             var response = CallServer(url);
             var result = JsonConvert.DeserializeObject<string[]>(response.Content);
             return result;
@@ -333,7 +358,7 @@ namespace Penneo.Connector
         public ServerResult PerformAction(Entity obj, string actionName)
         {
             var result = new ServerResult();
-            var url = obj.RelativeUrl + "/" + obj.Id + "/" + actionName;
+            var url = obj.GetRelativeUrl(_con) + "/" + obj.Id + "/" + actionName;
             var response = CallServer(url, customMethod: "patch");
             if (response == null || !_successStatusCodes.Contains(response.StatusCode))
             {
@@ -369,35 +394,39 @@ namespace Penneo.Connector
         /// </summary>
         private void Init()
         {
-            if (!string.IsNullOrEmpty(PenneoConnector.Endpoint))
+            if (string.IsNullOrEmpty(_endpoint))
             {
-                _endpoint = PenneoConnector.Endpoint;
+                _endpoint = "https://sandbox.penneo.com/api/v1";
             }
             _client = new RestClient(_endpoint);
 
-            _restResources = ServiceLocator.Instance.GetInstance<RestResources>();
-
-            _headers = PenneoConnector.Headers ?? new Dictionary<string, string>();
+            _headers = _headers ?? new Dictionary<string, string>();
             _headers["Content-type"] = "application/json";
 
-            if (!string.IsNullOrEmpty(PenneoConnector.User))
+            if (!string.IsNullOrEmpty(_user))
             {
-                _headers["penneo-api-user"] = PenneoConnector.User;
+                _headers["penneo-api-user"] = _user;
             }
 
-            if (PenneoConnector.AuthenticationType == AuthType.WSSE)
+            if (_authType == AuthType.WSSE)
             {
-                _client.Authenticator = new WSSEAuthenticator(PenneoConnector.Key, PenneoConnector.Secret);
+                _client.Authenticator = new WSSEAuthenticator(_key, _secret);
             }
             else
             {
-                throw new NotSupportedException("Unknown authentication type " + PenneoConnector.AuthenticationType);
+                throw new NotSupportedException("Unknown authentication type " + _authType);
             }
             LatestEntityServerResults = new Dictionary<Guid, ServerResult>();
-
-            PenneoConnector.Reset();
         }
 
+        public void ChangeKeySecret(string key, string secret)
+        {
+            _key = key;
+            _secret = secret;
+            _client.Authenticator = new WSSEAuthenticator(_key, _secret);
+        }
+
+        /*
         /// <summary>
         /// Sets a factory for creating a connector.
         /// </summary>
@@ -407,19 +436,14 @@ namespace Penneo.Connector
 
             //Null instance if a new factory is provided
             ResetInstance();
-        }
+        }*/
 
         /// <summary>
         /// Sets whether to use automatic proxy settings from Internet Explorer
         /// </summary>
-        public static void SetUseProxySettingsFromInternetExplorer(bool use)
+        public void SetUseProxySettingsFromInternetExplorer(bool use)
         {
             _useAutomaticProxy = use;
-        }
-
-        public static void ResetInstance()
-        {
-            _instance = null;
         }
 
         /// <summary>
@@ -503,7 +527,7 @@ namespace Penneo.Connector
                     var proxy = proxyWrapper.GetProxy(new Uri(_endpoint));
                     if (proxy != null && !_endpoint.Equals(proxy.ToString(), StringComparison.OrdinalIgnoreCase))
                     {
-                        Log.Write("Proxy URL: " + proxy, LogSeverity.Information);
+                        _con.Log("Proxy URL: " + proxy, LogSeverity.Information);
                         _client.Proxy = new WebProxy(proxy);
                     }
                 }
@@ -542,41 +566,42 @@ namespace Penneo.Connector
             }
             catch (Exception ex)
             {
-                Log.Write(ex.ToString(), LogSeverity.Fatal);
+                _con.Log(ex.ToString(), LogSeverity.Fatal);
                 throw;
             }
         }
 
         private void LogRequest(IRestRequest request, string url, string method)
         {
-            Log.Write(string.Format("HTTP REQUEST {0}: {1}{2} ", method, _client.BaseUrl.ToString(), url), LogSeverity.Trace);
+            _con.Log(string.Format("HTTP REQUEST {0}: {1}{2} ", method, _client.BaseUrl.ToString(), url), LogSeverity.Trace);
             foreach (var p in request.Parameters)
             {
-                Log.Write(string.Format("{0} - {1}: {2}", p.Type, p.Name, p.Value), LogSeverity.Trace);
+                _con.Log(string.Format("{0} - {1}: {2}", p.Type, p.Name, p.Value), LogSeverity.Trace);
             }
         }
 
         private void LogResponse(IRestResponse response, string url, string method)
         {
-            Log.Write(string.Format("HTTP RESPONSE {0}: {1}{2} ({3} {4}) ", method, _client.BaseUrl.ToString(), url, (int)response.StatusCode, response.StatusCode), LogSeverity.Trace);
+            _con.Log(string.Format("HTTP RESPONSE {0}: {1}{2} ({3} {4}) ", method, _client.BaseUrl.ToString(), url, (int)response.StatusCode, response.StatusCode), LogSeverity.Trace);
             if (!string.IsNullOrEmpty(response.Content))
             {
-                Log.Write(string.Format("Content:  {0}", response.Content), LogSeverity.Trace);
+                _con.Log(string.Format("Content:  {0}", response.Content), LogSeverity.Trace);
             }
             if (!string.IsNullOrEmpty(response.ErrorMessage))
             {
-                Log.Write(string.Format("Content:  {0}", response.ErrorMessage), LogSeverity.Trace);
+                _con.Log(string.Format("Content:  {0}", response.ErrorMessage), LogSeverity.Trace);
             }
             foreach (var p in response.Headers)
             {
-                Log.Write(string.Format("{0} - {1}: {2}", p.Type, p.Name, p.Value), LogSeverity.Trace);
+                _con.Log(string.Format("{0} - {1}: {2}", p.Type, p.Name, p.Value), LogSeverity.Trace);
             }
         }
 
         /// <summary>
         /// Create objects from a json string
         /// </summary>
-        private static IEnumerable<T> CreateObjects<T>(string json)
+        private IEnumerable<T> CreateObjects<T>(string json)
+            where T: Entity
         {
             var direct = JsonConvert.DeserializeObject<List<T>>(json);
             return direct;

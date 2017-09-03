@@ -39,33 +39,33 @@ namespace Penneo
             get { return CaseFile; }
         }
 
-        public SigningRequest GetSigningRequest()
+        public SigningRequest GetSigningRequest(PenneoConnector con)
         {
             if (SigningRequest == null)
             {
-                SigningRequest = GetLinkedEntities<SigningRequest>().Objects.FirstOrDefault();
+                SigningRequest = GetLinkedEntities<SigningRequest>(con).Objects.FirstOrDefault();
             }
             return SigningRequest;
         }
 
-        public bool AddSignerType(SignerType type)
+        public bool AddSignerType(PenneoConnector con, SignerType type)
         {
-            return LinkEntity(type);
+            return LinkEntity(con, type);
         }
 
-        public bool RemoveSignerType(SignerType type)
+        public bool RemoveSignerType(PenneoConnector con, SignerType type)
         {
-            return UnlinkEntity(type);
+            return UnlinkEntity(con, type);
         }
 
-        public IEnumerable<SignerType> GetSignerTypes()
+        public IEnumerable<SignerType> GetSignerTypes(PenneoConnector con)
         {
-            return GetLinkedEntities<SignerType>().Objects;
+            return GetLinkedEntities<SignerType>(con).Objects;
         }
 
-        public IEnumerable<LogEntry> GetEventLog()
+        public IEnumerable<LogEntry> GetEventLog(PenneoConnector con)
         {
-            return GetLinkedEntities<LogEntry>().Objects;
+            return GetLinkedEntities<LogEntry>(con).Objects;
         }
     }
 }

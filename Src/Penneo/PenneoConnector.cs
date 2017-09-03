@@ -11,256 +11,111 @@ namespace Penneo
     /// </summary>
     public class PenneoConnector
     {
-        public static bool IsInitialized
-        {
-            get { return _isInitialized; }
-            set { _isInitialized = value; }
-        }
+        internal Dictionary<string, string> Headers;
+        internal PenneoSetup _setup;
+        internal ServiceLocator _serviceLocator;
+        internal IApiConnector _api;
+        private ILogger _logger;
 
-        internal static AuthType AuthenticationType;
-        internal static string Key;
-        internal static string Secret;
-        internal static string Endpoint;
-        internal static string User;
-        internal static Dictionary<string, string> Headers;
-        private static bool _isInitialized;
+        public bool IsInitialized { get; set; }
 
         /// <summary>
         /// Checks if the last Http response was an error
         /// </summary>
-        public static bool WasLastResponseError
+        public bool WasLastResponseError
         {
-            get { return ApiConnector.Instance.WasLastResponseError; }
+            get { return _api.WasLastResponseError; }
         }
 
         /// <summary>
         /// Gets the content of the last response
         /// </summary>
-        public static string LastResponseContent
+        public string LastResponseContent
         {
-            get { return ApiConnector.Instance.LastResponseContent; }
+            get { return _api.LastResponseContent; }
+        }
+
+        /// <summary>
+        /// Get the internal service locator
+        /// </summary>
+        internal ServiceLocator ServiceLocator
+        {
+            get { return _serviceLocator; }
+        }
+
+        /// <summary>
+        /// Get the internal setup
+        /// </summary>
+        internal PenneoSetup Setup
+        {
+            get { return _setup; }
+        }
+
+        /// <summary>
+        /// Get the internal api connector
+        /// </summary>
+        internal IApiConnector ApiConnector
+        {
+            get { return _api; }
+            set { _api = value; }
+        }
+
+        /// <summary>
+        /// Get/Set the logger used by the Penneo sdk
+        /// </summary>
+        public ILogger Logger
+        {
+            get { return _logger ?? (_logger = new DebugLogger()); }
+            set { _logger = value; }
         }
 
         /// <summary>
         /// Initialize the connection to Penneo.
         /// </summary>
-        public static void Initialize(string key, string secret, string endpoint = null, string user = null, Dictionary<string, string> headers = null, AuthType authType = AuthType.WSSE)
+        public PenneoConnector(string key, string secret, string endpoint = null, string user = null, Dictionary<string, string> headers = null, AuthType authType = AuthType.WSSE)
         {
-            Key = key;
-            Secret = secret;
-            AuthenticationType = authType;
-            Endpoint = endpoint;
-            User = user;
-            Headers = headers;
+            _serviceLocator = new ServiceLocator();
+            _setup = new PenneoSetup(_serviceLocator);
+            _setup.InitializeRestResources();
+            _setup.InitializeMappings();
+            _setup.InitializePostProcessors();
 
-            InitializeRestResources();
-            InitializeMappings();
-            InitializePostProcessors();
-
-            //Reset the api-connector if it was created earlier (to reset any cached authentication)
-            ApiConnector.ResetInstance();
+            _api = new ApiConnector(this, _setup.GetRestResources(), endpoint, headers, user, key, secret, authType);
 
             IsInitialized = true;
         }
 
+        internal void Init()
+        {
+            _serviceLocator = new ServiceLocator();
+            _setup = new PenneoSetup(_serviceLocator);
+            _setup.InitializeRestResources();
+            _setup.InitializeMappings();
+            _setup.InitializePostProcessors();
+        }
+
         /// <summary>
         /// Change the key/secret
-        /// </summary>        
-        public static void ChangeKeySecret(string key, string secret)
+        /// </summary>
+        public void ChangeKeySecret(string key, string secret)
         {
-            Key = key;
-            Secret = secret;
-
-            //Reset the api-connector if it was created earlier (to reset any cached authentication)
-            ApiConnector.ResetInstance();
+            _api.ChangeKeySecret(key, secret);
         }
 
         /// <summary>
         /// Use proxy settings from Internet Explorer
         /// </summary>
-        public static void SetUseProxySettingsFromInternetExplorer(bool use)
+        public void SetUseProxySettingsFromInternetExplorer(bool use)
         {
-            ApiConnector.SetUseProxySettingsFromInternetExplorer(use);
+            _api.SetUseProxySettingsFromInternetExplorer(use);
         }
 
         /// <summary>
-        /// Set a logger to get log information from the Penneo connection.
+        /// Log a message
         /// </summary>
-        public static void SetLogger(ILogger logger)
+        public void Log(string message, LogSeverity severity)
         {
-            Log.SetLogger(logger);
-        }
-
-        /// <summary>
-        /// Resets all stored values on this class, when they have been consumed and are no longer needed
-        /// </summary>
-        internal static void Reset()
-        {
-            Key = null;
-            Secret = null;
-            Endpoint = null;
-            User = null;
-            Headers = null;
-        }
-
-        private static void InitializeRestResources()
-        {
-            var r = new RestResources();
-
-            r.Add<CaseFile>("casefiles");
-            r.Add<Document>("documents");
-            r.Add<SignatureLine>("signaturelines");
-            r.Add<Signer>("signers");
-            r.Add<SigningRequest>("signingrequests");
-            r.Add<Validation>("validations");
-            r.Add<Folder>("folders");
-            r.Add<SignerType>("signertypes");
-            r.Add<DocumentType>("documenttype");
-            r.Add<CaseFileTemplate>("casefiletype");
-            r.Add<LogEntry>("log");
-            r.Add<CopyRecipient>("recipients");
-            r.Add<MessageTemplate>("casefile/message/templates");
-            r.Add<User>("users");
-            r.Add<Customer>("customers");
-
-            ServiceLocator.Instance.RegisterInstance<RestResources>(r);
-        }
-
-        /// <summary>
-        /// Initialize entity mappings
-        /// </summary>
-        private static void InitializeMappings()
-        {
-            var mappings = new Mappings();
-            ServiceLocator.Instance.RegisterInstance<Mappings>(mappings);
-
-            new MappingBuilder<CaseFile>(mappings)
-                .ForCreate()
-                .Map(x => x.Title)
-                .Map(x => x.Language)
-                .Map(x => x.MetaData)
-                .Map(x => x.SendAt, convert: x => TimeUtil.ToUnixTime((DateTime) x))
-                .Map(x => x.ExpireAt, convert: x => TimeUtil.ToUnixTime((DateTime) x))
-                .Map(x => x.VisibilityMode)
-                .Map(x => x.SensitiveData)
-                .Map(x => x.CaseFileTemplate.Id, "caseFileTypeId")
-                .ForUpdate()
-                .Map(x => x.Title)
-                .Map(x => x.MetaData)
-                .Map(x => x.CaseFileTemplate.Id, "caseFileTypeId")
-                .Map(x => x.VisibilityMode)
-                .Create();
-
-            new MappingBuilder<Document>(mappings)
-                .ForCreate()
-                .Map(x => x.Title)
-                .Map(x => x.CaseFile.Id, "CaseFileId")
-                .Map(x => x.MetaData)
-                .Map(x => x.Type)
-                .Map(x => x.Opts)
-                .MapBase64(x => x.PdfRaw, "PdfFile")
-                .Map(x => x.DocumentType.Id, "documentTypeId")
-                .ForUpdate()
-                .Map(x => x.Title)
-                .Map(x => x.MetaData)
-                .Map(x => x.Opts)
-                .Create();
-
-            new MappingBuilder<SignatureLine>(mappings)
-                .ForCreate()
-                .Map(x => x.Role)
-                .Map(x => x.Conditions)
-                .Map(x => x.SignOrder)
-                .ForUpdate()
-                .Map(x => x.Role)
-                .Map(x => x.Conditions)
-                .Map(x => x.SignOrder)
-                .Create();
-
-            new MappingBuilder<Signer>(mappings)
-                .ForCreate()
-                .Map(x => x.Name)
-                .Map(x => x.SocialSecurityNumber, "SocialSecurityNumberPlain")
-                .Map(x => x.VATIdentificationNumber, "vatin")
-                .Map(x => x.OnBehalfOf)
-                .ForUpdate()
-                .Map(x => x.Name)
-                .Map(x => x.SocialSecurityNumber, "SocialSecurityNumberPlain")
-                .Map(x => x.VATIdentificationNumber, "vatin")
-                .Map(x => x.OnBehalfOf)
-                .Create();
-
-            new MappingBuilder<SigningRequest>(mappings)
-                .ForUpdate()
-                .Map(x => x.Email)
-                .Map(x => x.EmailText)
-                .Map(x => x.EmailSubject)
-                .Map(x => x.ReminderEmailSubect)
-                .Map(x => x.ReminderEmailText)
-                .Map(x => x.CompletedEmailSubect)
-                .Map(x => x.CompletedEmailText)
-                .Map(x => x.EmailFormat)
-                .Map(x => x.SuccessUrl)
-                .Map(x => x.FailUrl)
-                .Map(x => x.ReminderInterval)
-                .Map(x => x.AccessControl)
-                .Map(x => x.EnableInsecureSigning)
-                .Create();
-
-            new MappingBuilder<Validation>(mappings)
-                .ForCreate()
-                .Map(x => x.Name)
-                .Map(x => x.Title)
-                .Map(x => x.Email)
-                .Map(x => x.EmailSubject)
-                .Map(x => x.EmailText)
-                .Map(x => x.SuccessUrl)
-                .Map(x => x.CustomText)
-                .Map(x => x.ReminderInterval)
-                .ForUpdate()
-                .Map(x => x.Name)
-                .Map(x => x.Title)
-                .Map(x => x.Email)
-                .Map(x => x.EmailSubject)
-                .Map(x => x.EmailText)
-                .Map(x => x.SuccessUrl)
-                .Map(x => x.CustomText)
-                .Map(x => x.ReminderInterval)
-                .Create();
-
-            new MappingBuilder<Folder>(mappings)
-                .ForCreate()
-                .Map(x => x.Title)
-                .Map(x => x.ParentId, "Parent")
-                .ForUpdate()
-                .Map(x => x.Title)
-                .Map(x => x.ParentId, "Parent")
-                .Create();
-
-            new MappingBuilder<CopyRecipient>(mappings)
-                .ForCreate()
-                .Map(x => x.Name)
-                .Map(x => x.Email)
-                .ForUpdate()
-                .Map(x => x.Name)
-                .Map(x => x.Email)
-                .Create();
-
-            new MappingBuilder<MessageTemplate>(mappings)
-                .ForCreate()
-                .Map(x => x.Title)
-                .Map(x => x.Subject)
-                .Map(x => x.Message)
-                .ForUpdate()
-                .Map(x => x.Title)
-                .Map(x => x.Subject)
-                .Map(x => x.Message)
-                .Create();
-        }
-
-        private static void InitializePostProcessors()
-        {
-            Query.AddPostProcessor<Folder>(Folder.QueryPostProcessor);
+            Logger.Log(message, severity);
         }
     }
 }
