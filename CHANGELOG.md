@@ -9,6 +9,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [1.4.1] - 2017-11-13
+### Fixed
+- [\#86] Updated the version from `1.3.0` to `1.4.1`
+
 ## [1.4.0] - 2017-05-26
 ### Added
 - [\#57] Make REST calls to the server
@@ -35,7 +39,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [comment]: # (Build Comparison Links)
 
-[unreleased]: https://github.com/Penneo/sdk-net/compare/1.4.0...HEAD
+[unreleased]: https://github.com/Penneo/sdk-net/compare/1.4.1...HEAD
+[1.4.1]:     https://github.com/Penneo/sdk-net/compare/1.4.0...1.4.1
 [1.4.0]:     https://github.com/Penneo/sdk-net/compare/1.3.0...1.4.0
 [1.3.0]:     https://github.com/Penneo/sdk-net/compare/1.2.1...1.3.0
 [1.2.1]:     https://github.com/Penneo/sdk-net/compare/1.2.0...1.2.1
