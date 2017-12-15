@@ -8,9 +8,9 @@
         public string Email { get; set; }
         public string EmailSubject { get; set; }
         public string EmailText { get; set; }
-        public string ReminderEmailSubect { get; set; }
+        public string ReminderEmailSubject { get; set; }
         public string ReminderEmailText { get; set; }
-        public string CompletedEmailSubect { get; set; }
+        public string CompletedEmailSubject { get; set; }
         public string CompletedEmailText { get; set; }
         public string EmailFormat { get; set; }
         public string RejectReason { get; set; }
