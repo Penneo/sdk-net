@@ -9,6 +9,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [1.5.0] - 2017-12-19
+### Added
+- [\#90] Disable notifications for the case file owner
+- [\#90] Enable sign on meeting for the case file
+
+### Fixed
+- [\#90] It is possible to update `sendAt`, `expireAt`, and `sensitiveData` properties for the case file
+
 ## [1.4.2] - 2017-12-15
 ### Fixed
 - [\#88] Updating the signing requests with email templates was failing with a bad request `400` error. This was introduced in version `1.4.0`
@@ -43,7 +51,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [comment]: # (Build Comparison Links)
 
-[unreleased]: https://github.com/Penneo/sdk-net/compare/1.4.2...HEAD
+[unreleased]: https://github.com/Penneo/sdk-net/compare/1.5.0...HEAD
+[1.5.0]:     https://github.com/Penneo/sdk-net/compare/1.4.2...1.5.0
 [1.4.2]:     https://github.com/Penneo/sdk-net/compare/1.4.1...1.4.2
 [1.4.1]:     https://github.com/Penneo/sdk-net/compare/1.4.0...1.4.1
 [1.4.0]:     https://github.com/Penneo/sdk-net/compare/1.3.0...1.4.0
@@ -54,6 +63,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [comment]: # (Issue Links)
 
+[\#90]: https://github.com/Penneo/sdk-net/issues/90
 [\#88]: https://github.com/Penneo/sdk-net/issues/88
 [\#86]: https://github.com/Penneo/sdk-net/issues/86
 [\#75]: https://github.com/Penneo/sdk-net/issues/75

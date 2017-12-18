@@ -77,6 +77,16 @@ namespace Penneo
         public bool SensitiveData { get; set; }
 
         /// <summary>
+        /// Indicates if notifications are disabled for the owner of the case file
+        /// </summary>
+        public bool DisableNotificationsOwner { get; set; }
+
+        /// <summary>
+        /// Indicates if sign on meeting feature is enabled
+        /// </summary>
+        public bool SignOnMeeting { get; set; }
+
+        /// <summary>
         /// The case file template
         /// </summary>
         public CaseFileTemplate CaseFileTemplate { get; set; }
