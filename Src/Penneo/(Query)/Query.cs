@@ -7,7 +7,6 @@ using Penneo.Connector;
 using Penneo.Mapping;
 using RestSharp;
 using Penneo.Util;
-using RestSharp.Contrib;
 
 namespace Penneo
 {
