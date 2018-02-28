@@ -2,6 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 using RestSharp;
+using RestSharp.Authenticators;
 
 namespace Penneo.Connector
 {

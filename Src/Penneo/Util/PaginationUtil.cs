@@ -1,6 +1,6 @@
-﻿using System;
+﻿using RestSharp.Extensions.MonoHttp;
+using System;
 using System.Text.RegularExpressions;
-using RestSharp.Contrib;
 
 namespace Penneo.Util
 {

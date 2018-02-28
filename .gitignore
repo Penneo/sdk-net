@@ -41,3 +41,4 @@ TestData
 
 #ignore linux backup files
 *~
+/Src/.vs/Penneo/v15/Server/sqlite3
