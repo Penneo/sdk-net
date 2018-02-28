@@ -9,6 +9,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [1.6.0] - 2018-02-28
+### Changed
+- [\#93] Updated RestSharp version. This means that upgrading to this version might break the project if another version of RestSharp is being used somewhere else. In such case upgrading RestSharp is recommended. 
+
 ## [1.5.0] - 2017-12-19
 ### Added
 - [\#90] Disable notifications for the case file owner
@@ -51,7 +55,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [comment]: # (Build Comparison Links)
 
-[unreleased]: https://github.com/Penneo/sdk-net/compare/1.5.0...HEAD
+[unreleased]: https://github.com/Penneo/sdk-net/compare/1.6.0...HEAD
+[1.6.0]:     https://github.com/Penneo/sdk-net/compare/1.5.0...1.6.0
 [1.5.0]:     https://github.com/Penneo/sdk-net/compare/1.4.2...1.5.0
 [1.4.2]:     https://github.com/Penneo/sdk-net/compare/1.4.1...1.4.2
 [1.4.1]:     https://github.com/Penneo/sdk-net/compare/1.4.0...1.4.1
