@@ -9,6 +9,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [1.6.1] - unreleased
+### Fixed
+- [\#93] Nuget spec file wasn't updated with the correct RestSharp version
+
 ## [1.6.0] - 2018-02-28
 ### Changed
 - [\#93] Updated RestSharp version. This means that upgrading to this version might break the project if another version of RestSharp is being used somewhere else. In such case upgrading RestSharp is recommended. 
