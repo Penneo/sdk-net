@@ -9,7 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-## [1.6.1] - unreleased
+## [1.6.1] - 2018-04-24
 ### Fixed
 - [\#93] Nuget spec file wasn't updated with the correct RestSharp version
 
