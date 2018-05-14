@@ -17,6 +17,7 @@ namespace Penneo
 
         private IEnumerable<SignatureLine> _signatureLines;
         private byte[] _pdfRaw;
+        private DocumentType _documentType;
 
         public Document()
         {
@@ -84,7 +85,23 @@ namespace Penneo
         /// The document type
         /// </summary>
         [JsonIgnore]
-        public DocumentType DocumentType { get; set; }
+        public DocumentType DocumentType
+        {
+            get { return _documentType; }
+            set
+            {
+                _documentType = value;
+                if (_documentType != null)
+                {
+                    DocumentTypeId = _documentType.Id;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The document type id
+        /// </summary>
+        public int? DocumentTypeId { get; set; }
 
         /// <summary>
         /// Get the document type
