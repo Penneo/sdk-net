@@ -246,6 +246,31 @@ namespace Penneo.Connector
         }
 
         /// <summary>
+        /// <see cref="IApiConnector.GetLinkedEntity{T}"/>
+        /// </summary>
+        public QuerySingleObjectResult<T> GetLinkedEntity<T>(Entity obj, string url = null)
+            where T : Entity
+        {
+            string actualUrl;
+            if (string.IsNullOrEmpty(url))
+            {
+                actualUrl = obj.RelativeUrl + "/" + obj.Id + "/" + _restResources.GetResource<T>();
+            }
+            else
+            {
+                actualUrl = url;
+            }
+
+            var response = CallServer(actualUrl);
+            var result = new QuerySingleObjectResult<T>();
+            if (ExtractResponse(obj, response, result))
+            {
+                result.Object = CreateObject<T>(response.Content);
+            }
+            return result;
+        }
+
+        /// <summary>
         /// <see cref="IApiConnector.FindLinkedEntity{T}"/>
         /// </summary>
         public T FindLinkedEntity<T>(Entity obj, int id)

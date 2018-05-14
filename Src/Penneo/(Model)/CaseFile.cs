@@ -115,6 +115,16 @@ namespace Penneo
         public string MetaData { get; set; }
 
         /// <summary>
+        /// The user of the case file
+        /// </summary>
+        public int? UserId { get; set; }
+
+        /// <summary>
+        /// The customer of the case file
+        /// </summary>
+        public int? CustomerId { get; set; }
+
+        /// <summary>
         /// The documents in the case file
         /// Note: This property will only return already loaded documents
         /// </summary>
@@ -268,6 +278,32 @@ namespace Penneo
                 return new List<SignerType>();
             }
             return GetLinkedEntities<SignerType>("casefiles/" + Id + "/signertypes").Objects;
+        }
+
+        /// <summary>
+        /// Gets the user instance (CustomerId and UserId must be set)
+        /// </summary>
+        public User GetUser()
+        {
+            if (!CustomerId.HasValue || !UserId.HasValue)
+            {
+                return null;
+            }
+            var r = GetLinkedEntity<User>("customers/" + CustomerId + "/users/" + UserId);
+            return r != null ? r.Object : null;
+        }
+
+        /// <summary>
+        /// Gets the customer instance (CustomerId must be set)
+        /// </summary>
+        public Customer GetCustomer()
+        {
+            if (!CustomerId.HasValue)
+            {
+                return null;
+            }
+            var r = GetLinkedEntity<Customer>("customers/" + CustomerId);
+            return r != null ? r.Object : null;
         }
 
         /// <summary>
