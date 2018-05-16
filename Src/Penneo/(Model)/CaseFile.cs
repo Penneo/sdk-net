@@ -32,6 +32,7 @@ namespace Penneo
         private IEnumerable<Document> _documents;
         private IEnumerable<Signer> _signers;
         private IEnumerable<CopyRecipient> _copyRecipients;
+        private CaseFileTemplate _caseFileTemplate;
 
         public CaseFile()
         {
@@ -89,7 +90,24 @@ namespace Penneo
         /// <summary>
         /// The case file template
         /// </summary>
-        public CaseFileTemplate CaseFileTemplate { get; set; }
+        public CaseFileTemplate CaseFileTemplate
+        {
+            get { return _caseFileTemplate; }
+            set
+            {
+                _caseFileTemplate = value;
+                if (_caseFileTemplate != null)
+                {
+                    CaseFileTemplateId = _caseFileTemplate.Id;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The case file template id
+        /// </summary>
+        [JsonProperty(PropertyName = "caseFileTypeId")]
+        public int? CaseFileTemplateId { get; set; }
 
         /// <summary>
         /// The data when the case file was created
