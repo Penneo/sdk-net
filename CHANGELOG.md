@@ -9,6 +9,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [1.7.0] - 2018-05-16
+### Added
+- [\#97] Case file type can be fetched for the case files using `GetCaseFileTemplate` for the case files. Similarly, document type can be fetched for the documents using `GetDocumentType`
+- [\#98] Case file has properties `customerId`, `userId`, and `caseFileTemplateId`, now
+- [\#98] Document has property `documentTypeId` now
+
 ## [1.6.1] - 2018-04-24
 ### Fixed
 - [\#93] Nuget spec file wasn't updated with the correct RestSharp version
@@ -59,7 +65,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [comment]: # (Build Comparison Links)
 
-[unreleased]: https://github.com/Penneo/sdk-net/compare/1.6.0...HEAD
+[unreleased]: https://github.com/Penneo/sdk-net/compare/1.7.0...HEAD
+[1.7.0]:     https://github.com/Penneo/sdk-net/compare/1.6.1...1.7.0
+[1.6.1]:     https://github.com/Penneo/sdk-net/compare/1.6.0...1.6.1
 [1.6.0]:     https://github.com/Penneo/sdk-net/compare/1.5.0...1.6.0
 [1.5.0]:     https://github.com/Penneo/sdk-net/compare/1.4.2...1.5.0
 [1.4.2]:     https://github.com/Penneo/sdk-net/compare/1.4.1...1.4.2
