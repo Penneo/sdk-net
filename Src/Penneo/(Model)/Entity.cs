@@ -135,6 +135,15 @@ namespace Penneo
         }
 
         /// <summary>
+        /// Get entity linked with this entity based on url
+        /// </summary>
+        protected QuerySingleObjectResult<T> GetLinkedEntity<T>(string url = null)
+            where T: Entity
+        {
+            return ApiConnector.Instance.GetLinkedEntity<T>(this, url);
+        }
+
+        /// <summary>
         /// Find a specific linked entity
         /// </summary>
         protected T FindLinkedEntity<T>(int id)

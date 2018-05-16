@@ -58,6 +58,12 @@ namespace Penneo.Connector
             where T: Entity;
 
         /// <summary>
+        /// Gets single entity linked with obj from the backend (url must be provided).
+        /// </summary>
+        QuerySingleObjectResult<T> GetLinkedEntity<T>(Entity obj, string url = null)
+            where T : Entity;
+
+        /// <summary>
         /// Find a specific linked entity
         /// </summary>
         T FindLinkedEntity<T>(Entity obj, int id);
