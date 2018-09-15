@@ -30,6 +30,7 @@ _ReSharper*/
 NDependOut/
 *.tmp_proj
 *.orig
+.vs/
 
 #ignore nuget packages 
 packages

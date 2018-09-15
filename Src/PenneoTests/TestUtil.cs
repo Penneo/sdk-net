@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using FakeItEasy;
-using NUnit.Core;
 using NUnit.Framework;
 using Penneo;
 using Penneo.Connector;
