@@ -55,64 +55,75 @@ namespace Penneo
             _serviceLocator.RegisterInstance<Mappings>(mappings);
 
             mappings.AddMapping(
-                new MappingBuilder<CaseFile>()
-                    .ForCreate()
-                    .Map(x => x.Title)
-                    .Map(x => x.Language)
-                    .Map(x => x.MetaData)
-                    .Map(x => x.SendAt, convert: x => TimeUtil.ToUnixTime((DateTime) x))
-                    .Map(x => x.ExpireAt, convert: x => TimeUtil.ToUnixTime((DateTime) x))
-                    .Map(x => x.VisibilityMode)
-                    .Map(x => x.SensitiveData)
-                    .Map(x => x.CaseFileTemplate.Id, "caseFileTypeId")
-                    .ForUpdate()
-                    .Map(x => x.Title)
-                    .Map(x => x.MetaData)
-                    .Map(x => x.CaseFileTemplate.Id, "caseFileTypeId")
-                    .Map(x => x.VisibilityMode)
-                    .Create());
+              new MappingBuilder<CaseFile>()
+                  .ForCreate()
+                  .Map(x => x.Title)
+                  .Map(x => x.Language)
+                  .Map(x => x.MetaData)
+                  .Map(x => x.SendAt, convert: x => TimeUtil.ToUnixTime((DateTime) x))
+                  .Map(x => x.ExpireAt, convert: x => TimeUtil.ToUnixTime((DateTime) x))
+                  .Map(x => x.VisibilityMode)
+                  .Map(x => x.SensitiveData)
+                  .Map(x => x.DisableNotificationsOwner)
+                  .Map(x => x.SignOnMeeting)
+                  .Map(x => x.CaseFileTemplate.Id, "caseFileTypeId")
+                  .ForUpdate()
+                  .Map(x => x.Title)
+                  .Map(x => x.MetaData)
+                  .Map(x => x.SendAt, convert: x => TimeUtil.ToUnixTime((DateTime) x))
+                  .Map(x => x.ExpireAt, convert: x => TimeUtil.ToUnixTime((DateTime) x))
+                  .Map(x => x.CaseFileTemplate.Id, "caseFileTypeId")
+                  .Map(x => x.VisibilityMode)
+                  .Map(x => x.SensitiveData)
+                  .Map(x => x.DisableNotificationsOwner)
+                  .Map(x => x.SignOnMeeting)
+                  .Create()
+            );
 
             mappings.AddMapping(
-                new MappingBuilder<Document>()
-                    .ForCreate()
-                    .Map(x => x.Title)
-                    .Map(x => x.CaseFile.Id, "CaseFileId")
-                    .Map(x => x.MetaData)
-                    .Map(x => x.Type)
-                    .Map(x => x.Opts)
-                    .MapBase64(x => x.PdfRaw, "PdfFile")
-                    .Map(x => x.DocumentType.Id, "documentTypeId")
-                    .ForUpdate()
-                    .Map(x => x.Title)
-                    .Map(x => x.MetaData)
-                    .Map(x => x.Opts)
-                    .Create());
+              new MappingBuilder<Document>()
+                  .ForCreate()
+                  .Map(x => x.Title)
+                  .Map(x => x.CaseFile.Id, "CaseFileId")
+                  .Map(x => x.MetaData)
+                  .Map(x => x.Type)
+                  .Map(x => x.Opts)
+                  .MapBase64(x => x.PdfRaw, "PdfFile")
+                  .Map(x => x.DocumentType.Id, "documentTypeId")
+                  .ForUpdate()
+                  .Map(x => x.Title)
+                  .Map(x => x.MetaData)
+                  .Map(x => x.Opts)
+                  .Create()
+            );
 
             mappings.AddMapping(
-                new MappingBuilder<SignatureLine>()
-                    .ForCreate()
-                    .Map(x => x.Role)
-                    .Map(x => x.Conditions)
-                    .Map(x => x.SignOrder)
-                    .ForUpdate()
-                    .Map(x => x.Role)
-                    .Map(x => x.Conditions)
-                    .Map(x => x.SignOrder)
-                    .Create());
+              new MappingBuilder<SignatureLine>()
+                  .ForCreate()
+                  .Map(x => x.Role)
+                  .Map(x => x.Conditions)
+                  .Map(x => x.SignOrder)
+                  .ForUpdate()
+                  .Map(x => x.Role)
+                  .Map(x => x.Conditions)
+                  .Map(x => x.SignOrder)
+                  .Create()
+            );
 
             mappings.AddMapping(
-                new MappingBuilder<Signer>()
-                    .ForCreate()
-                    .Map(x => x.Name)
-                    .Map(x => x.SocialSecurityNumber, "SocialSecurityNumberPlain")
-                    .Map(x => x.VATIdentificationNumber, "vatin")
-                    .Map(x => x.OnBehalfOf)
-                    .ForUpdate()
-                    .Map(x => x.Name)
-                    .Map(x => x.SocialSecurityNumber, "SocialSecurityNumberPlain")
-                    .Map(x => x.VATIdentificationNumber, "vatin")
-                    .Map(x => x.OnBehalfOf)
-                    .Create());
+              new MappingBuilder<Signer>()
+                  .ForCreate()
+                  .Map(x => x.Name)
+                  .Map(x => x.SocialSecurityNumber, "SocialSecurityNumberPlain")
+                  .Map(x => x.VATIdentificationNumber, "vatin")
+                  .Map(x => x.OnBehalfOf)
+                  .ForUpdate()
+                  .Map(x => x.Name)
+                  .Map(x => x.SocialSecurityNumber, "SocialSecurityNumberPlain")
+                  .Map(x => x.VATIdentificationNumber, "vatin")
+                  .Map(x => x.OnBehalfOf)
+                  .Create()
+            );
 
             mappings.AddMapping(
                 new MappingBuilder<SigningRequest>()
@@ -120,9 +131,9 @@ namespace Penneo
                     .Map(x => x.Email)
                     .Map(x => x.EmailText)
                     .Map(x => x.EmailSubject)
-                    .Map(x => x.ReminderEmailSubect)
+                    .Map(x => x.ReminderEmailSubject)
                     .Map(x => x.ReminderEmailText)
-                    .Map(x => x.CompletedEmailSubect)
+                    .Map(x => x.CompletedEmailSubject)
                     .Map(x => x.CompletedEmailText)
                     .Map(x => x.EmailFormat)
                     .Map(x => x.SuccessUrl)
@@ -130,7 +141,8 @@ namespace Penneo
                     .Map(x => x.ReminderInterval)
                     .Map(x => x.AccessControl)
                     .Map(x => x.EnableInsecureSigning)
-                    .Create());
+                    .Create()
+            );
 
             mappings.AddMapping(
                 new MappingBuilder<Validation>()
@@ -152,7 +164,8 @@ namespace Penneo
                     .Map(x => x.SuccessUrl)
                     .Map(x => x.CustomText)
                     .Map(x => x.ReminderInterval)
-                    .Create());
+                    .Create()
+            );
 
             mappings.AddMapping(
                 new MappingBuilder<Folder>()
@@ -162,7 +175,8 @@ namespace Penneo
                     .ForUpdate()
                     .Map(x => x.Title)
                     .Map(x => x.ParentId, "Parent")
-                    .Create());
+                    .Create()
+            );
 
             mappings.AddMapping(
                 new MappingBuilder<CopyRecipient>()
@@ -172,7 +186,8 @@ namespace Penneo
                     .ForUpdate()
                     .Map(x => x.Name)
                     .Map(x => x.Email)
-                    .Create());
+                    .Create()
+            );
 
             mappings.AddMapping(
                 new MappingBuilder<MessageTemplate>()
@@ -184,7 +199,9 @@ namespace Penneo
                     .Map(x => x.Title)
                     .Map(x => x.Subject)
                     .Map(x => x.Message)
-                    .Create());
+                    .Create()
+            );
+
         }
 
         public virtual void InitializePostProcessors()

@@ -135,10 +135,10 @@ namespace Penneo
         /// <summary>
         /// Get entity linked with this entity based on url
         /// </summary>
-        protected QuerySingleObjectResult<T> GetLinkedEntity<T>(string url = null)
+        protected QuerySingleObjectResult<T> GetLinkedEntity<T>(PenneoConnector con, string url = null)
             where T: Entity
         {
-            return ApiConnector.Instance.GetLinkedEntity<T>(this, url);
+            return con.ApiConnector.GetLinkedEntity<T>(this, url);
         }
 
         /// <summary>
@@ -202,3 +202,4 @@ namespace Penneo
         }
     }
 }
+

@@ -301,26 +301,26 @@ namespace Penneo
         /// <summary>
         /// Gets the user instance (CustomerId and UserId must be set)
         /// </summary>
-        public User GetUser()
+        public User GetUser(PenneoConnector con)
         {
             if (!CustomerId.HasValue || !UserId.HasValue)
             {
                 return null;
             }
-            var r = GetLinkedEntity<User>("customers/" + CustomerId + "/users/" + UserId);
+            var r = GetLinkedEntity<User>(con, "customers/" + CustomerId + "/users/" + UserId);
             return r != null ? r.Object : null;
         }
 
         /// <summary>
         /// Gets the customer instance (CustomerId must be set)
         /// </summary>
-        public Customer GetCustomer()
+        public Customer GetCustomer(PenneoConnector con)
         {
             if (!CustomerId.HasValue)
             {
                 return null;
             }
-            var r = GetLinkedEntity<Customer>("customers/" + CustomerId);
+            var r = GetLinkedEntity<Customer>(con, "customers/" + CustomerId);
             return r != null ? r.Object : null;
         }
 

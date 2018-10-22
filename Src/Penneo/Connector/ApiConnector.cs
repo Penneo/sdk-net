@@ -279,7 +279,7 @@ namespace Penneo.Connector
             string actualUrl;
             if (string.IsNullOrEmpty(url))
             {
-                actualUrl = obj.RelativeUrl + "/" + obj.Id + "/" + _restResources.GetResource<T>();
+                actualUrl = obj.GetRelativeUrl(_con) + "/" + obj.Id + "/" + _restResources.GetResource<T>();
             }
             else
             {
