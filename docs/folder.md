@@ -12,7 +12,7 @@ var myFolder = new Folder();
 myFolder.Title = "New Folder";
 
 // Persist the new object
-myFolder.Persist();
+myFolder.Persist(con);
 ```
 
 ## Manipulating folder contents
@@ -25,13 +25,13 @@ An empty folder is not much fun. The examples below shows how to assign and unas
 myFolder.AddCaseFile(caseFile1);
 
 // Get a list of all the case files in the folder
-var caseFiles = myFolder.GetCaseFiles();
+var caseFiles = myFolder.GetCaseFiles(con);
 for (var caseFile in caseFiles) {
 	Console.WriteLine(caseFile.Title);	
 }
 
 // Now, remove that same case file again
-myFolder.RemoveCaseFile(caseFile);
+myFolder.RemoveCaseFile(con, caseFile);
 
 ```
 
@@ -39,49 +39,51 @@ myFolder.RemoveCaseFile(caseFile);
 
 ```csharp
 // Assign a validation to a folder
-myFolder.AddValidation(validation1);
+myFolder.AddValidation(con, validation1);
 
 // Get a list of all the validations in the folder
-var validations = myFolder.GetValidations();
+var validations = myFolder.GetValidations(con);
 for (var validation in validations) {
     Console.WriteLine(validation.Title);  
 }
 
 // Now, remove that same validation again
-myFolder.RemoveValidation(validation);
+myFolder.RemoveValidation(con, validation);
 
 ```
 
 ## Retrieve existing folders
 There is several ways to retrieve folders from Penneo. Available methods for retrieving folders are:
 
-* __Query.Find<Folder>(int id)__
+* __Find<Folder>(int id)__
 Find one specific folder by its ID.
-* __Query.FindAll<Folder>__
+* __FindAll<Folder>__
 Find all folders accessible by the authenticated user.
-* __Query.FindBy<Folder>(Dictionary\<string, object\> criteria = null, Dictionary\<string, string\> orderBy = null, int? limit = null, int? offset = null)__
+* __FindBy<Folder>(Dictionary\<string, object\> criteria = null, Dictionary\<string, string\> orderBy = null, int? limit = null, int? offset = null)__
 Find all folders matching _criteria_ ordered by _orderBy_. If _limit_ is set, only _limit_ results are returned. If _offset_ is set, the _offset_ first results are skipped.
 Criteria can either be _title_ or _metaData_.
-* __Query.FindOneBy<Folder>(Dictionary\<string, object\> criteria = null, Dictionary\<string, string\> orderBy = null)__
+* __FindOneBy<Folder>(Dictionary\<string, object\> criteria = null, Dictionary\<string, string\> orderBy = null)__
 Same as _FindBy_ setting _limit_ = 1 and _offset_ = null
 
 Below is a couple of examples:
 
 ```csharp
+var query = new Query(con);
+
 // Retrieve all folders
-var myFolders = Query.FindAll<Folder>();
+var myFolders = query.FindAll<Folder>();
 
 // Retrieve a specific folder (by id)
-var myFolder = Query.Find<Folder>(14284);
+var myFolder = query.Find<Folder>(14284);
 
 // Retrieve all folders that contains the word "the" in their title and sort descending on folder title
-var myDocuments = Query.FindBy<Folder>(
+var myDocuments = query.FindBy<Folder>(
 	criteria: new Dictionary<string, object>{ { "title", "the" } },
 	orderBy: new Dictionary<string, string>(){ { "title", "desc" } }
 );
 
 // Retrieve folders from offset 10 until 110 ordered by title in ascending order
-var myFolders = Query.FindBy<Folder>(	
+var myFolders = query.FindBy<Folder>(	
 	orderBy: new Dictionary<string, string>(){ {"title", "asc" } },
 	limit: 10,
 	offset: 100

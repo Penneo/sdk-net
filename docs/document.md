@@ -20,33 +20,35 @@ myDocument.Persist();
 ## Retrieve existing documents
 There is several ways to retrieve document from Penneo. Available methods for retrieving documents are:
 
-* __Query.Find<Document>(int id)__
+* __Find<Document>(int id)__
 Find one specific case file by its ID.
-* __Query.FindAll<Document>__
+* __query.FindAll<Document>__
 Find all documents accessible by the authenticated user.
-* __Query.FindBy<Document>(Dictionary\<string, object\> criteria = null, Dictionary\<string, string\> orderBy = null, int? limit = null, int? offset = null)__
+* __FindBy<Document>(Dictionary\<string, object\> criteria = null, Dictionary\<string, string\> orderBy = null, int? limit = null, int? offset = null)__
 Find all documents matching _criteria_ ordered by _orderBy_. If _limit_ is set, only _limit_ results are returned. If _offset_ is set, the _offset_ first results are skipped.
 Criteria can either be _title_ or _metaData_.
-* __Query.FindOneBy<Document>(Dictionary\<string, object\> criteria = null, Dictionary\<string, string\> orderBy = null)__
+* __FindOneBy<Document>(Dictionary\<string, object\> criteria = null, Dictionary\<string, string\> orderBy = null)__
 Same as _FindBy_ setting _limit_ = 1 and _offset_ = null
 
 Below is a couple of examples:
 
 ```csharp
+var query = new Query(con);
+
 // Retrieve all documents
-var myDocuments = Query.FindAll<Document>();
+var myDocuments = query.FindAll<Document>();
 
 // Retrieve a specific document (by id)
-var myDocument = Query.Find<Document>(7382393);
+var myDocument = query.Find<Document>(7382393);
 
 // Retrieve all documents that contains the word "the" in their title and sort descending by creation date
-var myDocuments = Query.FindBy<Document>(
+var myDocuments = query.FindBy<Document>(
 	criteria: new Dictionary<string, object>{ { "title", "the" } },
 	orderBy: new Dictionary<string, string>(){ { "created", "desc" } }
 );
 
 // Retrieve documents from offset 10 until 110 ordered by title in ascending order
-var myDocuments = Query.FindBy<Document>(	
+var myDocuments = query.FindBy<Document>(	
 	orderBy: new Dictionary<string, string>(){ {"title", "asc" } },
 	limit: 10,
 	offset: 100
