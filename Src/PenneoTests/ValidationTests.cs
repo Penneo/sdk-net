@@ -19,19 +19,22 @@ namespace PenneoTests
         [Test]
         public void PersistSuccessTest()
         {
-            TestUtil.TestPersist(() => new Validation());
+            var con = TestUtil.CreatePenneoConnector();
+            TestUtil.TestPersist(con, () => new Validation());
         }
 
         [Test]
         public void PersistFailTest()
         {
-            TestUtil.TestPersistFail(() => new Validation());
+            var con = TestUtil.CreatePenneoConnector();
+            TestUtil.TestPersistFail(con, () => new Validation());
         }
 
         [Test]
         public void DeleteTest()
         {
-            TestUtil.TestDelete(() => new Validation());
+            var con = TestUtil.CreatePenneoConnector();
+            TestUtil.TestDelete(con, () => new Validation());
         }
 
         [Test]
@@ -43,27 +46,29 @@ namespace PenneoTests
         [Test]
         public void GetLinkTest()
         {
-            TestUtil.TestGetTextAsset(() => new Validation().GetLink());
+            var con = TestUtil.CreatePenneoConnector();
+            TestUtil.TestGetTextAsset(con, () => new Validation().GetLink(con));
         }
 
         [Test]
         public void GetPdfTest()
         {
-            TestUtil.TestGetFileAsset(() => new Validation().GetPdf());
+            var con = TestUtil.CreatePenneoConnector();
+            TestUtil.TestGetFileAsset(con, () => new Validation().GetPdf(con));
         }
 
         [Test]
         public void SavePdfTest()
         {
-            var connector = TestUtil.CreateFakeConnector();
+            var con = TestUtil.CreatePenneoConnector();
             var data = new byte[] { 1, 2, 3 };
-            A.CallTo(() => connector.GetFileAssets(null, null)).WithAnyArguments().Returns(data);
+            A.CallTo(() => con.ApiConnector.GetFileAssets(null, null)).WithAnyArguments().Returns(data);
 
             var doc = new Validation();
             var savePath = Path.GetTempFileName();
             try
             {
-                doc.SavePdf(savePath);
+                doc.SavePdf(con, savePath);
                 var readBytes = File.ReadAllBytes(savePath);
                 CollectionAssert.AreEqual(data, readBytes);
             }
@@ -71,13 +76,14 @@ namespace PenneoTests
             {
                 File.Delete(savePath);
             }
-            A.CallTo(() => connector.GetFileAssets(null, null)).WithAnyArguments().MustHaveHappened();
+            A.CallTo(() => con.ApiConnector.GetFileAssets(null, null)).WithAnyArguments().MustHaveHappened();
         }
 
         [Test]
         public void SendTest()
         {
-            TestUtil.TestPerformActionSuccess(() => new Validation().Send());
+            var con = TestUtil.CreatePenneoConnector();
+            TestUtil.TestPerformActionSuccess(con, () => new Validation().Send(con));
         }
     }
 }

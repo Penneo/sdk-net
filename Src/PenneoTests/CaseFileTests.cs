@@ -19,19 +19,22 @@ namespace PenneoTests
         [Test]
         public void PersistSuccessTest()
         {
-            TestUtil.TestPersist(() => new CaseFile());
+            var con = TestUtil.CreatePenneoConnector();
+            TestUtil.TestPersist(con, () => new CaseFile());
         }
 
         [Test]
         public void PersistFailTest()
         {
-            TestUtil.TestPersistFail(() => new CaseFile());
+            var con = TestUtil.CreatePenneoConnector();
+            TestUtil.TestPersistFail(con, () => new CaseFile());
         }
 
         [Test]
         public void DeleteTest()
         {
-            TestUtil.TestDelete(() => new CaseFile());
+            var con = TestUtil.CreatePenneoConnector();
+            TestUtil.TestDelete(con, () => new CaseFile());
         }
 
         [Test]
@@ -43,31 +46,36 @@ namespace PenneoTests
         [Test]
         public void GetDocumentsTest()
         {
-            TestUtil.TestGetLinked(new CaseFile().GetDocuments);
+            var con = TestUtil.CreatePenneoConnector();
+            TestUtil.TestGetLinked(con, () => new CaseFile().GetDocuments(con));
         }
 
         [Test]
         public void GetSignersTest()
         {
-            TestUtil.TestGetLinked(new CaseFile().GetSigners);
+            var con = TestUtil.CreatePenneoConnector();
+            TestUtil.TestGetLinked(con, () => new CaseFile().GetSigners(con));
         }
 
         [Test]
         public void FindSignerTest()
         {
-            TestUtil.TestFindLinked(() => new CaseFile().FindSigner(0));
+            var con = TestUtil.CreatePenneoConnector();
+            TestUtil.TestFindLinked(con, () => new CaseFile().FindSigner(con, 0));
         }
 
         [Test]
         public void SendTest()
         {
-            TestUtil.TestPerformActionSuccess(() => new CaseFile().Send());
+            var con = TestUtil.CreatePenneoConnector();
+            TestUtil.TestPerformActionSuccess(con, () => new CaseFile().Send(con));
         }
-
+        
         [Test]
         public void ActivateTest()
         {
-            TestUtil.TestPerformActionSuccess(() => new CaseFile().Activate());
+            var con = TestUtil.CreatePenneoConnector();
+            TestUtil.TestPerformActionSuccess(con, () => new CaseFile().Activate(con));
         }
 
         [Test]

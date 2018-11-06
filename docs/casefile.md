@@ -25,33 +25,35 @@ A case file can be set to expire using the __ExpireAt__ property on the object. 
 ## Retrieve existing case files
 There is several ways to retrieve case files from Penneo. Available methods for retrieving case files are:
 
-* __Query.Find<Casefile>(int id)__
+* __Find<Casefile>(int id)__
 Find one specific case file by its ID.
-* __Query.FindAll<CaseFile>__
+* __FindAll<CaseFile>__
 Find all case files accessible by the authenticated user.
-* __Query.FindBy<Casefile>(Dictionary\<string, object\> criteria = null, Dictionary\<string, string\> orderBy = null, int? limit = null, int? offset = null)__
+* __FindBy<Casefile>(Dictionary\<string, object\> criteria = null, Dictionary\<string, string\> orderBy = null, int? limit = null, int? offset = null)__
 Find all case files matching _criteria_ ordered by _orderBy_. If _limit_ is set, only _limit_ results are returned. If _offset_ is set, the _offset_ first results are skipped.
 Criteria can either be _title_ or _metaData_.
-* __Query.FindOneBy<Casefile>(Dictionary\<string, object\> criteria = null, Dictionary\<string, string\> orderBy = null)__
+* __FindOneBy<Casefile>(Dictionary\<string, object\> criteria = null, Dictionary\<string, string\> orderBy = null)__
 Same as _FindBy_ setting _limit_ = 1 and _offset_ = null
 
 Below is a couple of examples:
 
 ```csharp
+var query = new Query(con);
+
 // Retrieve all case files
-var myCaseFiles = Query.FindAll<CaseFile>();
+var myCaseFiles = query.FindAll<CaseFile>();
 
 // Retrieve a specific case file (by id)
-var myCaseFile = Query.Find<CaseFile>(271184);
+var myCaseFile = query.Find<CaseFile>(271184);
 
 // Retrieve all case files that contains the word "the" in their title and sort descending on creation date
-var myCaseFiles = Query.FindByTitle<CaseFile>(
+var myCaseFiles = query.FindByTitle<CaseFile>(
 	"the",
 	orderBy: new Dictionary<string, string>(){ {"created", "desc" } }	
 );
 
 // Retrieve case files from offset 10 until 110 ordered by title in ascending order
-var myCaseFiles = Query.FindBy<CaseFile>(	
+var myCaseFiles = query.FindBy<CaseFile>(	
 	orderBy: new Dictionary<string, string>(){ {"title", "asc" } },
 	limit: 10,
 	offset: 100

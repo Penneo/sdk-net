@@ -9,19 +9,22 @@ namespace PenneoTests
         [Test]
         public void PersistSuccessTest()
         {
-            TestUtil.TestPersist(() => new SigningRequest());
+            var con = TestUtil.CreatePenneoConnector();
+            TestUtil.TestPersist(con, () => new SigningRequest());
         }
 
         [Test]
         public void PersistFailTest()
         {
-            TestUtil.TestPersistFail(() => new SigningRequest());
+            var con = TestUtil.CreatePenneoConnector();
+            TestUtil.TestPersistFail(con, () => new SigningRequest());
         }
 
         [Test]
         public void DeleteTest()
         {
-            TestUtil.TestDelete(() => new SigningRequest());
+            var con = TestUtil.CreatePenneoConnector();
+            TestUtil.TestDelete(con, () => new SigningRequest());
         }
 
         [Test]
@@ -33,13 +36,15 @@ namespace PenneoTests
         [Test]
         public void GetLinkTest()
         {
-            TestUtil.TestGetTextAsset(() => new SigningRequest().GetLink());
+            var con = TestUtil.CreatePenneoConnector();
+            TestUtil.TestGetTextAsset(con, () => new SigningRequest().GetLink(con));
         }
 
         [Test]
         public void SendTest()
         {
-            TestUtil.TestPerformActionSuccess(() => new SigningRequest().Send());
+            var con = TestUtil.CreatePenneoConnector();
+            TestUtil.TestPerformActionSuccess(con, () => new SigningRequest().Send(con));
         }
 
         [Test]

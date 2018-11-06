@@ -21,7 +21,7 @@ namespace PenneoTests
                 .Map(x => x.Title)
                 .GetMapping();
 
-            var obj = new CaseFile {Title = title};
+            var obj = new CaseFile() {Title = title};
             var createValues = mapping.GetCreateValues(obj);
             var updateValues = mapping.GetUpdateValues(obj);
 
@@ -46,7 +46,7 @@ namespace PenneoTests
                 .Map(x => x.Status)
                 .GetMapping();
 
-            var obj = new CaseFile {Status = 3};
+            var obj = new CaseFile() {Status = 3};
             var createValues = mapping.GetCreateValues(obj);
             var updateValues = mapping.GetUpdateValues(obj);
 
@@ -66,10 +66,11 @@ namespace PenneoTests
 
             Assert.IsNull(mappings.GetMapping(typeof(CaseFile)));
 
-            new MappingBuilder<CaseFile>(mappings)
+            mappings.AddMapping(
+            new MappingBuilder<CaseFile>()
                 .ForCreate()
                 .Map(x => x.Status)
-                .Create();
+                .Create());
 
             Assert.IsNotNull(mappings.GetMapping(typeof(CaseFile)));
         }
@@ -83,7 +84,7 @@ namespace PenneoTests
                 .Map(x => x.Title)
                 .GetMapping();
 
-            var obj = new CaseFile {Status = 3};
+            var obj = new CaseFile() {Status = 3};
             mapping.GetUpdateValues(obj); //only create mapping created, so this should fail
         }
     }

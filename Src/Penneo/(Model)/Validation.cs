@@ -45,14 +45,14 @@ namespace Penneo
             return (ValidationStatus) Status;
         }
 
-        public byte[] GetPdf()
+        public byte[] GetPdf(PenneoConnector con)
         {
-            return GetFileAssets(ASSET_PDF);
+            return GetFileAssets(con, ASSET_PDF);
         }
 
-        public void SavePdf(string path)
+        public void SavePdf(PenneoConnector con, string path)
         {
-            var data = GetPdf();
+            var data = GetPdf(con);
             if (File.Exists(path))
             {
                 File.Delete(path);
@@ -60,24 +60,24 @@ namespace Penneo
             File.WriteAllBytes(path, data);
         }
 
-        public string GetLink()
+        public string GetLink(PenneoConnector con)
         {
-            return GetTextAssets(ASSET_LINK);
+            return GetTextAssets(con, ASSET_LINK);
         }
 
-        public ValidationContents GetContents()
+        public ValidationContents GetContents(PenneoConnector con)
         {
-            return GetAsset<ValidationContents>(ASSET_CONTENTS);
+            return GetAsset<ValidationContents>(con, ASSET_CONTENTS);
         }
 
-        public bool Send()
+        public bool Send(PenneoConnector con)
         {
-            return PerformAction(ACTION_SEND).Success;
+            return PerformAction(con, ACTION_SEND).Success;
         }
 
-        public IEnumerable<LogEntry> GetEventLog()
+        public IEnumerable<LogEntry> GetEventLog(PenneoConnector con)
         {
-            return GetLinkedEntities<LogEntry>().Objects;
+            return GetLinkedEntities<LogEntry>(con).Objects;
         }
     }
 

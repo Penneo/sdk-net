@@ -1,4 +1,5 @@
-﻿using FakeItEasy;
+﻿using System;
+using FakeItEasy;
 using NUnit.Framework;
 using Penneo;
 
@@ -18,6 +19,7 @@ namespace PenneoTests
         [Test]
         public void ConstructorTest()
         {
+            var con = TestUtil.CreatePenneoConnector();
             var s = CreateSignatureLine();
             Assert.IsNotNull(s.Document);
             Assert.AreEqual("role", s.Role);
@@ -29,19 +31,22 @@ namespace PenneoTests
         [Test]
         public void PersistSuccessTest()
         {
-            TestUtil.TestPersist(CreateSignatureLine);
+            var con = TestUtil.CreatePenneoConnector();
+            TestUtil.TestPersist(con, CreateSignatureLine);
         }
 
         [Test]
         public void PersistFailTest()
         {
-            TestUtil.TestPersistFail(CreateSignatureLine);
+            var con = TestUtil.CreatePenneoConnector();
+            TestUtil.TestPersistFail(con, CreateSignatureLine);
         }
 
         [Test]
         public void DeleteTest()
         {
-            TestUtil.TestDelete(CreateSignatureLine);
+            var con = TestUtil.CreatePenneoConnector();
+            TestUtil.TestDelete(con, CreateSignatureLine);
         }
 
         [Test]
@@ -53,35 +58,35 @@ namespace PenneoTests
         [Test]
         public void SetSignerSuccessTest()
         {
+            var con = TestUtil.CreatePenneoConnector();
             var sl = CreateSignatureLine();
             var s = new Signer(sl.Document.CaseFile);
 
-            var connector = TestUtil.CreateFakeConnector();
-            A.CallTo(() => connector.LinkEntity(sl, s)).Returns(true);
+            A.CallTo(() => con.ApiConnector.LinkEntity(sl, s)).Returns(true);
 
-            sl.SetSigner(s);
+            sl.SetSigner(con, s);
 
             Assert.AreEqual(s, sl.Signer);
-            A.CallTo(() => connector.LinkEntity(sl, s)).MustHaveHappened();
+            A.CallTo(() => con.ApiConnector.LinkEntity(sl, s)).MustHaveHappened();
         }
 
         [Test]
         public void SetSignerFailTest()
         {
+            var con = TestUtil.CreatePenneoConnector();
             var sl = CreateSignatureLine();
             var s = new Signer(sl.Document.CaseFile);
 
-            var connector = TestUtil.CreateFakeConnector();
-            A.CallTo(() => connector.LinkEntity(sl, s)).Returns(false);
+            A.CallTo(() => con.ApiConnector.LinkEntity(sl, s)).Returns(false);
 
             try
             {
-                var result = sl.SetSigner(s);
+                var result = sl.SetSigner(con, s);
                 Assert.IsFalse(result);
             }
             finally
             {
-                A.CallTo(() => connector.LinkEntity(sl, s)).MustHaveHappened();
+                A.CallTo(() => con.ApiConnector.LinkEntity(sl, s)).MustHaveHappened();
             }
         }   
     }

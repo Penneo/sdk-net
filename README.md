@@ -30,14 +30,14 @@ In order to use the SDK, you will have to authenticate against the Penneo API. A
 
 ```csharp
 // Initialize the connection to the API
-PenneoConnector.Initialize("apiKeyHere", "apiSecretHere", "endpointHere");
+PenneoConnector con = new PenneoConnector(key, secret, endpoint);
 ```
 
 If you have a reseller account, you can carry out operations on behalf of one of your customers, by specifying the customer id as well:
 
 ```csharp
 // Initialize the connection to the API as customer
-PenneoConnector.Initialize("apiKeyHere","apiSecretHere", "endpointHere", "customerIdHere");
+PenneoConnector con = new PenneoConnector(key, secret, endpoint, customerId);
 ```
 
 The endpoint url can point to either the sandbox (for testing) or the live system. Both endpoint urls are available on request.
@@ -71,32 +71,32 @@ The link to the Penneo signing portal, where the actual signing takes place, is 
 ```csharp
 // Create a new case file
 var myCaseFile = new CaseFile("Demo case file");
-myCaseFile.Persist();
+myCaseFile.Persist(con);
 
 // Create a new signable document in this case file
 var myDocument = new Document(myCasefile, "Demo Document", "/path/to/pdfFile");
 myDocument.MakeSignable();
-myDocument.Persist();
+myDocument.Persist(con);
 
 // Create a new signer that can sign documents in the case file
 var mySigner = new Signer(myCaseFile, "John Doe");
-mySigner.Persist();
+mySigner.Persist(con);
 
 // Create a new signature line on the document
 var mySignatureLine = new SignatureLine(myDocument, "MySignerRole");
-mySignatureLine.Persist();
+mySignatureLine.Persist(con);
 
 // Map the signer to the signing request
-mySignatureLine.SetSigner(mySigner);
+mySignatureLine.SetSigner(con, mySigner);
 
 // Update the signing request for the new signer
 var mySigningRequest = mySigner.GetSigningRequest();
 mySigningRequest.SuccessUrl = "http://go/here/on/success";
 mySigningRequest.FailUrl = "http://go/here/on/failure";
-mySigningRequest.Persist();
+mySigningRequest.Persist(con);
 
 // "Package" the case file for "sending".
-myCaseFile.Send();
+myCaseFile.Send(con);
 
 // And finally, print out the link leading to the signing portal.
 // The signer uses this link to sign the document.
@@ -111,7 +111,7 @@ The result is a link to the Penneo validation page. The person in question must 
 // Create a new validation
 var myValidation = new Validation("john Doe");
 myValidation.Title = "My new validation";
-myValidation.Persist();
+myValidation.Persist(con);
 
 // Output the validation link.
 Console.WriteLine("<a href=\"" + myValidation.GetLink() + "\">Validate now</a>");
