@@ -9,6 +9,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [2.0.0] - 2018-11-28
+### Added
+- [\#83] Concurrency support
+
 ## [1.7.0] - 2018-05-16
 ### Added
 - [\#97] Case file type can be fetched for the case files using `GetCaseFileTemplate` for the case files. Similarly, document type can be fetched for the documents using `GetDocumentType`
@@ -65,7 +69,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [comment]: # (Build Comparison Links)
 
-[unreleased]: https://github.com/Penneo/sdk-net/compare/1.7.0...HEAD
+[unreleased]: https://github.com/Penneo/sdk-net/compare/2.0.0...HEAD
+[1.7.0]:     https://github.com/Penneo/sdk-net/compare/1.7.0...2.0.0
 [1.7.0]:     https://github.com/Penneo/sdk-net/compare/1.6.1...1.7.0
 [1.6.1]:     https://github.com/Penneo/sdk-net/compare/1.6.0...1.6.1
 [1.6.0]:     https://github.com/Penneo/sdk-net/compare/1.5.0...1.6.0
@@ -83,6 +88,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [\#90]: https://github.com/Penneo/sdk-net/issues/90
 [\#88]: https://github.com/Penneo/sdk-net/issues/88
 [\#86]: https://github.com/Penneo/sdk-net/issues/86
+[\#83]: https://github.com/Penneo/sdk-net/issues/83
 [\#75]: https://github.com/Penneo/sdk-net/issues/75
 [\#74]: https://github.com/Penneo/sdk-net/issues/74
 [\#69]: https://github.com/Penneo/sdk-net/issues/69
