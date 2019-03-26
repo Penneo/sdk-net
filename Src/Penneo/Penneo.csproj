@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Penneo</RootNamespace>
     <AssemblyName>Penneo</AssemblyName>
-    <AssemblyFileVersion>2.0.0</AssemblyFileVersion>
+    <!-- <AssemblyFileVersion>2.0.0</AssemblyFileVersion> -->
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
