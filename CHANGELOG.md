@@ -10,7 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 ## [2.0.1] - 2019-04-01
-### Added
+### Fixed
 - [\#107] Meta data was missing from the Penneo .dll file (File version etc.)
 
 ## [2.0.0] - 2018-11-28
