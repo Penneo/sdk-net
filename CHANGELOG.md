@@ -9,6 +9,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [2.0.1] - 2019-04-01
+### Added
+- [\#107] Meta data was missing from the Penneo .dll file (File version etc.)
+
 ## [2.0.0] - 2018-11-28
 ### Added
 - [\#83] Concurrency support
@@ -69,8 +73,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [comment]: # (Build Comparison Links)
 
-[unreleased]: https://github.com/Penneo/sdk-net/compare/2.0.0...HEAD
-[1.7.0]:     https://github.com/Penneo/sdk-net/compare/1.7.0...2.0.0
+[unreleased]: https://github.com/Penneo/sdk-net/compare/2.0.1...HEAD
+[2.0.1]:     https://github.com/Penneo/sdk-net/compare/2.0.0...2.0.1
+[2.0.0]:     https://github.com/Penneo/sdk-net/compare/1.7.0...2.0.0
 [1.7.0]:     https://github.com/Penneo/sdk-net/compare/1.6.1...1.7.0
 [1.6.1]:     https://github.com/Penneo/sdk-net/compare/1.6.0...1.6.1
 [1.6.0]:     https://github.com/Penneo/sdk-net/compare/1.5.0...1.6.0
@@ -85,6 +90,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [comment]: # (Issue Links)
 
+[\#107]: https://github.com/Penneo/sdk-net/issues/107
 [\#90]: https://github.com/Penneo/sdk-net/issues/90
 [\#88]: https://github.com/Penneo/sdk-net/issues/88
 [\#86]: https://github.com/Penneo/sdk-net/issues/86
