@@ -9,6 +9,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+
+## [2.0.2] - 2019-07-05
+### Changed
+- Updated RestSharp to 106.6.10
+
+
 ## [2.0.1] - 2019-04-01
 ### Fixed
 - [\#107] Meta data was missing from the Penneo .dll file (File version etc.)
