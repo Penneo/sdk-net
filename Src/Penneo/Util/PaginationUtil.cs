@@ -1,5 +1,6 @@
-﻿using RestSharp.Extensions.MonoHttp;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Penneo.Util
@@ -19,7 +20,7 @@ namespace Penneo.Util
                 var lastIndex = relation.LastIndexOf(";", StringComparison.OrdinalIgnoreCase);
                 var relName = Regex.Match(relation, "rel=\"(?<rel>.*)\"").Groups[1].Value;
                 var relUrl = relation.Substring(0, lastIndex - 1);
-                var parameters = HttpUtility.ParseQueryString(relUrl.Substring(relUrl.IndexOf("?", StringComparison.OrdinalIgnoreCase)));
+                var parameters = ParseQueryString(relUrl.Substring(relUrl.IndexOf("?", StringComparison.OrdinalIgnoreCase)));
                 var page = int.Parse(parameters["page"]);
 
                 switch (relName)
@@ -38,6 +39,21 @@ namespace Penneo.Util
                 var perPage = int.Parse(parameters["per_page"]);
                 output.PerPage = perPage;
             }
+        }
+
+        private static IDictionary<string, string> ParseQueryString(this string query)
+        {
+            // [DC]: This method does not URL decode, and cannot handle decoded input
+            if (query.StartsWith("?"))
+                query = query.Substring(1);
+
+            if (query.Equals(string.Empty))
+                return new Dictionary<string, string>();
+
+            var parts = query.Split('&');
+
+            return parts.Select(part => part.Split('='))
+                .ToDictionary(pair => pair[0], pair => pair[1]);
         }
     }
 }
