@@ -81,7 +81,7 @@ namespace PenneoTests
         [Test]
         public void TestJsonDeserialization()
         {
-            const string json = "{\"signers\":[{\"sdkClassName\":\"Signer\",\"id\":334,\"name\":\"A signer\",\"signingRequest\":{\"sdkClassName\":\"SigningRequest\",\"id\":334,\"email\":\"test@example.com\",\"emailSubject\":\"Test subject\",\"emailText\":\"Test text\",\"status\":1,\"accessControl\":true}}],\"sdkClassName\":\"CaseFile\",\"id\":245,\"title\":\"CF\",\"status\":1,\"documents\":[{\"sdkClassName\":\"Document\",\"id\":359,\"documentId\":\"CB5VL-GS115-G5KDD-GFHKH-IPGAX-3J0LZ\",\"title\":\"My Doc\",\"status\":0,\"signable\":true,\"signatureLines\":[{\"signerId\":334,\"sdkClassName\":\"SignatureLine\",\"id\":477,\"signOrder\":0}],\"created\":\"1412092744\",\"modified\":\"1412092744\",\"completed\":\"1412092744\"}],\"signIteration\":2,\"visibilityMode\":3,\"created\":\"1412092736\"}";
+            const string json = "{\"reference\":\"hi\",\"signers\":[{\"sdkClassName\":\"Signer\",\"id\":334,\"name\":\"A signer\",\"signingRequest\":{\"sdkClassName\":\"SigningRequest\",\"id\":334,\"email\":\"test@example.com\",\"emailSubject\":\"Test subject\",\"emailText\":\"Test text\",\"status\":1,\"accessControl\":true}}],\"sdkClassName\":\"CaseFile\",\"id\":245,\"title\":\"CF\",\"status\":1,\"documents\":[{\"sdkClassName\":\"Document\",\"id\":359,\"documentId\":\"CB5VL-GS115-G5KDD-GFHKH-IPGAX-3J0LZ\",\"title\":\"My Doc\",\"status\":0,\"signable\":true,\"signatureLines\":[{\"signerId\":334,\"sdkClassName\":\"SignatureLine\",\"id\":477,\"signOrder\":0}],\"created\":\"1412092744\",\"modified\":\"1412092744\",\"completed\":\"1412092744\"}],\"signIteration\":2,\"visibilityMode\":3,\"created\":\"1412092736\"}";
 
             var caseFile = JsonConvert.DeserializeObject<CaseFile>(json);
 
@@ -93,6 +93,7 @@ namespace PenneoTests
             Assert.AreEqual(2, caseFile.SignIteration);
             Assert.AreEqual(3, caseFile.VisibilityMode);
             Assert.AreEqual(new DateTime(2014, 9, 30, 15, 58, 56), caseFile.Created);
+            Assert.AreEqual("hi", caseFile.Reference);
 
             //Signers
             Assert.IsNotNull(caseFile.Signers);
