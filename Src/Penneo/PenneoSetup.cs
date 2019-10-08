@@ -66,6 +66,7 @@ namespace Penneo
                   .Map(x => x.SensitiveData)
                   .Map(x => x.DisableNotificationsOwner)
                   .Map(x => x.SignOnMeeting)
+                  .Map(x => x.Reference)
                   .Map(x => x.CaseFileTemplate.Id, "caseFileTypeId")
                   .ForUpdate()
                   .Map(x => x.Title)

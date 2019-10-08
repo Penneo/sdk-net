@@ -10,6 +10,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 
+### [2.0.3] - 2019-10-07
+## Added
+- Added CaseFile.Reference, a handy field to track case files with
+
+
 ## [2.0.2] - 2019-07-05
 ### Changed
 - Updated RestSharp to 106.6.10
