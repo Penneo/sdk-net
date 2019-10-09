@@ -10,7 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 
-### [2.0.3] - 2019-10-07
+### [2.1.0] - 2019-10-07
 ## Added
 - Added CaseFile.Reference, a handy field to track case files with
 
@@ -84,20 +84,22 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [comment]: # (Build Comparison Links)
 
-[unreleased]: https://github.com/Penneo/sdk-net/compare/2.0.1...HEAD
-[2.0.1]:     https://github.com/Penneo/sdk-net/compare/2.0.0...2.0.1
-[2.0.0]:     https://github.com/Penneo/sdk-net/compare/1.7.0...2.0.0
-[1.7.0]:     https://github.com/Penneo/sdk-net/compare/1.6.1...1.7.0
-[1.6.1]:     https://github.com/Penneo/sdk-net/compare/1.6.0...1.6.1
-[1.6.0]:     https://github.com/Penneo/sdk-net/compare/1.5.0...1.6.0
-[1.5.0]:     https://github.com/Penneo/sdk-net/compare/1.4.2...1.5.0
-[1.4.2]:     https://github.com/Penneo/sdk-net/compare/1.4.1...1.4.2
-[1.4.1]:     https://github.com/Penneo/sdk-net/compare/1.4.0...1.4.1
-[1.4.0]:     https://github.com/Penneo/sdk-net/compare/1.3.0...1.4.0
-[1.3.0]:     https://github.com/Penneo/sdk-net/compare/1.2.1...1.3.0
-[1.2.1]:     https://github.com/Penneo/sdk-net/compare/1.2.0...1.2.1
-[1.2.0]:     https://github.com/Penneo/sdk-net/compare/1.1.0...1.2.0
-[1.1.0]:     https://github.com/Penneo/sdk-net/compare/1.0.23...1.1.0
+[unreleased]: https://github.com/Penneo/sdk-net/compare/2.1.0...HEAD
+[2.1.0]:      https://github.com/Penneo/sdk-net/compare/2.0.2...2.1.0
+[2.0.2]:      https://github.com/Penneo/sdk-net/compare/2.0.1...2.0.2
+[2.0.1]:      https://github.com/Penneo/sdk-net/compare/2.0.0...2.0.1
+[2.0.0]:      https://github.com/Penneo/sdk-net/compare/1.7.0...2.0.0
+[1.7.0]:      https://github.com/Penneo/sdk-net/compare/1.6.1...1.7.0
+[1.6.1]:      https://github.com/Penneo/sdk-net/compare/1.6.0...1.6.1
+[1.6.0]:      https://github.com/Penneo/sdk-net/compare/1.5.0...1.6.0
+[1.5.0]:      https://github.com/Penneo/sdk-net/compare/1.4.2...1.5.0
+[1.4.2]:      https://github.com/Penneo/sdk-net/compare/1.4.1...1.4.2
+[1.4.1]:      https://github.com/Penneo/sdk-net/compare/1.4.0...1.4.1
+[1.4.0]:      https://github.com/Penneo/sdk-net/compare/1.3.0...1.4.0
+[1.3.0]:      https://github.com/Penneo/sdk-net/compare/1.2.1...1.3.0
+[1.2.1]:      https://github.com/Penneo/sdk-net/compare/1.2.0...1.2.1
+[1.2.0]:      https://github.com/Penneo/sdk-net/compare/1.1.0...1.2.0
+[1.1.0]:      https://github.com/Penneo/sdk-net/compare/1.0.23...1.1.0
 
 [comment]: # (Issue Links)
 
