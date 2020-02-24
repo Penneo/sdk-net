@@ -124,6 +124,12 @@ namespace Penneo
         public DateTime? SendAt { get; set; }
 
         /// <summary>
+        /// The date where the case file is set to be activated
+        /// </summary>
+        [JsonConverter(typeof(PenneoDateConverter))]
+        public DateTime? ActivateAt { get; set; }
+
+        /// <summary>
         /// The data where the case file will expire
         /// </summary>
         [JsonConverter(typeof(PenneoDateConverter))]
