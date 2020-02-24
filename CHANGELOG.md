@@ -10,6 +10,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 
+### [2.2.0] - 2020-02-24
+### Added
+- Added CaseFile.ActivateAt, a field that shows when the case file is going to be activated.
+
+
 ### [2.1.0] - 2019-10-07
 ### Added
 - Added CaseFile.Reference, a handy field to track case files with

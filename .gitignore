@@ -31,6 +31,9 @@ NDependOut/
 *.tmp_proj
 *.orig
 
+#Ignore JetBrains IDE's files
+.idea
+
 #ignore nuget packages 
 packages
 nuget/lib
