@@ -10,6 +10,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 
+### [2.3.0] - 2020-02-27
+### Added
+- Added support for activeAt and expireAt at signature line level.
+
+
 ### [2.2.0] - 2020-02-24
 ### Added
 - Added CaseFile.ActivateAt, a field that shows when the case file is going to be activated.
