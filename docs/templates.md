@@ -8,7 +8,7 @@ Let's try to create a new case file based on a pre-existing case file template:
 
 ```csharp
 // Create a new case file
-var myCaseFile = new CaseFile();
+var myCaseFile = new CaseFile("Example Case File");
 
 // Get the case file templates available to the authenticated user
 var availableTemplates = myCaseFile.GetTemplates().Objects;
@@ -43,7 +43,7 @@ var mySigner = new Signer(myCaseFile);
 availableSignerTypes = myCaseFile.GetSignerTypes();
 
 // Lets just assign the first type available
-mySigner.SetSignerType(availableSignerTypes.First());
+mySigner.AddSignerType(availableSignerTypes.First());
 ```
 
 ## Sending the case file out for signing
