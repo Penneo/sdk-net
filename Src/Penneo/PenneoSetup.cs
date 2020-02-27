@@ -106,10 +106,14 @@ namespace Penneo
                   .Map(x => x.Role)
                   .Map(x => x.Conditions)
                   .Map(x => x.SignOrder)
+                  .Map(x => x.ActiveAt)
+                  .Map(x => x.ExpireAt)
                   .ForUpdate()
                   .Map(x => x.Role)
                   .Map(x => x.Conditions)
                   .Map(x => x.SignOrder)
+                  .Map(x => x.ActiveAt)
+                  .Map(x => x.ExpireAt)
                   .Create()
             );
 
