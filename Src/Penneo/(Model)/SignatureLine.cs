@@ -34,9 +34,23 @@ namespace Penneo
             Conditions = conditions;
         }
 
+        public SignatureLine(Document doc, string role, int signOrder, string conditions, DateTime? activeAt)
+            : this(doc, role, signOrder, conditions)
+        {
+            ActiveAt = activeAt;
+        }
+
+        public SignatureLine(Document doc, string role, int signOrder, string conditions, DateTime? activeAt, DateTime? expireAt)
+            : this(doc, role, signOrder, conditions, activeAt)
+        {
+            ExpireAt = expireAt;
+        }
+
         public Document Document { get; internal set; }
         public string Role { get; set; }
         public string Conditions { get; set; }
+        public DateTime? ActiveAt { get; set; }
+        public DateTime? ExpireAt { get; set; }
         public int SignOrder { get; set; }
         public int? SignerId { get; set; }
 

@@ -12,7 +12,7 @@ namespace PenneoTests
         {
             var cf = new CaseFile();
             var doc = new Document(cf);
-            var s = new SignatureLine(doc, "role", 1, "conditions");
+            var s = new SignatureLine(doc, "role", 1, "conditions", DateTime.Now, DateTime.Now);
             return s;
         }
 
@@ -25,6 +25,8 @@ namespace PenneoTests
             Assert.AreEqual("role", s.Role);
             Assert.AreEqual(1, s.SignOrder);
             Assert.AreEqual("conditions", s.Conditions);
+            Assert.IsNotNull(s.ActiveAt);
+            Assert.IsNotNull(s.ExpireAt);
             Assert.AreEqual(s.Document, s.Parent);
         }
 
