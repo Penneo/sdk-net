@@ -21,6 +21,20 @@ To link a signer to a signature line, simply use the __SetSigner()__ method on t
 mySignatureLine.SetSigner(mySigner);
 ```
 
+## Getting the signature lines from a document and setting an activation and expiration date to each one
+```csharp
+// myDocument is an instance of Document
+DateTime today = DateTime.Now;
+DateTime tomorrow = today.AddDays(1);
+DateTime dayAfterTomorrow = today.AddDays(2);
+
+foreach (int mySignatureLine in myDocument.GetSignatureLines())
+{
+    mySignatureLine.SetActiveAt(tomorrow);
+    mySignatureLine.SetExpireAt(dayAfterTomorrow);
+}
+```
+
 ## Setting the sign order
 The sign order defines the order in which the signature lines must be signed.
 Per default, the sign order for all signature lines is 0, meaning that all signers sign in parallel.
