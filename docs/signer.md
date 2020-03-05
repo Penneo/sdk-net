@@ -22,6 +22,26 @@ mySigner.VATIdentificationNumber = 12345678;
 mySigner.Persist();
 ```
 
+## Creating a signer with delayed sendout, expiry or a role lable:
+
+```csharp
+var mySigner = new Signer(myCaseFile, "John Doe");
+mySigner.Persist();
+
+// This is similar to mySigner.addSignerType(), but allows for finer graned control
+var map = new SignerTypeMap
+{
+    Signer = mySigner,
+    SignerTypeId = 237,
+    ActiveAt = DateTime.Today.AddDays(70),
+    Role = "Animator",
+    ExpireAt = DateTime.Today.AddDays(90),
+};
+
+map.Persist();
+// Be careful, persisting the map multiple times will make the signer have to sign multiple times
+```
+
 ## Retrieving the signing request
 Every time you create a new signer, a signing request is also generated for the new signer. After persisting the new signer object, you can retrieve the signing request like so:
 
