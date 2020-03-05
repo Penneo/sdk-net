@@ -18,7 +18,7 @@ namespace Penneo
         /// <summary>
         /// The relative url (rest resource) of the entity type
         /// </summary>
-        internal string GetRelativeUrl(PenneoConnector con)
+        internal virtual string GetRelativeUrl(PenneoConnector con)
         {
             return con.ServiceLocator.GetInstance<RestResources>().GetResource(GetType(), Parent);
         }

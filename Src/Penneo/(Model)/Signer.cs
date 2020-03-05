@@ -48,6 +48,13 @@ namespace Penneo
             return SigningRequest;
         }
 
+        /// <summary>
+        /// Associate a signer type, if you need more control over this, create a SignerTypeMap directly instead of using
+        /// this method.
+        /// </summary>
+        /// <param name="con"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public bool AddSignerType(PenneoConnector con, SignerType type)
         {
             return LinkEntity(con, type);

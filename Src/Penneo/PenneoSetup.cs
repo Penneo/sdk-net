@@ -26,6 +26,7 @@ namespace Penneo
             r.Add<Document>("documents");
             r.Add<SignatureLine>("signaturelines");
             r.Add<Signer>("signers");
+            r.Add<SignerTypeMap>("signertypes");
             r.Add<SigningRequest>("signingrequests");
             r.Add<Validation>("validations");
             r.Add<Folder>("folders");
@@ -209,6 +210,16 @@ namespace Penneo
                     .Create()
             );
 
+            mappings.AddMapping(
+                new MappingBuilder<SignerTypeMap>()
+                    .ForCreate()
+                    .Map(x => x.SignerTypeId)
+                    .Map(x => x.SignerId)
+                    .Map(x => x.Role)
+                    .Map(x => x.ActiveAt, convert: x => TimeUtil.ToUnixTime((DateTime) x))
+                    .Map(x => x.ExpireAt, convert: x => TimeUtil.ToUnixTime((DateTime) x))
+                    .Create()
+            );
         }
 
         public virtual void InitializePostProcessors()
