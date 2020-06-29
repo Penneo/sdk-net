@@ -9,6 +9,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+### [2.5.0] - 2020-06-29
+### Fixed
+- Fixed invalid property `activeAt` of Case File. Now is called `activated` and shows the date when the Case File was activated.
+
+
 ### [2.4.0] - 2020-03-05
 ### Added
 - Added support for activeAt and expireAt at the signer type map level.
