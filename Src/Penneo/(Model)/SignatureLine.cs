@@ -50,6 +50,7 @@ namespace Penneo
         public string Role { get; set; }
         public string Conditions { get; set; }
         public DateTime? ActiveAt { get; set; }
+        public DateTime? ActivatedAt { get; set; }
         public DateTime? ExpireAt { get; set; }
         public int SignOrder { get; set; }
         public int? SignerId { get; set; }
