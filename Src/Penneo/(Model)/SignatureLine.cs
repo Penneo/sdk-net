@@ -49,7 +49,11 @@ namespace Penneo
         public Document Document { get; internal set; }
         public string Role { get; set; }
         public string Conditions { get; set; }
+        [JsonConverter(typeof(PenneoDateConverter))]
         public DateTime? ActiveAt { get; set; }
+        [JsonConverter(typeof(PenneoDateConverter))]
+        public DateTime? ActivatedAt { get; set; }
+        [JsonConverter(typeof(PenneoDateConverter))]
         public DateTime? ExpireAt { get; set; }
         public int SignOrder { get; set; }
         public int? SignerId { get; set; }

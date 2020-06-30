@@ -9,6 +9,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+### [2.6.0] - 2020-06-30
+### Added
+- Added missing property `activatedAt` to Signature Line to show the date when the Signature Line was activated.
+
+
 ### [2.5.0] - 2020-06-29
 ### Fixed
 - Fixed invalid property `activeAt` of Case File. Now is called `activated` and shows the date when the Case File was activated.
