@@ -13,6 +13,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Fixed date time values before year 1 causing exceptions, all such values will now snap to DateTime.MinValue
 
+### Added
+- Added a DebugLogger class to aid in debugging problems
+
 
 ### [2.6.0] - 2020-06-30
 ### Added

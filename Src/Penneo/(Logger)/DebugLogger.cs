@@ -2,7 +2,7 @@
 
 namespace Penneo
 {
-    internal class DebugLogger : ILogger
+    public class DebugLogger : IPenneoLogger
     {
         public void Log(string message, LogSeverity severity)
         {

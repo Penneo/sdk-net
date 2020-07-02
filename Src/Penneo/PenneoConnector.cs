@@ -15,7 +15,7 @@ namespace Penneo
         internal PenneoSetup _setup;
         internal ServiceLocator _serviceLocator;
         internal IApiConnector _api;
-        private ILogger _logger;
+        private IPenneoLogger _logger = new NullLogger();
 
         public bool IsInitialized { get; set; }
 
@@ -63,9 +63,9 @@ namespace Penneo
         /// <summary>
         /// Get/Set the logger used by the Penneo sdk
         /// </summary>
-        public ILogger Logger
+        public IPenneoLogger Logger
         {
-            get { return _logger ?? (_logger = new DebugLogger()); }
+            get { return _logger; }
             set { _logger = value; }
         }
 
