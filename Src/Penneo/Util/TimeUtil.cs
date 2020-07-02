@@ -13,7 +13,15 @@ namespace Penneo.Util
         public static DateTime FromUnixTime(long unixTime)
         {
             var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            return epoch.AddSeconds(unixTime);
+
+            try
+            {
+                return epoch.AddSeconds(unixTime);
+            }
+            catch (ArgumentOutOfRangeException _)
+            {
+                return unixTime > 0 ? DateTime.MaxValue : DateTime.MinValue;
+            }
         }
 
         /// <summary>

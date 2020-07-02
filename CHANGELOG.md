@@ -9,6 +9,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+### [2.7.0] - 2020-07-03
+### Fixed
+- Fixed date time values before year 1 causing exceptions, all such values will now snap to DateTime.MinValue
+
+
 ### [2.6.0] - 2020-06-30
 ### Added
 - Added missing property `activatedAt` to Signature Line to show the date when the Signature Line was activated.
