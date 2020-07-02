@@ -523,7 +523,7 @@ namespace Penneo.Connector
             if (data != null)
             {
                 request.RequestFormat = DataFormat.Json;
-                request.AddBody(data);
+                request.AddJsonBody(data);
             }
             return request;
         }
