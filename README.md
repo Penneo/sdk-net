@@ -117,6 +117,24 @@ myValidation.Persist(con);
 Console.WriteLine("<a href=\"" + myValidation.GetLink() + "\">Validate now</a>");
 ```
 
+## Debugging
+
+Use the `DebugLogger` class or implement your own `IPenneoLogger` to see more info about the reuqests perfomed.
+
+Note: Please provide the `X-Penneo-Request-Id` and the `X-B3-TraceId` headers whenever submitting a support ticket.
+
+```csharp
+con.Logger = new DebugLogger(); // debug info will be printed to the debug console
+
+/*
+Example tracing headers:
+
+X-B3-TraceId: a9a6ed54760af06f
+X-Penneo-Request-Id: 2855de5360cb6f515917a3e62916459c
+*/
+```
+
+
 ## Resources
 
 * [API documentation][docs-api] - Information about the Penneo API, methods and responses
