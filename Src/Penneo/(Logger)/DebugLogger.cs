@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+﻿using System;
 
 namespace Penneo
 {
@@ -6,7 +6,7 @@ namespace Penneo
     {
         public void Log(string message, LogSeverity severity)
         {
-            Debug.WriteLine(severity + ": " + message);
+            Console.WriteLine("Penneo: " + severity + ": " + message);
         }
     }
 }
