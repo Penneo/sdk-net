@@ -382,9 +382,19 @@ namespace Penneo.Connector
         /// </summary>
         public ServerResult PerformAction(Entity obj, string actionName)
         {
+            return PerformComplexAction(obj, Method.PATCH, actionName, null);
+        }
+
+        public ServerResult PerformComplexAction(
+            Entity obj,
+            Method method,
+            string action,
+            Dictionary<string, object> data
+        )
+        {
             var result = new ServerResult();
-            var url = obj.GetRelativeUrl(_con) + "/" + obj.Id + "/" + actionName;
-            var response = CallServer(url, customMethod: "patch");
+            var url = obj.GetRelativeUrl(_con) + "/" + obj.Id + "/" + action;
+            var response = CallServer(url, data, method);
             if (response == null || !_successStatusCodes.Contains(response.StatusCode))
             {
                 result.Success = false;

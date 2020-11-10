@@ -9,6 +9,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [2.8.0] - 2020-11-10
+### Added
+- Added support for setting up webhook subscriptions. See [the docs](https://github.com/Penneo/sdk-net/blob/master/docs/webhooks.md) for more details.
+
+
 ## [2.7.1] - 2020-10-08
 ### Fixed
 - Fixed the debug logger being optimised away
