@@ -34,7 +34,7 @@ If everything was successful, your servers will now be called on case file/signe
 ## Finding webhook subscriptions
 ```csharp
 var hook = query.Find<WebhookSubscription>(webhookId);
-var allHooks = query.FinaAll<WebhookSubscription>();
+var allHooks = query.FindAll<WebhookSubscription>();
 ```
 
 
