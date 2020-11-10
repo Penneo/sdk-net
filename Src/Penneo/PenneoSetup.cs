@@ -38,6 +38,7 @@ namespace Penneo
             r.Add<MessageTemplate>("casefile/message/templates");
             r.Add<User>("users");
             r.Add<Customer>("customers");
+            r.Add<WebhookSubscription>("webhook/subscriptions");
 
             _serviceLocator.RegisterInstance<RestResources>(r);
         }
@@ -220,6 +221,14 @@ namespace Penneo
                     .Map(x => x.Role)
                     .Map(x => x.ActiveAt, convert: x => TimeUtil.ToUnixTime((DateTime) x))
                     .Map(x => x.ExpireAt, convert: x => TimeUtil.ToUnixTime((DateTime) x))
+                    .Create()
+            );
+
+            mappings.AddMapping(
+                new MappingBuilder<WebhookSubscription>()
+                    .ForCreate()
+                    .Map(x => x.Endpoint)
+                    .Map(x => x.Topic)
                     .Create()
             );
         }
