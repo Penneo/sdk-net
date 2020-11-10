@@ -100,6 +100,11 @@ namespace Penneo.Connector
         ServerResult PerformAction(Entity obj, string actionName);
 
         /// <summary>
+        /// Performs the named action on the backend for the given object
+        /// </summary>
+        ServerResult PerformComplexAction(Entity obj, Method method, string action, Dictionary<string, object> data);
+
+        /// <summary>
         /// Get the latest server result for a given entity
         /// </summary>
         ServerResult GetLatestEntityServerResult(Entity entity);

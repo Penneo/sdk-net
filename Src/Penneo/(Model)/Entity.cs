@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Penneo.Connector;
 using Penneo.Mapping;
+using RestSharp;
 
 namespace Penneo
 {
@@ -184,6 +185,16 @@ namespace Penneo
         protected ServerResult PerformAction(PenneoConnector con, string action)
         {
             return con.ApiConnector.PerformAction(this, action);
+        }
+
+        protected ServerResult PerformComplexAction(
+            PenneoConnector con,
+            Method method,
+            string action,
+            Dictionary<string, object> data
+        )
+        {
+            return con.ApiConnector.PerformComplexAction(this, method, action, data);
         }
 
         /// <summary>
