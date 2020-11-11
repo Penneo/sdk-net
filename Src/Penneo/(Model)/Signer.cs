@@ -29,6 +29,10 @@ namespace Penneo
         public string Name { get; set; }
         public string ValidatedName { get; set; }
         public string SocialSecurityNumber { get; set; }
+        /// <summary>
+        /// See https://app.penneo.com/api/v1/signers/ssn-types for available types
+        /// </summary>
+        public string SsnType = "legacy";
         public string OnBehalfOf { get; set; }
         public string VATIdentificationNumber { get; set; }
         public CaseFile CaseFile { get; set; }
