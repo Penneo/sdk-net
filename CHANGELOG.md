@@ -9,6 +9,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [2.9.1] - 2020-11-11
+### Changed
+- Migrated to netstandard20
+
+
 ## [2.9.0] - 2020-11-11
 ### Added
 - Added support for specifying which type of SSN signers should validate as.
