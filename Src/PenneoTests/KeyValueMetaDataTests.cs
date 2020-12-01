@@ -23,7 +23,7 @@ namespace PenneoTests
             Assert.AreEqual(val, helper.GetMetaDataValue(key));
 
             var json = helper.ToJson();
-            Assert.IsNotNullOrEmpty(json);
+            Assert.IsTrue(!string.IsNullOrEmpty(json));
             Assert.IsTrue(json.Contains(key));
             Assert.IsTrue(json.Contains(val));
         }

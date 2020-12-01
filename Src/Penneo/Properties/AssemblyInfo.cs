@@ -6,14 +6,6 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("Penneo")]
-[assembly: AssemblyDescription("SDK for Penneo Web API")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Penneo")]
-[assembly: AssemblyProduct("Penneo")]
-[assembly: AssemblyCopyright("Copyright ©  2014")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
@@ -36,7 +28,5 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 
-[assembly: AssemblyVersion("2.0.1.0")]
-[assembly: AssemblyFileVersion("2.0.1.0")]
 [assembly: InternalsVisibleTo("PenneoTests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
