@@ -1,17 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003"  Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0F44F248-97DA-49E2-BEE6-8215B0A4DEAB}</ProjectGuid>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+ 
+    <Version>3.0.0</Version>
+    <PackageId>Penneo.SDK</PackageId>
     <OutputType>Library</OutputType>
+    <PackageLicenseUrl>https://github.com/Penneo/sdk-net/blob/master/license.txt</PackageLicenseUrl>
     <AppDesignerFolder>Properties</AppDesignerFolder>
+    <PackageProjectUrl>https://github.com/Penneo/sdk-net</PackageProjectUrl>
     <RootNamespace>Penneo</RootNamespace>
+    <PackageIconUrl>https://raw.githubusercontent.com/Penneo/sdk-net/master/icon.png</PackageIconUrl>
     <AssemblyName>Penneo</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <RepositoryUrl>https://github.com/Penneo/sdk-net</RepositoryUrl>
+    <Description>SDK for using Penneo in your own C# projects</Description>
+    <PackageTags>Penneo sign signing digital</PackageTags>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <FileAlignment>512</FileAlignment>
+    <Copyright>Copyright 2020</Copyright>
     <TargetFrameworkProfile />
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,87 +39,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="RestSharp, Version=106.6.10.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
-      <HintPath>..\packages\RestSharp.106.6.10\lib\net452\RestSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="%28Logger%29\DebugLogger.cs" />
-    <Compile Include="%28Model%29\CaseFileTemplate.cs" />
-    <Compile Include="%28Model%29\CopyRecipient.cs" />
-    <Compile Include="%28Model%29\Customer.cs" />
-    <Compile Include="%28Model%29\DocumentTypeOption.cs" />
-    <Compile Include="%28Model%29\LogEntry.cs" />
-    <Compile Include="%28Model%29\DocumentType.cs" />
-    <Compile Include="%28Model%29\Folder.cs" />
-    <Compile Include="%28Model%29\MessageTemplate.cs" />
-    <Compile Include="%28Model%29\SignerType.cs" />
-    <Compile Include="%28Model%29\User.cs" />
-    <Compile Include="%28Model%29\ValidationContents.cs" />
-    <Compile Include="(Logger)\NullLogger.cs" />
-    <Compile Include="(Model)\SignerTypeMap.cs" />
-    <Compile Include="(Model)\WebhookSubscription.cs" />
-    <Compile Include="AuthType.cs" />
-    <Compile Include="Mapping\Mappings.cs" />
-    <Compile Include="%28Model%29\SigningRequest.cs" />
-    <Compile Include="%28Model%29\Signer.cs" />
-    <Compile Include="%28Model%29\SignatureLine.cs" />
-    <Compile Include="%28Model%29\Document.cs" />
-    <Compile Include="%28Model%29\Validation.cs" />
-    <Compile Include="PenneoConnector.cs" />
-    <Compile Include="%28Query%29\Query.cs" />
-    <Compile Include="Connector\RestResources.cs" />
-    <Compile Include="Connector\IApiConnector.cs" />
-    <Compile Include="Connector\WSSEAuthenticator.cs" />
-    <Compile Include="Mapping\IMapping.cs" />
-    <Compile Include="Mapping\Mapping.cs" />
-    <Compile Include="Mapping\MappingBuilder.cs" />
-    <Compile Include="Mapping\MethodProperties.cs" />
-    <Compile Include="Connector\ApiConnector.cs" />
-    <Compile Include="%28Model%29\CaseFile.cs" />
-    <Compile Include="%28Model%29\Entity.cs" />
-    <Compile Include="PenneoSetup.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="%28Logger%29\IPenneoLogger.cs" />
-    <Compile Include="%28Query%29\QueryInput.cs" />
-    <Compile Include="%28Result%29\QueryResult.cs" />
-    <Compile Include="%28Result%29\ServerResult.cs" />
-    <Compile Include="RestConnector.cs" />
-    <Compile Include="ServiceLocator.cs" />
-    <Compile Include="Util\FileUtil.cs" />
-    <Compile Include="Util\KeyValueMetaDataHelper.cs" />
-    <Compile Include="Util\LinqExtensions.cs" />
-    <Compile Include="Util\MetaDataExtensions.cs" />
-    <Compile Include="Util\PaginationUtil.cs" />
-    <Compile Include="Util\ReflectionUtil.cs" />
-    <Compile Include="Util\StringUtil.cs" />
-    <Compile Include="Util\TimeUtil.cs" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="RestSharp" Version="106.11.7" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <!-- Disabled the windows specific command.Also, moving forward,
-         we won't keep the built binary in the repository -->
-    <!-- <PostBuildEvent>rem copy /Y "$(TargetDir)$(TargetName).dll" "$(SolutionDir)\..\Binaries\Unsigned\$(TargetName).dll"</PostBuildEvent> -->
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
+  <Target Name="Build">
+    <Csc Sources="@(Compile)"/>
   </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
