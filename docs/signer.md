@@ -14,7 +14,7 @@ mySigner.OnBehalfOf = "Acme Corporation";
 
 // Set the optional social security number
 mySigner.SocialSecurityNumber = "0101501111";
-mySigner.SsnType = "dk:cpr"; // additional values here https://app.penneo.com/api/v1/signers/ssn-types
+mySigner.SsnType = "dk:cpr"; // additional values here https://app.penneo.com/api/v3/signers/ssn-types
                              // reading SsnType from existing signers only works if using the api/v3 and up
                              // if using a lower version, you will see 'legacy' even if another value is actually set
 

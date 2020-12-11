@@ -12,6 +12,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [4.0.0] - 2020-12-12
 ### Changed
 - `Document.Type` has been renamed to `Document.SignType`
+- Using the 'https://[env].penneo.com/api/v1' and 'https://[env].penneo.com/api/v2' endpoints is no longer supported. Please use 'https://(sandbox|app).penneo.com/api/v3'.
 
 
 ## [3.0.0] - 2020-12-10

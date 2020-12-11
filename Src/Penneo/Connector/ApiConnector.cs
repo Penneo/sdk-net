@@ -431,8 +431,17 @@ namespace Penneo.Connector
         {
             if (string.IsNullOrEmpty(_endpoint))
             {
-                _endpoint = "https://sandbox.penneo.com/api/v1";
+                _endpoint = "https://sandbox.penneo.com/api/v3";
             }
+
+            // We dropped support for the old endpoints to try to keep more people on the same version.
+            if (_endpoint.EndsWith("api/v1") || _endpoint.EndsWith("api/v2"))
+            {
+                throw new InvalidOperationException(
+                $"Trying to use the {_endpoint} API endpoint. Please use /v3 or above."
+                );
+            }
+
             _client = new RestClient(_endpoint);
 
             _headers = _headers ?? new Dictionary<string, string>();
