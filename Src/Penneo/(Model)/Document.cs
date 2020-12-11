@@ -84,24 +84,17 @@ namespace Penneo
         /// <summary>
         /// The document type
         /// </summary>
-        [JsonIgnore]
+        [JsonProperty(PropertyName = "type")]
         public DocumentType DocumentType
         {
             get { return _documentType; }
-            set
-            {
-                _documentType = value;
-                if (_documentType != null)
-                {
-                    DocumentTypeId = _documentType.Id;
-                }
-            }
+            set { _documentType = value; }
         }
 
         /// <summary>
         /// The document type id
         /// </summary>
-        public int? DocumentTypeId { get; set; }
+        public int? DocumentTypeId => DocumentType?.Id;
 
         /// <summary>
         /// Get the document type

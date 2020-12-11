@@ -98,6 +98,7 @@ namespace Penneo
                   .ForUpdate()
                   .Map(x => x.Title)
                   .Map(x => x.MetaData)
+                  .Map(x => x.DocumentType.Id, "documentTypeId")
                   .Map(x => x.Opts)
                   .Create()
             );
