@@ -9,6 +9,17 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [4.0.0] - 2020-12-12
+### Changed
+- `Document.Type` has been renamed to `Document.SignType`
+- Using the 'https://[env].penneo.com/api/v1' and 'https://[env].penneo.com/api/v2' endpoints is no longer supported. Please use 'https://(sandbox|app).penneo.com/api/v3'.
+
+
+## [3.0.0] - 2020-12-10
+### Changed
+- The SDK now uses netcoreapp3.1. If you need other target framework support, please contact us at support@penneo.com.
+
+
 ## [2.9.0] - 2020-11-11
 ### Added
 - Added support for specifying which type of SSN signers should validate as.

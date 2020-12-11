@@ -96,36 +96,6 @@ namespace Penneo.Connector
             Init();
         }
 
-        /*
-        /// <summary>
-        /// Singleton instance
-        /// </summary>
-        public static IApiConnector Instance
-        {
-            get
-            {
-                if (_instance != null)
-                {
-                    return _instance;
-                }
-
-                if (!PenneoConnector.IsInitialized)
-                {
-                    throw new AuthenticationException("The Penneo connector has not been initialized");
-                }
-
-                if (_factory != null)
-                {
-                    _instance = _factory();
-                }
-                else
-                {
-                    _instance = new ApiConnector();
-                }
-                return _instance;
-            }
-        }*/
-
         #region IApiConnector Members
         /// <summary>
         /// <see cref="IApiConnector.WriteObject"/>
@@ -431,9 +401,19 @@ namespace Penneo.Connector
         {
             if (string.IsNullOrEmpty(_endpoint))
             {
-                _endpoint = "https://sandbox.penneo.com/api/v1";
+                _endpoint = "https://sandbox.penneo.com/api/v3";
             }
+
+            // We dropped support for the old endpoints to try to keep more people on the same version.
+            if (_endpoint.EndsWith("api/v1") || _endpoint.EndsWith("api/v2"))
+            {
+                throw new InvalidOperationException(
+                $"Trying to use the {_endpoint} API endpoint. Please use /v3 or above."
+                );
+            }
+
             _client = new RestClient(_endpoint);
+            _client.UserAgent = "Penneo/sdk-net@" + Info.Version;
 
             _headers = _headers ?? new Dictionary<string, string>();
             _headers["Content-type"] = "application/json";

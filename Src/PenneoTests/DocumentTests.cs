@@ -67,7 +67,7 @@ namespace PenneoTests
             var con = TestUtil.CreatePenneoConnector();
             var doc = CreateDocument();
             doc.MakeSignable();
-            Assert.AreEqual("signable", doc.Type);
+            Assert.AreEqual("signable", doc.SignType);
         }
 
 
