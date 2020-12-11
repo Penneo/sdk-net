@@ -96,36 +96,6 @@ namespace Penneo.Connector
             Init();
         }
 
-        /*
-        /// <summary>
-        /// Singleton instance
-        /// </summary>
-        public static IApiConnector Instance
-        {
-            get
-            {
-                if (_instance != null)
-                {
-                    return _instance;
-                }
-
-                if (!PenneoConnector.IsInitialized)
-                {
-                    throw new AuthenticationException("The Penneo connector has not been initialized");
-                }
-
-                if (_factory != null)
-                {
-                    _instance = _factory();
-                }
-                else
-                {
-                    _instance = new ApiConnector();
-                }
-                return _instance;
-            }
-        }*/
-
         #region IApiConnector Members
         /// <summary>
         /// <see cref="IApiConnector.WriteObject"/>
@@ -443,6 +413,7 @@ namespace Penneo.Connector
             }
 
             _client = new RestClient(_endpoint);
+            _client.UserAgent = "Penneo/sdk-net@" + Info.Version;
 
             _headers = _headers ?? new Dictionary<string, string>();
             _headers["Content-type"] = "application/json";
