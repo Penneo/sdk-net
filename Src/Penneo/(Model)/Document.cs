@@ -22,7 +22,7 @@ namespace Penneo
         public Document()
         {
             MetaData = null;
-            Type = TYPE_ATTACHMENT;
+            SignType = TYPE_ATTACHMENT;
         }
 
         public Document(CaseFile cf)
@@ -79,7 +79,7 @@ namespace Penneo
         /// <summary>
         /// The document type. See <see cref="DocumentType"/>.
         /// </summary>
-        public string Type { get; internal set; }
+        public string SignType { get; internal set; }
 
         /// <summary>
         /// The document type
@@ -181,8 +181,8 @@ namespace Penneo
         /// </summary>
         public bool Signable
         {
-            get { return Type == TYPE_SIGNABLE; }
-            set { Type = value ? TYPE_SIGNABLE : TYPE_ATTACHMENT; }
+            get { return SignType == TYPE_SIGNABLE; }
+            set { SignType = value ? TYPE_SIGNABLE : TYPE_ATTACHMENT; }
         }
 
         /// <summary>
@@ -211,7 +211,7 @@ namespace Penneo
         /// </summary>
         public void MakeSignable()
         {
-            Type = TYPE_SIGNABLE;
+            SignType = TYPE_SIGNABLE;
         }
 
         /// <summary>

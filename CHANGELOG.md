@@ -9,6 +9,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [4.0.0] - 2020-12-12
+### Changed
+- `Document.Type` has been renamed to `Document.SignType`
+
+
 ## [3.0.0] - 2020-12-10
 ### Changed
 - The SDK now uses netcoreapp3.1. If you need other target framework support, please contact us at support@penneo.com.

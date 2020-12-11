@@ -91,7 +91,7 @@ namespace Penneo
                   .Map(x => x.Title)
                   .Map(x => x.CaseFile.Id, "CaseFileId")
                   .Map(x => x.MetaData)
-                  .Map(x => x.Type)
+                  .Map(x => x.SignType, "type")
                   .Map(x => x.Opts)
                   .MapBase64(x => x.PdfRaw, "PdfFile")
                   .Map(x => x.DocumentType.Id, "documentTypeId")
