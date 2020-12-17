@@ -2,7 +2,7 @@
 Penneo is all about digitizing the process of signing documents and contacts. The Penneo SDK for .Net enables .Net developers to use digital signing of documents in their .Net code. Get more info at [penneo.com](https://penneo.com/) about how to become a customer.
 
 ## Prerequisites
-The Penneo SDK for .Net requires that you are using .Net 4.5.2 or newer. 
+The Penneo SDK for .Net requires that you are using netcoreapp3.1 or newer. If you need other target framework support, please contact us at support@penneo.com.
 
 ## Getting Started
 You can install the SDK by simply cloning or downloading the source, or you can use Nuget. We recommend that you use Nuget:
