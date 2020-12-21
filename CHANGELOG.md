@@ -9,6 +9,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+
+## [4.0.1] - 2020-12-21
+### Misc
+- Added support for the net46 platform
+
+
 ## [4.0.0] - 2020-12-12
 ### Changed
 - `Document.Type` has been renamed to `Document.SignType`
