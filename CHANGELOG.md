@@ -10,6 +10,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 
+## [4.1.0] - 2021-01-21
+### Added
+- Added support for setting CaseFile.DisableEmailAttachments
+
+
 ## [4.0.1] - 2020-12-21
 ### Misc
 - Added support for the net46 platform
