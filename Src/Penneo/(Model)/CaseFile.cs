@@ -151,6 +151,12 @@ namespace Penneo
         public int? CustomerId { get; set; }
 
         /// <summary>
+        /// If set, documents will not be sent as email attachments to signers and the case file owner when the signing
+        /// process is finalized.
+        /// </summary>
+        public bool DisableEmailAttachments = false;
+
+        /// <summary>
         /// The documents in the case file
         /// Note: This property will only return already loaded documents
         /// </summary>
