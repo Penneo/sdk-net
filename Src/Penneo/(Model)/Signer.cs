@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace Penneo
 {
@@ -27,12 +28,17 @@ namespace Penneo
         }
 
         public string Name { get; set; }
+
         public string ValidatedName { get; set; }
+
+        [JsonProperty(PropertyName = "socialSecurityNumberPlain")]
         public string SocialSecurityNumber { get; set; }
+
         /// <summary>
         /// See https://app.penneo.com/api/v3/signers/ssn-types for available types
         /// </summary>
         public string SsnType = "legacy";
+
         public string OnBehalfOf { get; set; }
         public string VATIdentificationNumber { get; set; }
         public CaseFile CaseFile { get; set; }

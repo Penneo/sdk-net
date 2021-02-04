@@ -10,6 +10,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 
+## [4.1.1] - 2021-02-04
+### Fixed
+- Fixed not being able to retrieve SSN numbers for signers
+
+
 ## [4.1.0] - 2021-01-21
 ### Added
 - Added support for setting CaseFile.DisableEmailAttachments
