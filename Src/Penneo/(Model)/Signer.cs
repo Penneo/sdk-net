@@ -40,6 +40,8 @@ namespace Penneo
         public string SsnType = "legacy";
 
         public string OnBehalfOf { get; set; }
+
+        [JsonProperty(PropertyName = "vatin")]
         public string VATIdentificationNumber { get; set; }
         public CaseFile CaseFile { get; set; }
         public SigningRequest SigningRequest { get; set; }
