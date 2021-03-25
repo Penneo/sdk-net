@@ -10,6 +10,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 
+## [4.1.2] - 2021-03-25
+### Fixed
+- Fixed error when trying to unserialize signers with VATIN validation set
+
+
 ## [4.1.1] - 2021-02-04
 ### Fixed
 - Fixed not being able to retrieve SSN numbers for signers
