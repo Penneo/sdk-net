@@ -10,6 +10,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 
+## [4.1.3] - 2021-07-23
+### Changed
+- Doc comments are now available in the Nuget package
+
+
 ## [4.1.2] - 2021-03-25
 ### Fixed
 - Fixed error when trying to unserialize signers with VATIN validation set

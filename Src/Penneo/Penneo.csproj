@@ -16,6 +16,7 @@
     <Description>SDK for using Penneo in your own C# projects</Description>
     <PackageTags>Penneo sign signing digital</PackageTags>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <FileAlignment>512</FileAlignment>
     <Copyright>Copyright 2020</Copyright>
     <TargetFrameworkProfile />
