@@ -43,7 +43,7 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="RestSharp" Version="106.11.7" />
+    <PackageReference Include="RestSharp" Version="106.12.0" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)'== 'net46'">
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net46" Version="1.0.0">
