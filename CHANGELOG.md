@@ -10,6 +10,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 
+## [4.1.4] - 2022-02-01
+### Misc
+- Updated RestSharp to 106.15.0
+
+
 ## [4.1.3] - 2021-07-23
 ### Changed
 - Doc comments are now available in the Nuget package
