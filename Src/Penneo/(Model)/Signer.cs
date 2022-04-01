@@ -41,6 +41,8 @@ namespace Penneo
 
         public string OnBehalfOf { get; set; }
 
+        public bool StoreAsContact { get; set; }
+
         [JsonProperty(PropertyName = "vatin")]
         public string VATIdentificationNumber { get; set; }
         public CaseFile CaseFile { get; set; }
