@@ -39,6 +39,7 @@ namespace Penneo
             r.Add<User>("users");
             r.Add<Customer>("customers");
             r.Add<WebhookSubscription>("webhook/subscriptions");
+            r.Add<Contact>("contacts");
 
             _serviceLocator.RegisterInstance<RestResources>(r);
         }
@@ -234,6 +235,16 @@ namespace Penneo
                     .ForCreate()
                     .Map(x => x.Endpoint)
                     .Map(x => x.Topic)
+                    .Create()
+            );
+            mappings.AddMapping(
+                new MappingBuilder<Contact>()
+                    .ForCreate()
+                    .Map(x => x.Name)
+                    .Map(x => x.Email)
+                    .ForUpdate()
+                    .Map(x => x.Name)
+                    .Map(x => x.Email)
                     .Create()
             );
         }
