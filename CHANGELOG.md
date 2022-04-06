@@ -10,6 +10,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 
+## [4.2.0] - 2022-04-06
+### Added
+- Added support for `Contact` CRUD
+- Added support for setting `Signer.StoreAsContact`
+
+
 ## [4.1.4] - 2022-02-01
 ### Misc
 - Updated RestSharp to 106.15.0
