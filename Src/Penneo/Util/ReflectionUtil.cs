@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.Serialization;
 
 namespace Penneo.Util
 {
@@ -38,6 +40,16 @@ namespace Penneo.Util
         public static string GetPropertyName<T>(Expression<Func<T, string>> property)
         {
             return ((MemberExpression) property.Body).Member.Name;
+        }
+        /// <summary>
+        /// Get the EnumMember value of a enum
+        /// </summary>
+        public static string ToEnumString<T>(this T type)
+        {
+            var enumType = typeof(T);
+            var name = Enum.GetName(enumType, type);
+            var enumMemberAttribute = ((EnumMemberAttribute[])enumType.GetField(name).GetCustomAttributes(typeof(EnumMemberAttribute), true)).Single();
+            return enumMemberAttribute.Value;
         }
     }
 }

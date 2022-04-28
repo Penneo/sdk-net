@@ -49,7 +49,7 @@ namespace Penneo
         public T FindOneBy<T>(Dictionary<string, object> criteria = null, Dictionary<string, string> orderBy = null)
             where T : Entity
         {
-            var input = new QueryInput {Criteria = criteria, OrderBy = orderBy};
+            var input = new QueryInput { Criteria = criteria, OrderBy = orderBy };
             return FindOneBy<T>(input).Object;
         }
 
@@ -157,7 +157,7 @@ namespace Penneo
                 {
                     PaginationUtil.ParseRepsonseHeadersForPagination(linkHeader.Value.ToString(), output);
                 }
-                
+
 
                 //If no objects were returned, assume that there is no next page - regardless of any returned Link response header
                 if (objects == null || !objects.Any())
@@ -175,7 +175,7 @@ namespace Penneo
                 return;
             }
             var criteria = input.Criteria.Where(x => x.Value != null && x.Value.GetType() == typeof(DateTime)).ToList();
-            foreach(var entry in criteria)
+            foreach (var entry in criteria)
             {
                 var key = entry.Key;
                 var val = entry.Value;
@@ -187,13 +187,19 @@ namespace Penneo
         /// <summary>
         /// Get the default message template
         /// </summary>
-        public QueryResult<MessageTemplate> GetDefaultMessageTemplate()
+        /// <param name="messageTemplateType">The default message template type. Defaults to signing request</param>
+        /// <param name="isoLanguage">The language iso code for the message template as two letter isocode. Defaults to users language</param>
+        public QueryResult<MessageTemplate> GetDefaultMessageTemplate(MessageTemplate.MessageTemplateType messageTemplateType = MessageTemplate.MessageTemplateType.SigningRequest, string isoLanguage = null)
         {
-            var resource = _con.ServiceLocator.GetInstance<RestResources>().GetResource(typeof(MessageTemplate)) + "/default";
+            var resource = _con.ServiceLocator.GetInstance<RestResources>().GetResource(typeof(MessageTemplate)) + $"/default?type={messageTemplateType.ToEnumString()}";
+            if (!string.IsNullOrEmpty(isoLanguage))
+            {
+                resource += $"&language={isoLanguage}";
+            }
             var result = _con.ApiConnector.CallServer(resource);
             var obj = JsonConvert.DeserializeObject<MessageTemplate>(result.Content);
             obj.Title = "Standard";
-            return new QueryResult<MessageTemplate>(){ Objects = new []{ obj }, Success = true };
+            return new QueryResult<MessageTemplate>() { Objects = new[] { obj }, Success = true };
         }
 
         /// <summary>
@@ -207,7 +213,7 @@ namespace Penneo
         }
 
         private QuerySingleObjectResult<T> CreateSingleObjectResult<T>(IRestResponse response, T obj, int? id)
-            where T: Entity
+            where T : Entity
         {
             var output = new QuerySingleObjectResult<T>
             {
@@ -231,7 +237,7 @@ namespace Penneo
         /// Get the next page based on an earlier result
         /// </summary>
         public QueryResult<T> GetNextPage<T>(QueryResult<T> result)
-            where T: Entity
+            where T : Entity
         {
             _con.Log("GetNextPage (" + typeof(T).Name + ")", LogSeverity.Information);
             if (!result.NextPage.HasValue)
