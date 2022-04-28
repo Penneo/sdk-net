@@ -13,7 +13,7 @@ namespace Penneo
             [EnumMember(Value = "signing_request")]
             SigningRequest,
             [EnumMember(Value = "completed")]
-            SigningCompledted,
+            SigningCompleted,
             [EnumMember(Value = "reminder")]
             SigningReminder,
             [EnumMember(Value = "carbon_copy_recipient")]
