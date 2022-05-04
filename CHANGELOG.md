@@ -9,12 +9,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [4.3.0] - 2022-05-04
+### Added
+- Added support for getting different types of default email templates, see [Penneo.MessageTemplate.MessageTemplateType](https://github.com/Penneo/sdk-net/blob/master/Src/Penneo/(Model)/MessageTemplate.cs#L11) for more details
 
 ## [4.2.0] - 2022-04-06
 ### Added
 - Added support for `Contact` CRUD
 - Added support for setting `Signer.StoreAsContact`
-
 
 ## [4.1.4] - 2022-02-01
 ### Misc
