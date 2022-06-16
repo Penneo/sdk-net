@@ -160,6 +160,7 @@ namespace Penneo
                     .Map(x => x.ReminderInterval)
                     .Map(x => x.AccessControl)
                     .Map(x => x.EnableInsecureSigning)
+                    .Map(x => x.InsecureSigningMethods)
                     .Create()
             );
 
