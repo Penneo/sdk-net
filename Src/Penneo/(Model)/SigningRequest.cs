@@ -20,6 +20,7 @@
         public int? ReminderInterval { get; set; }
         public bool AccessControl { get; set; }
         public bool EnableInsecureSigning { get; set; }
+        public string[] InsecureSigningMethods { get; set; }
 
         public SigningRequestStatus GetStatus()
         {
@@ -49,5 +50,12 @@
         Deleted = 3,
         Signed = 4,
         Undeliverable = 5
+    }
+    
+    public enum InsecureSigningMethods
+    {
+        Draw = "draw",
+        Image = "image",
+        Text = "text"
     }
 }
