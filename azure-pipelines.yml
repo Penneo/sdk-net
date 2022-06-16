@@ -1,0 +1,53 @@
+# ASP.NET Core (.NET Framework)
+
+# Build and test ASP.NET Core projects targeting the full .NET Framework.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+name: $(majorMinorVersion).$(semanticVersion)
+
+trigger:
+- master
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  majorMinorVersion: 1.0
+  # semanticVersion counter is automatically incremented by one in each execution of pipeline
+  # second parameter is seed value to reset to every time the referenced majorMinorVersion is changed
+  semanticVersion: $[counter(variables['majorMinorVersion'], 0)]
+  projectName: 'PenneoPrivateSdk'
+  buildConfiguration: 'Release'
+
+steps:
+- task: NuGetToolInstaller@1
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+    arguments: '--configuration $(BuildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'NuGet pack'
+  inputs:
+    command: 'pack'
+    configuration: $(BuildConfiguration)
+    packagesToPack: '**/$(ProjectName)*.csproj'
+    packDirectory: '$(build.artifactStagingDirectory)'
+    versioningScheme: byBuildNumber
+
+# Publish
+- task: DotNetCoreCLI@2
+  displayName: 'Publish'
+  inputs:
+    command: 'push'
+    packagesToPush: '$(build.artifactStagingDirectory)/$(ProjectName)*.nupkg'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: 'f2a35f1b-36e6-4222-a259-123b23b0bab1'
