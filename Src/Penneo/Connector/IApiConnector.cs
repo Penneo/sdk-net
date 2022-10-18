@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using RestSharp;
 
 namespace Penneo.Connector
@@ -31,14 +32,14 @@ namespace Penneo.Connector
         /// <summary>
         /// Read an object from the backend
         /// </summary>
-        T ReadObject<T>(Entity parent, int? id, out IRestResponse response)
+        T ReadObject<T>(Entity parent, int? id, out RestResponse response)
             where T : Entity;
 
         /// <summary>
         /// Read an object from the backend
         /// If relative url is specifically provided, then that overrides general resource setup
         /// </summary>
-        T ReadObject<T>(Entity parent, int? id, string relativeUrl, out IRestResponse response)
+        T ReadObject<T>(Entity parent, int? id, string relativeUrl, out RestResponse response)
             where T : Entity;
 
         /// <summary>
@@ -91,7 +92,7 @@ namespace Penneo.Connector
         /// <summary>
         /// Find objects on the backend based on query parameters
         /// </summary>
-        bool FindBy<T>(Dictionary<string, object> query, out IEnumerable<T> objects, out IRestResponse response, int? page = null, int? perPage = null)
+        bool FindBy<T>(Dictionary<string, object> query, out IEnumerable<T> objects, out RestResponse response, int? page = null, int? perPage = null)
             where T : Entity;
 
         /// <summary>
@@ -112,7 +113,8 @@ namespace Penneo.Connector
         /// <summary>
         /// Custom call to the server
         /// </summary>
-        IRestResponse CallServer(string url, Dictionary<string, object> data = null, Method method = Method.GET, Dictionary<string, Dictionary<string, object>> options = null, string customMethod = null, int? page = null, int? perPage = null);
+        Task<RestResponse> CallServer(string url, Dictionary<string, object> data = null, Method method = Method.Get,
+            Dictionary<string, Dictionary<string, object>> options = null, int? page = null, int? perPage = null);
 
         /// <summary>
         /// Change the key and secret on the api connector

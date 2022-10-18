@@ -12,13 +12,13 @@ namespace PenneoTests
     [TestFixture]
     public class QueryTests
     {
-        private static IRestResponse _response200 = new RestResponse { StatusCode = HttpStatusCode.OK};
+        private static RestResponse _response200 = new RestResponse { StatusCode = HttpStatusCode.OK};
 
         [Test]
         public void FindTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            IRestResponse ignoredResponse;
+            RestResponse ignoredResponse;
             var expected = new CaseFile( "Test"){ Id = 1 };
             A.CallTo(() => con.ApiConnector.ReadObject<CaseFile>(null, 1, out ignoredResponse)).WithAnyArguments().Returns(expected).AssignsOutAndRefParameters(_response200);
 
@@ -64,7 +64,7 @@ namespace PenneoTests
         {
             IEnumerable<T> returned = new[] { (T)Activator.CreateInstance(typeof(T)) };
             IEnumerable<T> ignoredObjects;
-            IRestResponse ignoredResponse;
+            RestResponse ignoredResponse;
             A.CallTo(() => con.ApiConnector.FindBy(null, out ignoredObjects, out ignoredResponse, null, null)).WithAnyArguments().Returns(true).AssignsOutAndRefParameters(returned, _response200);
 
             var objects = f();
@@ -81,7 +81,7 @@ namespace PenneoTests
             var instance = (T) Activator.CreateInstance(typeof(T));
             IEnumerable<T> returned = new[] { instance };
             IEnumerable<T> ignoredObjects;
-            IRestResponse ignoredResponse;
+            RestResponse ignoredResponse;
             A.CallTo(() => con.ApiConnector.FindBy(null, out ignoredObjects, out ignoredResponse, null, null)).WithAnyArguments().Returns(true).AssignsOutAndRefParameters(returned, _response200);
 
             var obj = f();

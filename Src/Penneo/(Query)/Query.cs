@@ -38,7 +38,7 @@ namespace Penneo
         public QuerySingleObjectResult<T> FindById<T>(int id)
             where T : Entity
         {
-            IRestResponse response;
+            RestResponse response;
             var obj = _con.ApiConnector.ReadObject<T>(null, id, out response);
             return CreateSingleObjectResult(response, obj, id);
         }
@@ -133,9 +133,7 @@ namespace Penneo
             var output = new QueryResult<T>();
             output.Input = input;
 
-            IEnumerable<T> objects;
-            IRestResponse response;
-            output.Success = _con.ApiConnector.FindBy(query, out objects, out response, input.Page, input.PerPage);
+            output.Success = _con.ApiConnector.FindBy(query, out IEnumerable<T> objects, out var response, input.Page, input.PerPage);
             output.Objects = objects;
             output.StatusCode = response.StatusCode;
             output.ErrorMessage = response.ErrorMessage;
@@ -152,10 +150,14 @@ namespace Penneo
                 //Pagination
                 output.Page = input.Page;
                 output.PerPage = input.PerPage;
-                var linkHeader = response.Headers.FirstOrDefault(x => x.Name.Equals("link", StringComparison.OrdinalIgnoreCase));
-                if (linkHeader != null && linkHeader.Value != null)
+                if (null != response.Headers)
                 {
-                    PaginationUtil.ParseRepsonseHeadersForPagination(linkHeader.Value.ToString(), output);
+                    var linkHeader =
+                        response.Headers.FirstOrDefault(x => x.Name.Equals("link", StringComparison.OrdinalIgnoreCase));
+                    if (linkHeader != null && linkHeader.Value != null)
+                    {
+                        PaginationUtil.ParseRepsonseHeadersForPagination(linkHeader.Value.ToString(), output);
+                    }
                 }
 
 
@@ -196,7 +198,7 @@ namespace Penneo
             {
                 resource += $"&language={isoLanguage}";
             }
-            var result = _con.ApiConnector.CallServer(resource);
+            var result = _con.ApiConnector.CallServer(resource).Result;
             var obj = JsonConvert.DeserializeObject<MessageTemplate>(result.Content);
             obj.Title = "Standard";
             return new QueryResult<MessageTemplate>() { Objects = new[] { obj }, Success = true };
@@ -207,12 +209,12 @@ namespace Penneo
         /// </summary>
         public QuerySingleObjectResult<User> GetUser()
         {
-            IRestResponse response;
+            RestResponse response;
             var user = _con.ApiConnector.ReadObject<User>(null, null, "user", out response);
             return CreateSingleObjectResult(response, user, null);
         }
 
-        private QuerySingleObjectResult<T> CreateSingleObjectResult<T>(IRestResponse response, T obj, int? id)
+        private QuerySingleObjectResult<T> CreateSingleObjectResult<T>(RestResponse response, T obj, int? id)
             where T : Entity
         {
             var output = new QuerySingleObjectResult<T>
