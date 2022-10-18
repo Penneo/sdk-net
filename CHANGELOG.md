@@ -9,6 +9,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [5.0.0] - 2022-05-04
+### Changed
+- Updated RestSharp to 108.0.2
+- Updated to .NET 6.0
+
 ## [4.3.0] - 2022-05-04
 ### Added
 - Added support for getting different types of default email templates, see [Penneo.MessageTemplate.MessageTemplateType](https://github.com/Penneo/sdk-net/blob/master/Src/Penneo/(Model)/MessageTemplate.cs#L11) for more details
