@@ -11,8 +11,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [5.0.0] - 2022-05-04
 ### Changed
-- Updated RestSharp to 108.0.2
-- Updated to .NET 6.0
+- Updated RestSharp from `106.15.0` to `108.0.2`
+- Updated from .NET Core 3.1 to .NET 6.0
 
 ## [4.3.0] - 2022-05-04
 ### Added
