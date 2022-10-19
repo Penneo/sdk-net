@@ -12,7 +12,7 @@ namespace PenneoTests
 {
     internal static class TestUtil
     {
-        private static IRestResponse _response200 = new RestResponse { StatusCode = HttpStatusCode.OK };
+        private static RestResponse _response200 = new RestResponse { StatusCode = HttpStatusCode.OK };
 
         public static PenneoConnector CreatePenneoConnector()
         {
@@ -71,7 +71,7 @@ namespace PenneoTests
                 list[i].Id = i;
             }
             IEnumerable<T> ignoredObjects;
-            IRestResponse ignoredResponse;
+            RestResponse ignoredResponse;
             A.CallTo(() => con.ApiConnector.FindBy(null, out ignoredObjects, out ignoredResponse, null, null)).WithAnyArguments().Returns(true).AssignsOutAndRefParameters(list, _response200);
 
             var q = new Query(con);

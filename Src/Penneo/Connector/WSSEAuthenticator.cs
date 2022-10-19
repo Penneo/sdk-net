@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using RestSharp;
 using RestSharp.Authenticators;
 
@@ -47,7 +48,7 @@ namespace Penneo.Connector
         /// <summary>
         /// Adds WSSE security headers to the request
         /// </summary>        
-        public void Authenticate(IRestClient client, IRestRequest request)
+        public ValueTask Authenticate(RestClient client, RestRequest request)
         {
             var created = DateTime.Now.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
             var nonce = Base64Encode(Noncer());
@@ -60,6 +61,7 @@ namespace Penneo.Connector
                 nonce,
                 created
                 ));
+            return default;
         }
 
         #endregion

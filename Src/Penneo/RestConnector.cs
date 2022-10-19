@@ -31,9 +31,9 @@ namespace Penneo
         /// <summary>
         /// Send a custom request to the Penneo backend
         /// </summary>
-        public IRestResponse InvokeRequest(string url, Dictionary<string, object> body = null, Method method = Method.GET, Dictionary<string, Dictionary<string, object>> options = null, string customMethod = null, int? page = null, int? perPage = null)
+        public RestResponse InvokeRequest(string url, Dictionary<string, object> body = null, Method method = Method.Get, Dictionary<string, Dictionary<string, object>> options = null, int? page = null, int? perPage = null)
         {
-            return _con.ApiConnector.CallServer(url, body, method, options, customMethod, page, perPage);
+            return _con.ApiConnector.CallServer(url, body, method, options, page, perPage).Result;
         }
 
         /// <summary>

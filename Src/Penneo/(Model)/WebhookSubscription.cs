@@ -28,7 +28,7 @@ namespace Penneo
         public bool Confirm(PenneoConnector con, string token)
         {
             var data = new Dictionary<string, object> {{"token", token}};
-            return PerformComplexAction(con, Method.POST, "confirm", data).Success;
+            return PerformComplexAction(con, Method.Post, "confirm", data).Success;
         }
     }
 }
