@@ -420,7 +420,7 @@ namespace Penneo.Connector
 
             _clientOptions = new RestClientOptions(baseUrl: _endpoint)
             {
-                UserAgent = "Penneo_sdk-net_" + Info.Version
+                UserAgent = "Penneo%2Fsdk-net%40" + Info.Version
             };
 
             _client = new RestClient(_clientOptions);
