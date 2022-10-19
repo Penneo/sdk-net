@@ -9,6 +9,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [5.0.1] - 2022-10-19
+### Fixed
+- Fixed problem with nuspec dependency references
+
 ## [5.0.0] - 2022-10-18
 ### Changed
 - Updated RestSharp from `106.15.0` to `108.0.2`

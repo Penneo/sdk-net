@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
- 
-    <Version>5.0.0</Version>
+    <TargetFramework>net6.0</TargetFramework>
+    
+    <Version>5.0.1</Version>
     <PackageId>Penneo.SDK</PackageId>
     <OutputType>Library</OutputType>
     <PackageLicenseUrl>https://github.com/Penneo/sdk-net/blob/master/license.txt</PackageLicenseUrl>
@@ -20,7 +21,6 @@
     <Copyright>Copyright 2020</Copyright>
     <TargetFrameworkProfile />
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
