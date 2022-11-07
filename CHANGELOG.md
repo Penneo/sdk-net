@@ -9,6 +9,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [5.1.0] - 2022-11-07
+### Added
+- Added support for setting `SigningRequest.InsecureSigningMethods`
+
 ## [5.0.1] - 2022-10-19
 ### Fixed
 - Fixed problem with nuspec dependency references
