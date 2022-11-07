@@ -1,4 +1,6 @@
-﻿namespace Penneo
+﻿using System.Collections.Generic;
+
+namespace Penneo
 {
     public class SigningRequest : Entity
     {
@@ -20,6 +22,7 @@
         public int? ReminderInterval { get; set; }
         public bool AccessControl { get; set; }
         public bool EnableInsecureSigning { get; set; }
+        public IEnumerable<string> InsecureSigningMethods { get; set; }
 
         public SigningRequestStatus GetStatus()
         {
@@ -49,5 +52,12 @@
         Deleted = 3,
         Signed = 4,
         Undeliverable = 5
+    }
+    
+    public static class InsecureSigningMethod
+    {
+        public const string Draw = "draw";
+        public const string Image = "image";
+        public const string Text = "text";
     }
 }
