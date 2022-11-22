@@ -24,14 +24,14 @@ mySignatureLine.SetSigner(mySigner);
 ## Getting the signature lines from a document and setting an activation and expiration date to each one
 ```csharp
 // myDocument is an instance of Document
-DateTime today = DateTime.Now;
+DateTime today = DateTime.UtcNow;
 DateTime tomorrow = today.AddDays(1);
 DateTime dayAfterTomorrow = today.AddDays(2);
 
 foreach (int mySignatureLine in myDocument.GetSignatureLines())
 {
-    mySignatureLine.SetActiveAt(tomorrow);
-    mySignatureLine.SetExpireAt(dayAfterTomorrow);
+    mySignatureLine.ActiveAt(tomorrow);
+    mySignatureLine.ExpireAt(dayAfterTomorrow);
 }
 ```
 
