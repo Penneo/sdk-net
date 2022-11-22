@@ -9,6 +9,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [5.1.1] - 2022-11-22
+### Fixed
+- Fixed an issue that made it impossible to add activation and expiration dates to signature lines
+
 ## [5.1.0] - 2022-11-07
 ### Added
 - Added support for setting `SigningRequest.InsecureSigningMethods`
