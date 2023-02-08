@@ -5,6 +5,6 @@ namespace Penneo
         /// <summary>
         /// The version of the SDK. This should be updated on each release.
         /// </summary>
-        public const string Version = "5.1.1";
+        public const string Version = "5.1.2";
     }
 }

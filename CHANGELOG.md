@@ -9,6 +9,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [5.1.2] - 2023-02-09
+### Added
+- Added support for using base64 strings instead of filepath for document pdfs
+
 ## [5.1.1] - 2022-11-22
 ### Fixed
 - Fixed an issue that made it impossible to add activation and expiration dates to signature lines

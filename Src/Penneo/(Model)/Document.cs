@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers.Text;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace Penneo
             CaseFile = cf;
         }
 
-        public Document(CaseFile cf, string title, string pdfFilePath)
+        public Document(CaseFile cf, string title, string pdfFilePath, string base64File = null)
             : this(cf)
         {
             CaseFile = cf;
@@ -56,6 +57,11 @@ namespace Penneo
         /// Reference to the pdf file on disk, which will be uploaded to the document
         /// </summary>
         public string PdfFile { get; set; }
+        
+        /// <summary>
+        /// The pdf file as base64 string, if set PdfFile parameter will be ignored
+        /// </summary>
+        public string Base64File { get; set; }
 
         /// <summary>
         /// The raw byte array of the pdf
@@ -64,7 +70,11 @@ namespace Penneo
         {
             get
             {
-                if (_pdfRaw == null && !string.IsNullOrEmpty(PdfFile) && File.Exists(PdfFile))
+                if (_pdfRaw == null && !string.IsNullOrEmpty(Base64File))
+                {
+                    _pdfRaw = Convert.FromBase64String(Base64File);
+                }
+                else if (_pdfRaw == null && !string.IsNullOrEmpty(PdfFile) && File.Exists(PdfFile))
                 {
                     _pdfRaw = File.ReadAllBytes(PdfFile);
                 }
