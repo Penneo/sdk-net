@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     
-    <Version>5.1.2</Version>
+    <Version>5.2.0</Version>
     <PackageId>Penneo.SDK</PackageId>
     <OutputType>Library</OutputType>
     <PackageLicenseUrl>https://github.com/Penneo/sdk-net/blob/master/license.txt</PackageLicenseUrl>

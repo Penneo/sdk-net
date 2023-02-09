@@ -9,9 +9,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-## [5.1.2] - 2023-02-09
+## [5.2.0] - 2023-02-09
 ### Added
-- Added support for using base64 strings instead of filepath for document pdfs
+- Added support for using a base64 string instead of filepath as the document PDF file
+- ```csharp
+  var document = new Document(casefile, "Title", base64AsString);
+- ```
 
 ## [5.1.1] - 2022-11-22
 ### Fixed
