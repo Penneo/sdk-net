@@ -63,14 +63,9 @@ namespace Penneo
         public int? Status { get; set; }
 
         /// <summary>
-        /// Reference to the pdf file on disk, which will be uploaded to the document
+        /// Reference to the pdf file on disk or as a base64 string, which will be uploaded to the document
         /// </summary>
         public string PdfFile { get; set; }
-        
-        /// <summary>
-        /// The pdf file as base64 string, if set PdfFile parameter will be ignored
-        /// </summary>
-        public string Base64File { get; set; }
 
         /// <summary>
         /// The raw byte array of the pdf
