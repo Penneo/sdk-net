@@ -32,12 +32,21 @@ namespace Penneo
             CaseFile = cf;
         }
 
-        public Document(CaseFile cf, string title, string pdfFilePath, string base64File = null)
+        public Document(CaseFile cf, string title, string pdfFile)
             : this(cf)
         {
             CaseFile = cf;
             Title = title;
-            PdfFile = pdfFilePath;
+            
+            byte[] buffer = new byte[pdfFile.Length * 3 / 4];
+            if (Convert.TryFromBase64String(pdfFile, buffer, out _))
+            {
+                PdfRaw = buffer;
+            }
+            else if (!string.IsNullOrEmpty(pdfFile) && File.Exists(pdfFile))
+            {
+                PdfFile = pdfFile;
+            }
         }
 
         /// <summary>
@@ -70,20 +79,13 @@ namespace Penneo
         {
             get
             {
-                if (_pdfRaw == null && !string.IsNullOrEmpty(Base64File))
-                {
-                    _pdfRaw = Convert.FromBase64String(Base64File);
-                }
-                else if (_pdfRaw == null && !string.IsNullOrEmpty(PdfFile) && File.Exists(PdfFile))
+                if (_pdfRaw == null && !string.IsNullOrEmpty(PdfFile) && File.Exists(PdfFile))
                 {
                     _pdfRaw = File.ReadAllBytes(PdfFile);
                 }
                 return _pdfRaw;
             }
-            set
-            {
-                _pdfRaw = value;
-            }
+            set => _pdfRaw = value;
         }
 
         /// <summary>
