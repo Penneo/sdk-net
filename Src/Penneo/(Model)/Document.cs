@@ -32,7 +32,7 @@ namespace Penneo
             CaseFile = cf;
         }
 
-        public Document(CaseFile cf, string title, string pdfFile)
+        public Document(CaseFile cf, string title, string pdfFileContentOrPath)
             : this(cf)
         {
             CaseFile = cf;
