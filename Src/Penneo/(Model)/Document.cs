@@ -26,13 +26,23 @@ namespace Penneo
             SignType = TYPE_ATTACHMENT;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cf">Link the document to the case file</param>
         public Document(CaseFile cf)
             : this()
         {
             CaseFile = cf;
         }
 
-        public Document(CaseFile cf, string title, string pdfFileContentOrPath)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cf">Link the document to the case file</param>
+        /// <param name="title">Add the title of the document as string</param>
+        /// <param name="pdfFile">Add PDF as filepath or base64 encoded file content string</param>
+        public Document(CaseFile cf, string title, string pdfFile)
             : this(cf)
         {
             CaseFile = cf;
@@ -63,7 +73,7 @@ namespace Penneo
         public int? Status { get; set; }
 
         /// <summary>
-        /// Reference to the pdf file on disk or as a base64 string, which will be uploaded to the document
+        /// Reference to the pdf file on disk or as a base64 encoded file content string, which will be uploaded to the document
         /// </summary>
         public string PdfFile { get; set; }
 
