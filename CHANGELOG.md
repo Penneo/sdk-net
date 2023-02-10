@@ -9,6 +9,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [5.3.0] - 2023-02-10
+### Added
+- Added support for .NET Standard 2.0 and .NET Framework 4.8
+
 ## [5.2.0] - 2023-02-09
 ### Added
 - Added support for using a base64 string instead of filepath as the document PDF file

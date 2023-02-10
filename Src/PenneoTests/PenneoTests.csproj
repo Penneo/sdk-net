@@ -22,6 +22,7 @@
         <PackageReference Include="FakeItEasy" Version="7.3.1" />
         <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
         <PackageReference Include="RestSharp" Version="108.0.2" />
+        <PackageReference Include="System.Net.Http" Version="4.3.4" />
     </ItemGroup>
     <Choose>
         <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -36,6 +37,15 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Penneo\Penneo.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Resources" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Remove="Resources/test.pdf" />
+        <Content Include="Resources/test.pdf">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
     <Target Name="Build">
         <Csc Sources="@(Compile)" />
