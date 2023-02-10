@@ -37,6 +37,15 @@
     <ItemGroup>
         <ProjectReference Include="..\Penneo\Penneo.csproj" />
     </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Resources" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Remove="Resources/test.pdf" />
+        <Content Include="Resources/test.pdf">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
     <Target Name="Build">
         <Csc Sources="@(Compile)" />
     </Target>

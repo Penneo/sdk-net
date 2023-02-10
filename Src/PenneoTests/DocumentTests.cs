@@ -8,11 +8,21 @@ namespace PenneoTests
     [TestFixture]
     public class DocumentTests
     {
+        private static readonly string TestPdfPath = $"{Directory.GetCurrentDirectory()}/Resources/test.pdf";
+
         private static Document CreateDocument()
         {
             var cf = new CaseFile();
-            var doc = new Document(cf, "doc", "path");
+            var doc = new Document(cf, "doc", TestPdfPath);
             doc.Id = 1;
+            return doc;
+        }
+        
+        private static Document CreateEmptyDocument()
+        {
+            var cf = new CaseFile();
+            var doc = new Document(cf);
+            doc.Id = 2;
             return doc;
         }
 
@@ -23,7 +33,7 @@ namespace PenneoTests
             var doc = CreateDocument();
             Assert.IsNotNull(doc.CaseFile);
             Assert.AreEqual("doc", doc.Title);
-            Assert.AreEqual("path", doc.PdfFile);
+            Assert.AreEqual(TestPdfPath, doc.PdfFile);
         }
 
         [Test]
@@ -89,14 +99,14 @@ namespace PenneoTests
         public void GetPdfTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestGetFileAsset(con, () => CreateDocument().GetPdf(con));
+            TestUtil.TestGetFileAsset(con, () => CreateEmptyDocument().GetPdf(con));
         }
 
         [Test]
         public void SavePdfTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            var data = new byte[] { 1, 2, 3 };
+            var data = File.ReadAllBytes(TestPdfPath);
             A.CallTo(() => con.ApiConnector.GetFileAssets(null, null)).WithAnyArguments().Returns(data);
 
             var doc = CreateDocument();
@@ -111,6 +121,20 @@ namespace PenneoTests
             {
                 File.Delete(savePath);
             }
+
+            var doc2 = CreateEmptyDocument();
+            var savePath2 = Path.GetTempFileName();
+            try
+            {
+                doc2.SavePdf(con, savePath);
+                var readBytes = File.ReadAllBytes(savePath);
+                CollectionAssert.AreEqual(data, readBytes);
+            }
+            finally
+            {
+                File.Delete(savePath2);
+            }
+
             A.CallTo(() => con.ApiConnector.GetFileAssets(null, null)).WithAnyArguments().MustHaveHappened();
         }
 
