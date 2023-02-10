@@ -3,6 +3,7 @@ using System.Buffers.Text;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Penneo.Connector;
 using Penneo.Util;
@@ -47,16 +48,7 @@ namespace Penneo
         {
             CaseFile = cf;
             Title = title;
-            
-            byte[] buffer = new byte[pdfFile.Length * 3 / 4];
-            if (Convert.TryFromBase64String(pdfFile, buffer, out _))
-            {
-                PdfRaw = buffer;
-            }
-            else if (!string.IsNullOrEmpty(pdfFile) && File.Exists(pdfFile))
-            {
-                PdfFile = pdfFile;
-            }
+            PdfFile = pdfFile;
         }
 
         /// <summary>
@@ -84,13 +76,22 @@ namespace Penneo
         {
             get
             {
-                if (_pdfRaw == null && !string.IsNullOrEmpty(PdfFile) && File.Exists(PdfFile))
+                if (_pdfRaw == null && !string.IsNullOrEmpty(PdfFile) && IsBase64String(PdfFile))
+                {
+                    _pdfRaw = Convert.FromBase64String(PdfFile);
+                }
+                else if (_pdfRaw == null && !string.IsNullOrEmpty(PdfFile) && File.Exists(PdfFile))
                 {
                     _pdfRaw = File.ReadAllBytes(PdfFile);
                 }
                 return _pdfRaw;
             }
             set => _pdfRaw = value;
+        }
+        private static bool IsBase64String(string s)
+        {
+            s = s.Trim();
+            return (s.Length % 4 == 0) && Regex.IsMatch(s, @"^[a-zA-Z0-9\+/]*={0,3}$", RegexOptions.None);
         }
 
         /// <summary>
