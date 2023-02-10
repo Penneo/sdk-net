@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using FakeItEasy;
 using NUnit.Framework;
 using Penneo;
@@ -9,6 +10,7 @@ namespace PenneoTests
     public class DocumentTests
     {
         private static readonly string TestPdfPath = $"{Directory.GetCurrentDirectory()}/Resources/test.pdf";
+        private static readonly string Base64String = "TZLu0SfTr3wxiuAxzdFBvA==";
 
         private static Document CreateDocument()
         {
@@ -23,6 +25,14 @@ namespace PenneoTests
             var cf = new CaseFile();
             var doc = new Document(cf);
             doc.Id = 2;
+            return doc;
+        }
+        
+        private static Document CreateBase64Document()
+        {
+            var cf = new CaseFile();
+            var doc = new Document(cf, "doc", Base64String);
+            doc.Id = 3;
             return doc;
         }
 
@@ -171,6 +181,14 @@ namespace PenneoTests
 
             doc.Status = (int?)DocumentStatus.Completed;
             Assert.AreEqual(DocumentStatus.Completed, doc.GetStatus());
+        }
+
+        [Test]
+        public void UseBase64FileContentTest()
+        {
+            var data = Convert.FromBase64String(Base64String);
+            var doc = CreateBase64Document();
+            Assert.AreEqual(data, doc.PdfRaw);
         }
     }
 }
