@@ -9,6 +9,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [5.3.1] - 2023-02-13
+### Changed
+- Updated Newtonsoft.Json to 13.0.2
+
 ## [5.3.0] - 2023-02-10
 ### Added
 - Added support for .NET Standard 2.0 and .NET Framework 4.8
