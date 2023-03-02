@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using FakeItEasy;
 using NUnit.Framework;
 using Penneo;
@@ -73,7 +74,7 @@ namespace PenneoTests
         }
 
         [Test]
-        public void SetSignerFailTest()
+        public async Task SetSignerFailTest()
         {
             var con = TestUtil.CreatePenneoConnector();
             var sl = CreateSignatureLine();
@@ -83,7 +84,7 @@ namespace PenneoTests
 
             try
             {
-                var result = sl.SetSigner(con, s);
+                var result = await sl.SetSigner(con, s);
                 Assert.IsFalse(result);
             }
             finally

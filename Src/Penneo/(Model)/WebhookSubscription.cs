@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Penneo.Connector;
 using RestSharp;
@@ -25,10 +26,10 @@ namespace Penneo
         [JsonConverter(typeof(PenneoDateConverter))]
         public DateTime? Created;
 
-        public bool Confirm(PenneoConnector con, string token)
+        public async Task<bool> Confirm(PenneoConnector con, string token)
         {
             var data = new Dictionary<string, object> {{"token", token}};
-            return PerformComplexAction(con, Method.Post, "confirm", data).Success;
+            return (await PerformComplexAction(con, Method.Post, "confirm", data)).Success;
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using FakeItEasy;
 using NUnit.Framework;
 using Penneo;
@@ -42,12 +43,12 @@ namespace PenneoTests
             A.CallTo(() => con.ApiConnector.WriteObject(e)).MustHaveHappened();
         }
 
-        public static void TestPersistFail(PenneoConnector con, Func<Entity> f)
+        public static async Task TestPersistFail(PenneoConnector con, Func<Entity> f)
         {
             A.CallTo(() => con.ApiConnector.WriteObject(null)).WithAnyArguments().Returns(false);
 
             var e = f();
-            var result = e.Persist(con);
+            var result = await e.Persist(con);
             
             A.CallTo(() => con.ApiConnector.WriteObject(e)).MustHaveHappened();
             Assert.IsFalse(result);
@@ -61,7 +62,7 @@ namespace PenneoTests
             A.CallTo(() => con.ApiConnector.DeleteObject(e)).MustHaveHappened();
         }   
 
-        public static void TestGet<T>()
+        public static async Task TestGet<T>()
             where T : Entity
         {
             var con = TestUtil.CreatePenneoConnector();
@@ -70,32 +71,33 @@ namespace PenneoTests
             {
                 list[i].Id = i;
             }
-            IEnumerable<T> ignoredObjects;
-            RestResponse ignoredResponse;
-            A.CallTo(() => con.ApiConnector.FindBy(null, out ignoredObjects, out ignoredResponse, null, null)).WithAnyArguments().Returns(true).AssignsOutAndRefParameters(list, _response200);
+            A.CallTo(() => con.ApiConnector.FindBy<T>(null, null, null)).WithAnyArguments()
+                .Returns(Task.FromResult(
+                    new FindByResult<T> { Success = true, Objects = new List<T>(), Response = _response200 }))
+                .AssignsOutAndRefParameters(list, _response200);
 
             var q = new Query(con);
-            var result = q.FindAll<T>().ToList();
+            var result = (await q.FindAll<T>()).ToList();
 
-            A.CallTo(() => con.ApiConnector.FindBy(null, out ignoredObjects, out ignoredResponse, null, null)).WithAnyArguments().MustHaveHappened();
+            A.CallTo(() => con.ApiConnector.FindBy<T>(null, null, null)).WithAnyArguments().MustHaveHappened();
             CollectionAssert.AreEqual(list, result);
         }
 
-        public static void TestGetLinked<TChild>(PenneoConnector con, Func<IEnumerable<TChild>> getter)
+        public static async Task TestGetLinked<TChild>(PenneoConnector con, Func<Task<IEnumerable<TChild>>> getter)
             where TChild: Entity
         {
             var list = new List<TChild>() { (TChild)Activator.CreateInstance(typeof(TChild))};
             var mockedResult = new QueryResult<TChild>() { Objects = list, StatusCode = HttpStatusCode.OK };
             A.CallTo(() => con.ApiConnector.GetLinkedEntities<TChild>(null, null)).WithAnyArguments().Returns(mockedResult);
 
-            var result = getter();
+            var result = await getter();
 
             A.CallTo(() => con.ApiConnector.GetLinkedEntities<TChild>(null, null)).WithAnyArguments().MustHaveHappened();
             Assert.IsNotNull(result);
             Assert.AreEqual(list.Count, result.Count());
         }
 
-        public static void TestGetLinked<TChild>(PenneoConnector con, Func<TChild> getter)
+        public static async Task TestGetLinked<TChild>(PenneoConnector con, Func<Task<TChild>> getter)
             where TChild: Entity
         {
             var instance = (TChild)Activator.CreateInstance(typeof(TChild));
@@ -103,14 +105,15 @@ namespace PenneoTests
             var mockedResult = new QueryResult<TChild>() {Objects = list, StatusCode = HttpStatusCode.OK};
             A.CallTo(() => con.ApiConnector.GetLinkedEntities<TChild>(null, null)).WithAnyArguments().Returns(mockedResult);
 
-            var result = getter();
+            var result = await getter();
 
             A.CallTo(() => con.ApiConnector.GetLinkedEntities<TChild>(null, null)).WithAnyArguments().MustHaveHappened();
             Assert.IsNotNull(result);
             Assert.AreEqual(instance, result);
         }
 
-        public static void TestGetLinkedNotCalled<TChild>(PenneoConnector con, Func<TChild> getter)
+
+        public static void TestGetLinkedNotCalled<TChild>(PenneoConnector con, Func<Task<TChild>> getter)
             where TChild: Entity
         {
             var mockedResult = new QueryResult<TChild>() { Objects = new List<TChild>() , StatusCode = HttpStatusCode.OK};
@@ -119,17 +122,20 @@ namespace PenneoTests
             A.CallTo(() => con.ApiConnector.GetLinkedEntities<TChild>(null, null)).WithAnyArguments().MustNotHaveHappened();
         }
 
-        public static void TestFindLinked<TChild>(PenneoConnector con, Func<TChild> getter)
+        public static async void TestFindLinked<TChild>(PenneoConnector con, Func<Task<TChild>> getter)
+            where TChild : Entity
         {
             var instance = (TChild)Activator.CreateInstance(typeof(TChild));
             A.CallTo(() => con.ApiConnector.FindLinkedEntity<TChild>(null, 0)).WithAnyArguments().Returns(instance);
 
-            var result = getter();
+            var task = getter();
+            var result = await task;
 
             A.CallTo(() => con.ApiConnector.FindLinkedEntity<TChild>(null, 0)).WithAnyArguments().MustHaveHappened();
             Assert.IsNotNull(result);
             Assert.AreEqual(instance, result);
         }
+
 
         public static void TestPerformActionSuccess(PenneoConnector con, Action action)
         {

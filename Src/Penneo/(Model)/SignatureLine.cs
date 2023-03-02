@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Penneo.Connector;
 
@@ -101,17 +102,17 @@ namespace Penneo
 
         public Signer Signer { get; private set; }
 
-        public Signer GetSigner(PenneoConnector con)
+        public async Task<Signer> GetSigner(PenneoConnector con)
         {
             if (Signer == null)
             {
                 if (SignerId.HasValue)
                 {
-                    Signer = Document.CaseFile.FindSigner(con, SignerId.Value);
+                    Signer = await Document.CaseFile.FindSigner(con, SignerId.Value);
                 }
                 else
                 {
-                    Signer = GetLinkedEntities<Signer>(con).Objects.FirstOrDefault();
+                    Signer = (await GetLinkedEntities<Signer>(con)).Objects.FirstOrDefault();
                     if (Signer != null)
                     {
                         Signer.CaseFile = Document.CaseFile;
@@ -121,10 +122,10 @@ namespace Penneo
             return Signer;
         }
 
-        public bool SetSigner(PenneoConnector con, Signer signer)
+        public async Task<bool> SetSigner(PenneoConnector con, Signer signer)
         {
             Signer = signer;
-            return LinkEntity(con, Signer);
+            return await LinkEntity(con, Signer);
         }
     }
 }

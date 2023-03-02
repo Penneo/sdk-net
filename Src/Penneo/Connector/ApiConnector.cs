@@ -11,6 +11,18 @@ using RestSharp;
 
 namespace Penneo.Connector
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class FindByResult<T>
+        where T : Entity
+    {
+        public bool Success { get; set; }
+        public IEnumerable<T> Objects { get; set; }
+        public RestResponse Response { get; set; }
+    }
+
     internal class ApiConnector : IApiConnector
     {
         /// <summary>
@@ -106,7 +118,7 @@ namespace Penneo.Connector
         /// <summary>
         /// <see cref="IApiConnector.WriteObject"/>
         /// </summary>
-        public bool WriteObject(Entity obj)
+        public async Task<bool> WriteObject(Entity obj)
         {
             var result = new ServerResult();
 
@@ -121,12 +133,12 @@ namespace Penneo.Connector
             }
             if (!obj.IsNew)
             {
-                var response = CallServer(obj.GetRelativeUrl(_con) + "/" + obj.Id, data, Method.Put).Result;
+                var response = await CallServer(obj.GetRelativeUrl(_con) + "/" + obj.Id, data, Method.Put);
                 return ExtractResponse(obj, response, result);
             }
             else
             {
-                var response = CallServer(obj.GetRelativeUrl(_con), data, Method.Post).Result;
+                var response = await CallServer(obj.GetRelativeUrl(_con), data, Method.Post);
                 var successful = ExtractResponse(obj, response, result);
                 if (successful)
                 {
@@ -164,48 +176,47 @@ namespace Penneo.Connector
         /// <summary>
         /// <see cref="IApiConnector.DeleteObject"/>
         /// </summary>
-        public bool DeleteObject(Entity obj)
+        public async Task<bool> DeleteObject(Entity obj)
         {
-            var response = CallServer(obj.GetRelativeUrl(_con) + '/' + obj.Id, null, Method.Delete).Result;
+            var response = await CallServer(obj.GetRelativeUrl(_con) + '/' + obj.Id, null, Method.Delete);
             return response != null && (response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.NoContent);
         }
 
-        public T ReadObject<T>(Entity parent, int? id, out RestResponse response)
-            where T : Entity
+        public async Task<ReadObjectResult<T>> ReadObject<T>(Entity parent, int? id) where T : Entity
         {
-            return ReadObject<T>(parent, id, null, out response);
+            return await ReadObject<T>(parent, id, null);
         }
 
-        public T ReadObject<T>(Entity parent, int? id, string relativeUrl, out RestResponse response)
-            where T : Entity
+        public async Task<ReadObjectResult<T>> ReadObject<T>(Entity parent, int? id, string relativeUrl) where T : Entity
         {
             var url = !string.IsNullOrEmpty(relativeUrl) ? relativeUrl : _restResources.GetResource(typeof(T), parent);
             if (id.HasValue)
             {
                 url += "/" + id;
             }
-            response = CallServer(url).Result;
+            var response = await CallServer(url);
             if (response == null || response.StatusCode != HttpStatusCode.OK)
             {
-                return default(T);
+                return new ReadObjectResult<T> { Response = response, Result = default };
             }
             var obj = JsonConvert.DeserializeObject<T>(response.Content);
             if (id.HasValue)
             {
                 obj.Id = id;
             }
-            return obj;
+            return new ReadObjectResult<T> { Response = response, Result = obj };
         }
+
 
 
 
         /// <summary>
         /// <see cref="IApiConnector.LinkEntity"/>
         /// </summary>
-        public bool LinkEntity(Entity parent, Entity child)
+        public async Task<bool> LinkEntity(Entity parent, Entity child)
         {
             var url = parent.GetRelativeUrl(_con) + "/" + parent.Id + "/" + _restResources.GetResource(child.GetType()) + "/" + child.Id;
-            var response = CallServer(url, method: Method.Post).Result;
+            var response = await CallServer(url, method: Method.Post);
             var result = new ServerResult();
             return ExtractResponse(parent, response, result);
         }
@@ -213,10 +224,10 @@ namespace Penneo.Connector
         /// <summary>
         /// <see cref="IApiConnector.UnlinkEntity"/>
         /// </summary>
-        public bool UnlinkEntity(Entity parent, Entity child)
+        public async Task<bool> UnlinkEntity(Entity parent, Entity child)
         {
             var url = parent.GetRelativeUrl(_con) + "/" + parent.Id + "/" + _restResources.GetResource(child.GetType()) + "/" + child.Id;
-            var response = CallServer(url, method: Method.Delete).Result;
+            var response = await CallServer(url, method: Method.Delete);
             var result = new ServerResult();
             return ExtractResponse(parent, response, result);
         }
@@ -224,7 +235,7 @@ namespace Penneo.Connector
         /// <summary>
         /// <see cref="IApiConnector.GetLinkedEntities{T}"/>
         /// </summary>
-        public QueryResult<T> GetLinkedEntities<T>(Entity obj, string url = null)
+        public async Task<QueryResult<T>> GetLinkedEntities<T>(Entity obj, string url = null)
             where T: Entity
         {
             string actualUrl;
@@ -237,7 +248,7 @@ namespace Penneo.Connector
                 actualUrl = url;
             }
 
-            var response = CallServer(actualUrl).Result;
+            var response = await CallServer(actualUrl);
             var result = new QueryResult<T>();
             if (ExtractResponse(obj, response, result))
             {
@@ -249,7 +260,7 @@ namespace Penneo.Connector
         /// <summary>
         /// <see cref="IApiConnector.GetLinkedEntity{T}"/>
         /// </summary>
-        public QuerySingleObjectResult<T> GetLinkedEntity<T>(Entity obj, string url = null)
+        public async Task<QuerySingleObjectResult<T>> GetLinkedEntity<T>(Entity obj, string url = null)
             where T : Entity
         {
             string actualUrl;
@@ -262,7 +273,7 @@ namespace Penneo.Connector
                 actualUrl = url;
             }
 
-            var response = CallServer(actualUrl).Result;
+            var response = await CallServer(actualUrl);
             var result = new QuerySingleObjectResult<T>();
             if (ExtractResponse(obj, response, result))
             {
@@ -274,10 +285,10 @@ namespace Penneo.Connector
         /// <summary>
         /// <see cref="IApiConnector.FindLinkedEntity{T}"/>
         /// </summary>
-        public T FindLinkedEntity<T>(Entity obj, int id)
+        public async Task<T> FindLinkedEntity<T>(Entity obj, int id)
         {
             var url = obj.GetRelativeUrl(_con) + "/" + obj.Id + "/" + _restResources.GetResource<T>() + "/" + id;
-            var response = CallServer(url).Result;
+            var response = await CallServer(url);
             if (response == null || !_successStatusCodes.Contains(response.StatusCode))
             {
                 throw new Exception("Penneo: Internal problem encountered");
@@ -285,10 +296,10 @@ namespace Penneo.Connector
             return CreateObject<T>(response.Content);
         }
 
-        public T GetAsset<T>(Entity obj, string assetName)
+        public async Task<T> GetAsset<T>(Entity obj, string assetName)
         {
             var url = obj.GetRelativeUrl(_con) + "/" + obj.Id + "/" + assetName;
-            var response = CallServer(url).Result;
+            var response = await CallServer(url);
             if (response == null || string.IsNullOrEmpty(response.Content) || !_successStatusCodes.Contains(response.StatusCode))
             {
                 return default(T);
@@ -300,19 +311,19 @@ namespace Penneo.Connector
         /// <summary>
         /// <see cref="IApiConnector.GetFileAssets"/>
         /// </summary>
-        public byte[] GetFileAssets(Entity obj, string assetName)
+        public async Task<byte[]> GetFileAssets(Entity obj, string assetName)
         {
-            var encoded = GetTextAssets(obj, assetName);
+            var encoded = await GetTextAssets(obj, assetName);
             return Convert.FromBase64String(encoded);
         }
 
         /// <summary>
         /// <see cref="IApiConnector.GetTextAssets"/>
         /// </summary>
-        public string GetTextAssets(Entity obj, string assetName)
+        public async Task<string> GetTextAssets(Entity obj, string assetName)
         {
             var url = obj.GetRelativeUrl(_con) + "/" + obj.Id + "/" + assetName;
-            var response = CallServer(url).Result;
+            var response = await CallServer(url);
             var result = JsonConvert.DeserializeObject<string[]>(response.Content);
             return result[0];
         }
@@ -320,10 +331,10 @@ namespace Penneo.Connector
         /// <summary>
         /// <see cref="IApiConnector.GetStringListAsset"/>
         /// </summary>
-        public IEnumerable<string> GetStringListAsset(Entity obj, string assetName)
+        public async Task<IEnumerable<string>> GetStringListAsset(Entity obj, string assetName)
         {
             var url = obj.GetRelativeUrl(_con) + "/" + obj.Id + "/" + assetName;
-            var response = CallServer(url).Result;
+            var response = await CallServer(url);
             var result = JsonConvert.DeserializeObject<string[]>(response.Content);
             return result;
         }
@@ -331,7 +342,7 @@ namespace Penneo.Connector
         /// <summary>
         /// <see cref="IApiConnector.FindBy{T}"/>
         /// </summary>
-        public bool FindBy<T>(Dictionary<string, object> query, out IEnumerable<T> objects, out RestResponse response, int? page = null, int? perPage = null)
+        public async Task<FindByResult<T>> FindBy<T>(Dictionary<string, object> query, int? page = null, int? perPage = null)
             where T : Entity
         {
             var resource = _restResources.GetResource<T>();
@@ -342,35 +353,32 @@ namespace Penneo.Connector
                 options = new Dictionary<string, Dictionary<string, object>>();
                 options["query"] = query;
             }
-            response = CallServer(resource, null, Method.Get, options, page: page, perPage: perPage).Result;
+            var response = await CallServer(resource, null, Method.Get, options, page: page, perPage: perPage);
             if (response == null || !_successStatusCodes.Contains(response.StatusCode))
             {
-                objects = null;
-                return false;
+                return new FindByResult<T> { Success = false };
             }
 
-            objects = CreateObjects<T>(response.Content);
-            return true;
+            var objects = CreateObjects<T>(response.Content);
+            return new FindByResult<T> { Success = true, Objects = objects, Response = response };
         }
 
         /// <summary>
         /// <see cref="IApiConnector.PerformAction"/>
         /// </summary>
-        public ServerResult PerformAction(Entity obj, string actionName)
+        public Task<ServerResult> PerformAction(Entity obj, string actionName)
         {
             return PerformComplexAction(obj, Method.Patch, actionName, null);
         }
 
-        public ServerResult PerformComplexAction(
-            Entity obj,
+        public async Task<ServerResult> PerformComplexAction(Entity obj,
             Method method,
             string action,
-            Dictionary<string, object> data
-        )
+            Dictionary<string, object> data)
         {
             var result = new ServerResult();
             var url = obj.GetRelativeUrl(_con) + "/" + obj.Id + "/" + action;
-            var response = CallServer(url, data, method).Result;
+            var response = await CallServer(url, data, method);
             if (response == null || !_successStatusCodes.Contains(response.StatusCode))
             {
                 result.Success = false;
@@ -670,6 +678,13 @@ namespace Penneo.Connector
             return null;
         }
     }
+
+    public class ReadObjectResult<T> where T : Entity
+    {
+        public RestResponse Response { get; set; }
+        public T Result { get; set; }
+    }
+
 
     public class PenneoDateConverter : JsonConverter
     {
