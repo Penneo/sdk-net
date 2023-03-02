@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace Penneo
@@ -45,14 +46,14 @@ namespace Penneo
             return (ValidationStatus) Status;
         }
 
-        public byte[] GetPdf(PenneoConnector con)
+        public async Task<byte[]> GetPdf(PenneoConnector con)
         {
-            return GetFileAssets(con, ASSET_PDF);
+            return await GetFileAssets(con, ASSET_PDF);
         }
 
-        public void SavePdf(PenneoConnector con, string path)
+        public async Task SavePdf(PenneoConnector con, string path)
         {
-            var data = GetPdf(con);
+            var data = await GetPdf(con);
             if (File.Exists(path))
             {
                 File.Delete(path);
@@ -60,24 +61,24 @@ namespace Penneo
             File.WriteAllBytes(path, data);
         }
 
-        public string GetLink(PenneoConnector con)
+        public async Task<string> GetLink(PenneoConnector con)
         {
-            return GetTextAssets(con, ASSET_LINK);
+            return await GetTextAssets(con, ASSET_LINK);
         }
 
-        public ValidationContents GetContents(PenneoConnector con)
+        public async Task<ValidationContents> GetContents(PenneoConnector con)
         {
-            return GetAsset<ValidationContents>(con, ASSET_CONTENTS);
+            return await GetAsset<ValidationContents>(con, ASSET_CONTENTS);
         }
 
-        public bool Send(PenneoConnector con)
+        public async Task<bool> Send(PenneoConnector con)
         {
-            return PerformAction(con, ACTION_SEND).Success;
+            return (await PerformAction(con, ACTION_SEND)).Success;
         }
 
-        public IEnumerable<LogEntry> GetEventLog(PenneoConnector con)
+        public async Task<IEnumerable<LogEntry>> GetEventLog(PenneoConnector con)
         {
-            return GetLinkedEntities<LogEntry>(con).Objects;
+            return (await GetLinkedEntities<LogEntry>(con)).Objects;
         }
     }
 

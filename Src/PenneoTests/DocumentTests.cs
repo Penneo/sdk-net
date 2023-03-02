@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using FakeItEasy;
 using NUnit.Framework;
 using Penneo;
@@ -47,11 +48,11 @@ namespace PenneoTests
         }
 
         [Test]
-        public void GetCaseFileTest()
+        public async Task GetCaseFileTest()
         {
             var con = TestUtil.CreatePenneoConnector();
             var doc = new Document();
-            TestUtil.TestGetLinked(con, () => doc.GetCaseFile(con));
+            await TestUtil.TestGetLinked(con, async() => await doc.GetCaseFile(con));
         }
 
         [Test]
@@ -92,17 +93,17 @@ namespace PenneoTests
 
 
         [Test]
-        public void GetSignatureLinesTest()
+        public async Task GetSignatureLinesTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestGetLinked(con, () => CreateDocument().GetSignatureLines(con));
+            await TestUtil.TestGetLinked(con, async () => await CreateDocument().GetSignatureLines(con));
         }
 
         [Test]
         public void FindSignatureLineTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestFindLinked(con, () => CreateDocument().FindSignatureLine(con, 0));
+            TestUtil.TestFindLinked(con, async () => await CreateDocument().FindSignatureLine(con, 0));
         }
 
         [Test]
@@ -149,17 +150,17 @@ namespace PenneoTests
         }
 
         [Test]
-        public void GetDocumentTypeTest()
+        public async Task GetDocumentTypeTest()
         {
             var con1 = TestUtil.CreatePenneoConnector();
             var doc1 = CreateDocument();
-            TestUtil.TestGetLinked(con1, () => doc1.GetDocumentType(con1));
+            TestUtil.TestGetLinked(con1,  () => doc1.GetDocumentType(con1));
 
             var con2 = TestUtil.CreatePenneoConnector();
             var doc2 = new Document();
             doc2.DocumentType = new DocumentType();
             TestUtil.TestGetLinkedNotCalled(con2, () => doc2.GetDocumentType(con2));
-            Assert.AreEqual(doc2.GetDocumentType(con2), doc2.DocumentType);
+            Assert.AreEqual((await doc2.GetDocumentType(con2)), doc2.DocumentType);
         }
 
         [Test]

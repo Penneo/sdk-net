@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Penneo.Connector;
 using RestSharp;
@@ -31,9 +32,9 @@ namespace Penneo
         /// <summary>
         /// Send a custom request to the Penneo backend
         /// </summary>
-        public RestResponse InvokeRequest(string url, Dictionary<string, object> body = null, Method method = Method.Get, Dictionary<string, Dictionary<string, object>> options = null, int? page = null, int? perPage = null)
+        public async Task<RestResponse> InvokeRequest(string url, Dictionary<string, object> body = null, Method method = Method.Get, Dictionary<string, Dictionary<string, object>> options = null, int? page = null, int? perPage = null)
         {
-            return _con.ApiConnector.CallServer(url, body, method, options, page, perPage).Result;
+            return await _con.ApiConnector.CallServer(url, body, method, options, page, perPage);
         }
 
         /// <summary>
