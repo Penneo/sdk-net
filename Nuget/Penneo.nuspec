@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Penneo.SDK</id>
-    <version>5.3.1</version>
+    <version>6.0.0</version>
     <title>Penneo .Net SDK</title>
     <authors>Penneo</authors>
     <owners>Penneo</owners>
@@ -18,5 +18,14 @@
       <dependency id="Newtonsoft.Json" version="13.0.2" />
       <dependency id="System.Net.Http" version="4.3.3" />
     </dependencies>
+    <releaseNotes>
+      # [6.0.0] - 2023-03-14
+      ### Changed
+      - **Please refer to the updated SDK documentation for details on how to migrate to the new version**. The updated usage example showcases the new async implementation, which may require code changes for existing users
+      - Improved async handling by using await instead of `.Result`
+      - Addressed issue #155 by doing proper async/await throughout the SDK
+      - Updated usage examples to showcase the use of `await` with `Persist()` and other methods.
+      - Changed the previous usage examples which relied on using `.Result`
+    </releaseNotes>
   </metadata>
 </package>
