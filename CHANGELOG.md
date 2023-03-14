@@ -9,6 +9,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [6.0.0] - 2023-03-14
+### Changed
+- **Please refer to the updated SDK documentation for details on how to migrate to the new version**. The updated usage example showcases the new async implementation, which may require code changes for existing users
+- Improved async handling by using await instead of `.Result`
+- Addressed issue #155 by doing proper async/await throughout the SDK 
+- Updated usage examples to showcase the use of `await` with `Persist()` and other methods. 
+- Changed the previous usage examples which relied on using `.Result`
+
 ## [5.3.1] - 2023-02-13
 ### Changed
 - Updated Newtonsoft.Json to 13.0.2
