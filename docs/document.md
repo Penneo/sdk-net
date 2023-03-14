@@ -14,7 +14,7 @@ var myDocument = new Document(myCaseFile, "My brand new document", "/path/to/pdf
 myDocument.MakeSignable();
 
 // Finally, persist the object
-myDocument.Persist();
+await myDocument.Persist();
 ```
 
 ## Retrieve existing documents
@@ -36,19 +36,19 @@ Below is a couple of examples:
 var query = new Query(con);
 
 // Retrieve all documents
-var myDocuments = query.FindAll<Document>();
+var myDocuments = await query.FindAll<Document>();
 
 // Retrieve a specific document (by id)
-var myDocument = query.Find<Document>(7382393);
+var myDocument = await query.Find<Document>(7382393);
 
 // Retrieve all documents that contains the word "the" in their title and sort descending by creation date
-var myDocuments = query.FindBy<Document>(
+var myDocuments = await query.FindBy<Document>(
 	criteria: new Dictionary<string, object>{ { "title", "the" } },
 	orderBy: new Dictionary<string, string>(){ { "created", "desc" } }
 );
 
 // Retrieve documents from offset 10 until 110 ordered by title in ascending order
-var myDocuments = query.FindBy<Document>(	
+var myDocuments = await query.FindBy<Document>(	
 	orderBy: new Dictionary<string, string>(){ {"title", "asc" } },
 	limit: 10,
 	offset: 100

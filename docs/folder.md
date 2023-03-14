@@ -12,7 +12,7 @@ var myFolder = new Folder();
 myFolder.Title = "New Folder";
 
 // Persist the new object
-myFolder.Persist(con);
+await myFolder.Persist(connector);
 ```
 
 ## Manipulating folder contents
@@ -22,16 +22,16 @@ An empty folder is not much fun. The examples below shows how to assign and unas
 
 ```csharp
 // Assign a case file to a folder
-myFolder.AddCaseFile(caseFile1);
+await myFolder.AddCaseFile(con, caseFile);
 
 // Get a list of all the case files in the folder
-var caseFiles = myFolder.GetCaseFiles(con);
-for (var caseFile in caseFiles) {
+var caseFiles = await myFolder.GetCaseFiles(connector);
+foreach (var caseFile in caseFiles) {
 	Console.WriteLine(caseFile.Title);	
 }
 
 // Now, remove that same case file again
-myFolder.RemoveCaseFile(con, caseFile);
+await myFolder.RemoveCaseFile(connector, caseFile);
 
 ```
 
@@ -39,16 +39,16 @@ myFolder.RemoveCaseFile(con, caseFile);
 
 ```csharp
 // Assign a validation to a folder
-myFolder.AddValidation(con, validation1);
+await myFolder.AddValidation(connector, validation1);
 
 // Get a list of all the validations in the folder
-var validations = myFolder.GetValidations(con);
-for (var validation in validations) {
+var validations = await myFolder.GetValidations(connector);
+foreach (var validation in validations) {
     Console.WriteLine(validation.Title);  
 }
 
 // Now, remove that same validation again
-myFolder.RemoveValidation(con, validation);
+await myFolder.RemoveValidation(connector, validation);
 
 ```
 
@@ -68,22 +68,22 @@ Same as _FindBy_ setting _limit_ = 1 and _offset_ = null
 Below is a couple of examples:
 
 ```csharp
-var query = new Query(con);
+var query = new Query(connector);
 
 // Retrieve all folders
-var myFolders = query.FindAll<Folder>();
+var myFolders = await query.FindAll<Folder>();
 
 // Retrieve a specific folder (by id)
-var myFolder = query.Find<Folder>(14284);
+var myFolder = await query.Find<Folder>(14284);
 
 // Retrieve all folders that contains the word "the" in their title and sort descending on folder title
-var myDocuments = query.FindBy<Folder>(
+var myDocuments = await query.FindBy<Folder>(
 	criteria: new Dictionary<string, object>{ { "title", "the" } },
 	orderBy: new Dictionary<string, string>(){ { "title", "desc" } }
 );
 
 // Retrieve folders from offset 10 until 110 ordered by title in ascending order
-var myFolders = query.FindBy<Folder>(	
+var myFolders = await query.FindBy<Folder>(	
 	orderBy: new Dictionary<string, string>(){ {"title", "asc" } },
 	limit: 10,
 	offset: 100
@@ -96,5 +96,5 @@ Folders can be deleted, even if the contain case files. This will only delete th
 
 ```csharp
 // Delete a folder
-myFolder.Delete();
+myFolder.Delete(connector);
 ```

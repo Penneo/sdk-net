@@ -13,7 +13,7 @@ var hook = new WebhookSubscription();
 hook.Endpoint = "https://your url .your domain/path";
 hook.Topic = "casefile";
 
-hook.Persist(con);
+await hook.Persist(connector);
 ```
 
 Currently, the `casefile` and `signer` topics are the only ones supported.
@@ -24,21 +24,21 @@ After calling `.Persist()`, your servers will receive a HTTP call which will hav
 
 ## Confirming a webhook subscription
 ```csharp
-var hook = query.Find<WebhookSubscription>(webhookId);
+var hook = await query.Find<WebhookSubscription>(webhookId);
 
-hook.Confirm(confirmationToken);
+await hook.Confirm(connector, confirmationToken);
 ```
 
 If everything was successful, your servers will now be called on case file/signer updates.
 
 ## Finding webhook subscriptions
 ```csharp
-var hook = query.Find<WebhookSubscription>(webhookId);
-var allHooks = query.FinaAll<WebhookSubscription>();
+var hook = await query.Find<WebhookSubscription>(webhookId);
+var allHooks = await query.FindAll<WebhookSubscription>();
 ```
 
 
 ## Deleting a webhook subscription
 ```csharp
-hook.Delete(con);
+await hook.Delete(con);
 ```

@@ -11,10 +11,12 @@ Let's try to create a new case file based on a pre-existing case file template:
 var myCaseFile = new CaseFile("Example Case File");
 
 // Get the case file templates available to the authenticated user
-var availableTemplates = myCaseFile.GetTemplates().Objects;
+var availableTemplates = (await myCaseFile.GetTemplates()).Objects;
 
 // Assign the first list item as the case file template
 myCaseFile.SetCaseFileTemplate(availableTemplates.First());
+
+await myCaseFile.Persist(connector)
 
 ```
 
@@ -26,10 +28,12 @@ When using a templated case file, every document assigned to the case file must 
 var myDocument = new Document(myCaseFile);
 
 // Get available document types from the case file object
-var availableDocumentTypes = myCaseFile.GetDocumentTypes();
+var availableDocumentTypes = await myCaseFile.GetDocumentTypes();
 
 // Lets just assign the first type available
 myDocument.SetDocumentType(availableDocumentTypes.First());
+
+await myDocument.Persist(connector);
 ```
 
 ### Adding signers
@@ -40,10 +44,12 @@ Like documents, signers must also be given types. The procedure looks almost ide
 var mySigner = new Signer(myCaseFile);
 
 // Get available signer types from the case file object
-availableSignerTypes = myCaseFile.GetSignerTypes();
+availableSignerTypes = await myCaseFile.GetSignerTypes();
 
 // Lets just assign the first type available
 mySigner.AddSignerType(availableSignerTypes.First());
+
+await mySigner.Persist(connector);
 ```
 
 ## Sending the case file out for signing
@@ -53,16 +59,19 @@ The case file object has a method for checking templated case files for validati
 
 ```csharp
 // Check case file for validation errors
-var errors = myCaseFile.GetErrors();
+var errors = (await myCaseFile.GetErrors()).ToList();
 
 // Check the $errors array to see if any configuration errors were encountered.
-if (errors.Any()){
+if (errors.Any())
+{
 	Console.WriteLine("The case file configuration has the following problems:");
-	foreach(var error in errors){
+	foreach(var error in errors)
+	{
 		Console.WriteLine(error);
 	}
 }
-else{
+else 
+{
 	Console.WriteLine("The case file is error free!");
 }
 

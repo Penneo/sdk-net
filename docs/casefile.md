@@ -9,9 +9,9 @@ Creating a case file is dead simple:
 var myCaseFile = new CaseFile("My brand new case file");
 
 // Finally, persist the object
-myCaseFile.Persist();
+await myCaseFile.Persist(connector);
 ```
-
+$
 ## Sending a case file out for signing
 When the case file contains the relevant documents and signers, it has to be "send out for signing" before the signing process can begin. This is accomplished by calling the __send()__ method on the case file object. You can delay the sending by setting the SendAt time using the __SendAt__ property on the case file object. This method takes a DateTime object as parameter.
 
@@ -41,19 +41,13 @@ Below is a couple of examples:
 var query = new Query(con);
 
 // Retrieve all case files
-var myCaseFiles = query.FindAll<CaseFile>();
+var myCaseFiles = await query.FindAll<CaseFile>();
 
 // Retrieve a specific case file (by id)
-var myCaseFile = query.Find<CaseFile>(271184);
-
-// Retrieve all case files that contains the word "the" in their title and sort descending on creation date
-var myCaseFiles = query.FindByTitle<CaseFile>(
-	"the",
-	orderBy: new Dictionary<string, string>(){ {"created", "desc" } }	
-);
+var myCaseFile = await query.Find<CaseFile>(271184);
 
 // Retrieve case files from offset 10 until 110 ordered by title in ascending order
-var myCaseFiles = query.FindBy<CaseFile>(	
+var myCaseFiles = await query.FindBy<CaseFile>(	
 	orderBy: new Dictionary<string, string>(){ {"title", "asc" } },
 	limit: 10,
 	offset: 100
@@ -61,11 +55,11 @@ var myCaseFiles = query.FindBy<CaseFile>(
 ```
 
 ## Deleting a case file
-A case file can be completely deleted from Penneos document store as long as it is in the _new_ state. As soon as it is send out, a delete request will only cause its status to be changed to _deleted_. A case file is deleted like so:
+A case file can be completely deleted from Penneo's document store as long as it is in the _new_ state. As soon as it is send out, a delete request will only cause its status to be changed to _deleted_. A case file is deleted like so:
 
 ```csharp
 // Delete case file
-myCaseFile.Delete();
+await myCaseFile.Delete(connector);
 ```
 
 ## Retrieving linked objects

@@ -19,7 +19,7 @@ mySigningRequest.EmailSubject = "Contract for signing";
 mySigningRequest.EmailText = "Dear john. Please sign the contract.";
 
 // Store the changes to the signing request
-mySigningRequest.Persist();
+await mySigningRequest.Persist(connector);
 ```
 
 Note that the signing request emails won't actually be send out until you call the __Send()__ method on the owning case file object.
@@ -28,7 +28,7 @@ If you need to re-send the signing request email (fx. due to a change in the ema
 
 ```csharp
 // Re-send the signing request email
-mySigningRequest.Send();
+await mySigningRequest.Send(connector);
 ```
 
 ### Reminder emails
@@ -37,8 +37,8 @@ When using Penneo to distribute signing links, it is also possible to have Penne
 ## Distributing the signing link yourself
 If you don't want Penneo to distribute your signing links, you can handle the process yourself. All you need to do is to fetch the link from the signing request object:
 
-```csharo
-var myLink = mySigningRequest.GetLink();
+```csharp
+var myLink = await mySigningRequest.GetLink(connector);
 ```
 
 Note that the signing link won't be active until you activate the case file by calling the __activate()__ method on the owning case file object.
@@ -54,7 +54,7 @@ mySigningRequest.SuccessUrl = "http://go/here/on/success";
 mySigningRequeset.FailUrl = "http://go/here/on/failure";
 
 // Store the changes to the signing request
-mySigningRequeset.Persist();
+await mySigningRequeset.Persist(connector);
 ```
 
 ## Protecting the signing link
