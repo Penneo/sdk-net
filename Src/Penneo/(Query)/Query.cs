@@ -77,14 +77,14 @@ namespace Penneo
         /// <summary>
         /// Get entities matching the search criteria
         /// </summary>
-        public async Task<IEnumerable<T>> FindBy<T>(Dictionary<string, object> criteria = null, Dictionary<string, string> orderBy = null, int? limit = null, int? offset = null)
+        public async Task<IEnumerable<T>> FindBy<T>(Dictionary<string, object> criteria = null, Dictionary<string, string> orderBy = null, int? perPage = null, int? page = null)
             where T : Entity
         {
             var input = new QueryInput();
             input.Criteria = criteria;
             input.OrderBy = orderBy;
-            input.Limit = limit;
-            input.Offset = offset;
+            input.PerPage = perPage;
+            input.Page = page;
             
             var output = await FindBy<T>(input);
             if (!output.Success)
@@ -109,19 +109,19 @@ namespace Penneo
 
             var criteria = input.Criteria;
             var orderBy = input.OrderBy;
-            var offset = input.Offset;
-            var limit = input.Limit;
+            var page = input.Page;
+            var perPage = input.PerPage;
 
             UpdateCriteriaDateTimesToUnix(input);
             var query = criteria ?? new Dictionary<string, object>();
 
-            if (limit.HasValue)
+            if (perPage.HasValue)
             {
-                query["limit"] = limit;
+                query["per_page"] = perPage;
             }
-            if (offset.HasValue)
+            if (page.HasValue)
             {
-                query["offset"] = offset;
+                query["page"] = page;
             }
 
             if (orderBy != null)

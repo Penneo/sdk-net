@@ -8,10 +8,6 @@ namespace Penneo
         public int Id { get; set; }
         public Dictionary<string, object> Criteria { get; set; }
         public Dictionary<string, string> OrderBy { get; set; }
-        [Obsolete("Use Page and PerPage")]
-        public int? Limit { get; set; }
-        [Obsolete("Use Page and PerPage")]
-        public int? Offset { get; set; }
         public int? Page { get; set; }
         public int? PerPage { get; set; }
 
@@ -40,8 +36,6 @@ namespace Penneo
                 Id = Id,
                 Criteria = Criteria,
                 OrderBy = OrderBy,
-                Limit = Limit,
-                Offset = Offset,
                 Page = Page,
                 PerPage = PerPage
             };
