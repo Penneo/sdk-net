@@ -139,30 +139,6 @@ namespace Penneo
         }
 
         /// <summary>
-        /// Options as json
-        /// </summary>
-        [JsonProperty("Options")]
-        [Obsolete("Obsolete. Use Opts")]
-        public string OptionsJson { get; set; }
-
-        /// <summary>
-        /// Options for the document
-        /// </summary>
-        [JsonIgnore]
-        [Obsolete("Obsolete. Use Opts")]
-        public Dictionary<string, object> Options
-        {
-            get
-            {
-                if (OptionsJson == null)
-                {
-                    return null;
-                }
-                return JsonConvert.DeserializeObject<Dictionary<string, object>>(OptionsJson);
-            }
-        }
-
-        /// <summary>
         /// Options for the document
         /// </summary>
         public Dictionary<string, object> Opts { get; set; }

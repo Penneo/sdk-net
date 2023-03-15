@@ -59,7 +59,7 @@ namespace PenneoTests
         {
             var con = TestUtil.CreatePenneoConnector();
             var q = new Query(con);
-            FindCollectionTest(con, async() => await q.FindBy<Document>(
+            FindCollectionTest(con, async () => await q.FindBy<Document>(
                 new Dictionary<string, object> { { "title", "the" } },
                 new Dictionary<string, string>() { { "created", "desc" } },
                 10,5

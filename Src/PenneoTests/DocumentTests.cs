@@ -52,7 +52,7 @@ namespace PenneoTests
         {
             var con = TestUtil.CreatePenneoConnector();
             var doc = new Document();
-            await TestUtil.TestGetLinked(con, async() => await doc.GetCaseFile(con));
+            await TestUtil.TestGetLinked(con, async () => await doc.GetCaseFile(con));
         }
 
         [Test]

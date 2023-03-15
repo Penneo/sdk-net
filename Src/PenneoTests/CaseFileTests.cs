@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using Penneo;
@@ -133,6 +132,5 @@ namespace PenneoTests
             Assert.AreEqual(477, sl.Id);
             Assert.AreEqual(334, sl.SignerId);
         }
-
     }
 }

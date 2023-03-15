@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Penneo.Connector;
-using Penneo.Util;
 
 namespace Penneo
 {
@@ -276,13 +275,8 @@ namespace Penneo
             {
                 return CaseFileStatus.New;
             }
-            return (CaseFileStatus) Status;
-        }
 
-        [Obsolete("Obsolete since 1.0.18. Use GetTemplates instead.")]
-        public async Task<IEnumerable<CaseFileTemplate>> GetCaseFileTemplates(PenneoConnector con)
-        {
-            return (await GetLinkedEntities<CaseFileTemplate>(con, "casefile/casefiletypes")).Objects;
+            return (CaseFileStatus)Status;
         }
 
         /// <summary>
