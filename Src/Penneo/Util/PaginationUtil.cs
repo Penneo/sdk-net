@@ -52,7 +52,8 @@ namespace Penneo.Util
 
             var parts = query.Split('&');
 
-            return parts.Select(part => part.Split('='))
+            return parts.Where(part => part.Contains('='))
+                .Select(part => part.Split('='))
                 .ToDictionary(pair => pair[0], pair => pair[1]);
         }
     }
