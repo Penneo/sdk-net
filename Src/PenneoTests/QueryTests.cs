@@ -14,7 +14,7 @@ namespace PenneoTests
     [TestFixture]
     public class QueryTests
     {
-        private static RestResponse _response200 = new RestResponse { StatusCode = HttpStatusCode.OK};
+        private static RestResponse _response200 = new RestResponse { StatusCode = HttpStatusCode.OK };
 
         [Test]
         public async Task FindTest()
@@ -62,7 +62,7 @@ namespace PenneoTests
             FindCollectionTest(con, async () => await q.FindByAsync<Document>(
                 new Dictionary<string, object> { { "title", "the" } },
                 new Dictionary<string, string>() { { "created", "desc" } },
-                10,5
+                10, 5
             ));
 
         }
@@ -71,7 +71,8 @@ namespace PenneoTests
             where T : Entity
         {
             IEnumerable<T> returned = new[] { (T)Activator.CreateInstance(typeof(T)) };
-            A.CallTo(() => con.ApiConnector.FindByAsync<T>(null, null, null)).WithAnyArguments().Returns(Task.FromResult(new FindByResult<T> { Success = true, Objects = returned, Response = _response200 }));
+            A.CallTo(() => con.ApiConnector.FindByAsync<T>(null, null, null)).WithAnyArguments().Returns(
+                Task.FromResult(new FindByResult<T> { Success = true, Objects = returned, Response = _response200 }));
 
             var objects = await f();
 
@@ -84,9 +85,12 @@ namespace PenneoTests
         private static async Task FindOneTest<T>(PenneoConnector con, Func<Task<T>> f)
             where T : Entity
         {
-            var instance = (T) Activator.CreateInstance(typeof(T));
+            var instance = (T)Activator.CreateInstance(typeof(T));
             IEnumerable<T> returned = new[] { instance };
-            A.CallTo(() => con.ApiConnector.FindByAsync<T>(null, null, null)).WithAnyArguments().Returns(Task.FromResult(new FindByResult<T> { Success = true, Objects = returned, Response = _response200 })).AssignsOutAndRefParameters(returned, _response200);
+            A.CallTo(() => con.ApiConnector.FindByAsync<T>(null, null, null)).WithAnyArguments()
+                .Returns(Task.FromResult(new FindByResult<T>
+                    { Success = true, Objects = returned, Response = _response200 }))
+                .AssignsOutAndRefParameters(returned, _response200);
 
             var obj = await f();
 

@@ -76,6 +76,7 @@ namespace PenneoTests
             {
                 File.Delete(savePath);
             }
+
             A.CallTo(() => con.ApiConnector.GetFileAssetsAsync(null, null)).WithAnyArguments().MustHaveHappened();
         }
 
