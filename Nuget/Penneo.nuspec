@@ -19,6 +19,7 @@
       <dependency id="System.Net.Http" version="4.3.3" />
     </dependencies>
     <releaseNotes>
+      /// Appveyor pre-build script will automatically add the latest release notes from CHANGELOG.md
     </releaseNotes>
   </metadata>
 </package>
