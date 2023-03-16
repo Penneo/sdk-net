@@ -47,35 +47,35 @@ namespace PenneoTests
         public void GetDocumentsTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestGetLinked(con, () => new CaseFile().GetDocuments(con));
+            TestUtil.TestGetLinked(con, () => new CaseFile().GetDocumentsAsync(con));
         }
 
         [Test]
         public void GetSignersTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestGetLinked(con, () => new CaseFile().GetSigners(con));
+            TestUtil.TestGetLinked(con, () => new CaseFile().GetSignersAsync(con));
         }
 
         [Test]
         public void FindSignerTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestFindLinked(con, () => new CaseFile().FindSigner(con, 0));
+            TestUtil.TestFindLinked(con, () => new CaseFile().FindSignerAsync(con, 0));
         }
 
         [Test]
         public void SendTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestPerformActionSuccess(con, () => new CaseFile().Send(con));
+            TestUtil.TestPerformActionSuccess(con, () => new CaseFile().SendAsync(con));
         }
         
         [Test]
         public void ActivateTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestPerformActionSuccess(con, () => new CaseFile().Activate(con));
+            TestUtil.TestPerformActionSuccess(con, () => new CaseFile().ActivateAsync(con));
         }
 
         [Test]

@@ -26,16 +26,16 @@ namespace PenneoTests
                 Response = new RestResponse(),
                 Result = expected
             };
-            A.CallTo(() => con.ApiConnector.ReadObject<CaseFile>(null, 1))
+            A.CallTo(() => con.ApiConnector.ReadObjectAsync<CaseFile>(null, 1))
                 .WithAnyArguments()
                 .Returns(Task.FromResult(readObjectResult));
 
             var q = new Query(con);
-            var obj = await q.Find<CaseFile>(1);
+            var obj = await q.FindAsync<CaseFile>(1);
 
             Assert.AreEqual(1, obj.Id);
             Assert.AreEqual(expected.Title, obj.Title);
-            A.CallTo(() => con.ApiConnector.ReadObject<CaseFile>(null, 1)).WithAnyArguments().MustHaveHappened();
+            A.CallTo(() => con.ApiConnector.ReadObjectAsync<CaseFile>(null, 1)).WithAnyArguments().MustHaveHappened();
         }
 
         [Test]
@@ -43,7 +43,7 @@ namespace PenneoTests
         {
             var con = TestUtil.CreatePenneoConnector();
             var q = new Query(con);
-            FindOneTest(con, () => q.FindOneBy<CaseFile>());
+            FindOneTest(con, () => q.FindOneByAsync<CaseFile>());
         }
 
         [Test]
@@ -51,7 +51,7 @@ namespace PenneoTests
         {
             var con = TestUtil.CreatePenneoConnector();
             var q = new Query(con);
-            FindCollectionTest(con, async () => await q.FindAll<CaseFile>());
+            FindCollectionTest(con, async () => await q.FindAllAsync<CaseFile>());
         }
 
         [Test]
@@ -59,7 +59,7 @@ namespace PenneoTests
         {
             var con = TestUtil.CreatePenneoConnector();
             var q = new Query(con);
-            FindCollectionTest(con, async () => await q.FindBy<Document>(
+            FindCollectionTest(con, async () => await q.FindByAsync<Document>(
                 new Dictionary<string, object> { { "title", "the" } },
                 new Dictionary<string, string>() { { "created", "desc" } },
                 10,5
@@ -71,14 +71,14 @@ namespace PenneoTests
             where T : Entity
         {
             IEnumerable<T> returned = new[] { (T)Activator.CreateInstance(typeof(T)) };
-            A.CallTo(() => con.ApiConnector.FindBy<T>(null, null, null)).WithAnyArguments().Returns(Task.FromResult(new FindByResult<T> { Success = true, Objects = returned, Response = _response200 }));
+            A.CallTo(() => con.ApiConnector.FindByAsync<T>(null, null, null)).WithAnyArguments().Returns(Task.FromResult(new FindByResult<T> { Success = true, Objects = returned, Response = _response200 }));
 
             var objects = await f();
 
             Assert.IsNotNull(objects);
             CollectionAssert.AreEqual(returned.ToList(), objects.ToList());
 
-            A.CallTo(() => con.ApiConnector.FindBy<T>(null, null, null)).WithAnyArguments().MustHaveHappened();
+            A.CallTo(() => con.ApiConnector.FindByAsync<T>(null, null, null)).WithAnyArguments().MustHaveHappened();
         }
 
         private static async Task FindOneTest<T>(PenneoConnector con, Func<Task<T>> f)
@@ -86,14 +86,14 @@ namespace PenneoTests
         {
             var instance = (T) Activator.CreateInstance(typeof(T));
             IEnumerable<T> returned = new[] { instance };
-            A.CallTo(() => con.ApiConnector.FindBy<T>(null, null, null)).WithAnyArguments().Returns(Task.FromResult(new FindByResult<T> { Success = true, Objects = returned, Response = _response200 })).AssignsOutAndRefParameters(returned, _response200);
+            A.CallTo(() => con.ApiConnector.FindByAsync<T>(null, null, null)).WithAnyArguments().Returns(Task.FromResult(new FindByResult<T> { Success = true, Objects = returned, Response = _response200 })).AssignsOutAndRefParameters(returned, _response200);
 
             var obj = await f();
 
             Assert.IsNotNull(obj);
             Assert.AreEqual(instance, obj);
 
-            A.CallTo(() => con.ApiConnector.FindBy<T>(null, null, null)).WithAnyArguments().MustHaveHappened();
+            A.CallTo(() => con.ApiConnector.FindByAsync<T>(null, null, null)).WithAnyArguments().MustHaveHappened();
         }
     }
 }

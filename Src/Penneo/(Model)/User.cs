@@ -19,7 +19,7 @@ namespace Penneo
 
         public async Task<IEnumerable<Customer>> GetCustomers(PenneoConnector con)
         {
-            return _customers ?? (_customers = (await GetLinkedEntities<Customer>(con)).Objects.ToList());
+            return _customers ?? (_customers = (await GetLinkedEntitiesAsync<Customer>(con)).Objects.ToList());
         }
     }
 }

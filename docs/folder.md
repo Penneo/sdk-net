@@ -12,7 +12,7 @@ var myFolder = new Folder();
 myFolder.Title = "New Folder";
 
 // Persist the new object
-await myFolder.Persist(connector);
+await myFolder.PersistAsync(connector);
 ```
 
 ## Manipulating folder contents
@@ -22,16 +22,16 @@ An empty folder is not much fun. The examples below shows how to assign and unas
 
 ```csharp
 // Assign a case file to a folder
-await myFolder.AddCaseFile(con, caseFile);
+await myFolder.AddCaseFileAsync(con, caseFile);
 
 // Get a list of all the case files in the folder
-var caseFiles = await myFolder.GetCaseFiles(connector);
+var caseFiles = await myFolder.GetCaseFilesAsync(connector);
 foreach (var caseFile in caseFiles) {
 	Console.WriteLine(caseFile.Title);	
 }
 
 // Now, remove that same case file again
-await myFolder.RemoveCaseFile(connector, caseFile);
+await myFolder.RemoveCaseFileAsync(connector, caseFile);
 
 ```
 

@@ -14,20 +14,20 @@ var myDocument = new Document(myCaseFile, "My brand new document", "/path/to/pdf
 myDocument.MakeSignable();
 
 // Finally, persist the object
-await myDocument.Persist();
+await myDocument.PersistAsync();
 ```
 
 ## Retrieve existing documents
 There is several ways to retrieve document from Penneo. Available methods for retrieving documents are:
 
-* __Find<Document>(int id)__
+* __FindAsync<Document>(int id)__
 Find one specific case file by its ID.
-* __query.FindAll<Document>__
+* __query.FindAllAsync<Document>__
 Find all documents accessible by the authenticated user.
-* __FindBy<Document>(Dictionary\<string, object\> criteria = null, Dictionary\<string, string\> orderBy = null, int? limit = null, int? offset = null)__
-Find all documents matching _criteria_ ordered by _orderBy_. If _limit_ is set, only _limit_ results are returned. If _offset_ is set, the _offset_ first results are skipped.
+* __FindByAsync<Document>(Dictionary\<string, object\> criteria = null, Dictionary\<string, string\> orderBy = null, int? limit = null, int? offset = null)__
+Find all documents matching _criteria_ ordered by _orderBy_. If _perPage_ is set, only _perPage_ results are returned. If _page_ is set, the _page_ results are returned.
 Criteria can either be _title_ or _metaData_.
-* __FindOneBy<Document>(Dictionary\<string, object\> criteria = null, Dictionary\<string, string\> orderBy = null)__
+* __FindOneByAsync<Document>(Dictionary\<string, object\> criteria = null, Dictionary\<string, string\> orderBy = null)__
 Same as _FindBy_ setting _limit_ = 1 and _offset_ = null
 
 Below is a couple of examples:
@@ -36,22 +36,22 @@ Below is a couple of examples:
 var query = new Query(con);
 
 // Retrieve all documents
-var myDocuments = await query.FindAll<Document>();
+var myDocuments = await query.FindAllAsync<Document>();
 
 // Retrieve a specific document (by id)
-var myDocument = await query.Find<Document>(7382393);
+var myDocument = await query.FindAsync<Document>(7382393);
 
 // Retrieve all documents that contains the word "the" in their title and sort descending by creation date
-var myDocuments = await query.FindBy<Document>(
+var myDocuments = await query.FindByAsync<Document>(
 	criteria: new Dictionary<string, object>{ { "title", "the" } },
 	orderBy: new Dictionary<string, string>(){ { "created", "desc" } }
 );
 
 // Retrieve documents from offset 10 until 110 ordered by title in ascending order
-var myDocuments = await query.FindBy<Document>(	
+var myDocuments = await query.FindByAsync<Document>(
 	orderBy: new Dictionary<string, string>(){ {"title", "asc" } },
-	limit: 10,
-	offset: 100
+	perPage: 10,
+	page: 100
 );
 ```
 
@@ -61,9 +61,9 @@ When the signing process is completed (when __GetStatus()__ returns "completed")
 ## Retrieving linked objects
 A signable document contains signature lines. These objects can be retrieved using the following methods:
 
-* __GetSignatureLines()__
+* __GetSignatureLinesAsync()__
 Returns the signature lines linked to the document as an array of signature line objects.
-* __FindSignatureLine(int id)__
+* __FindSignatureLineAsync(int id)__
 Find and return a specific signature line by _id_.
 
 ## State variables

@@ -11,12 +11,12 @@ Let's try to create a new case file based on a pre-existing case file template:
 var myCaseFile = new CaseFile("Example Case File");
 
 // Get the case file templates available to the authenticated user
-var availableTemplates = (await myCaseFile.GetTemplates()).Objects;
+var availableTemplates = (await myCaseFile.GetTemplatesAsync(connector)).Objects;
 
 // Assign the first list item as the case file template
 myCaseFile.SetCaseFileTemplate(availableTemplates.First());
 
-await myCaseFile.Persist(connector)
+await myCaseFile.PersistAsync(connector)
 
 ```
 
@@ -28,12 +28,12 @@ When using a templated case file, every document assigned to the case file must 
 var myDocument = new Document(myCaseFile);
 
 // Get available document types from the case file object
-var availableDocumentTypes = await myCaseFile.GetDocumentTypes();
+var availableDocumentTypes = await myCaseFile.GetDocumentTypesAsync();
 
 // Lets just assign the first type available
 myDocument.SetDocumentType(availableDocumentTypes.First());
 
-await myDocument.Persist(connector);
+await myDocument.PersistAsync(connector);
 ```
 
 ### Adding signers
@@ -44,12 +44,12 @@ Like documents, signers must also be given types. The procedure looks almost ide
 var mySigner = new Signer(myCaseFile);
 
 // Get available signer types from the case file object
-availableSignerTypes = await myCaseFile.GetSignerTypes();
+availableSignerTypes = await myCaseFile.GetSignerTypesAsync();
 
 // Lets just assign the first type available
 mySigner.AddSignerType(availableSignerTypes.First());
 
-await mySigner.Persist(connector);
+await mySigner.PersistAsync(connector);
 ```
 
 ## Sending the case file out for signing
@@ -59,7 +59,7 @@ The case file object has a method for checking templated case files for validati
 
 ```csharp
 // Check case file for validation errors
-var errors = (await myCaseFile.GetErrors()).ToList();
+var errors = (await myCaseFile.GetErrorsAsync()).ToList();
 
 // Check the $errors array to see if any configuration errors were encountered.
 if (errors.Any())

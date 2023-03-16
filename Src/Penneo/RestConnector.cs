@@ -32,9 +32,9 @@ namespace Penneo
         /// <summary>
         /// Send a custom request to the Penneo backend
         /// </summary>
-        public async Task<RestResponse> InvokeRequest(string url, Dictionary<string, object> body = null, Method method = Method.Get, Dictionary<string, Dictionary<string, object>> options = null, int? page = null, int? perPage = null)
+        public async Task<RestResponse> InvokeRequestAsync(string url, Dictionary<string, object> body = null, Method method = Method.Get, Dictionary<string, Dictionary<string, object>> options = null, int? page = null, int? perPage = null)
         {
-            return await _con.ApiConnector.CallServer(url, body, method, options, page, perPage);
+            return await _con.ApiConnector.CallServerAsync(url, body, method, options, page, perPage);
         }
 
         /// <summary>

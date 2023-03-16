@@ -58,7 +58,7 @@ namespace Penneo
         {
             if (SigningRequest == null)
             {
-                SigningRequest = (await GetLinkedEntities<SigningRequest>(con)).Objects.FirstOrDefault();
+                SigningRequest = (await GetLinkedEntitiesAsync<SigningRequest>(con)).Objects.FirstOrDefault();
             }
             return SigningRequest;
         }
@@ -72,7 +72,7 @@ namespace Penneo
         /// <returns></returns>
         public async Task<bool> AddSignerType(PenneoConnector con, SignerType type)
         {
-            return await LinkEntity(con, type);
+            return await LinkEntityAsync(con, type);
         }
 
         public async Task<bool> RemoveSignerType(PenneoConnector con, SignerType type)
@@ -82,12 +82,12 @@ namespace Penneo
 
         public async Task<IEnumerable<SignerType>> GetSignerTypes(PenneoConnector con)
         {
-            return (await GetLinkedEntities<SignerType>(con)).Objects;
+            return (await GetLinkedEntitiesAsync<SignerType>(con)).Objects;
         }
 
         public async Task<IEnumerable<LogEntry>> GetEventLog(PenneoConnector con)
         {
-            return (await GetLinkedEntities<LogEntry>(con)).Objects;
+            return (await GetLinkedEntitiesAsync<LogEntry>(con)).Objects;
         }
     }
 }

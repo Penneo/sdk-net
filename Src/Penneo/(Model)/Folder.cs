@@ -61,40 +61,40 @@ namespace Penneo
 
         public ICollection<Folder> ChildFolders { get; set; } 
 
-        public async Task<IEnumerable<CaseFile>> GetCaseFiles(PenneoConnector con)
+        public async Task<IEnumerable<CaseFile>> GetCaseFilesAsync(PenneoConnector con)
         {
             if (!Id.HasValue)
             {
                 return new List<CaseFile>();
             }
-            return (await GetLinkedEntities<CaseFile>(con, "folders/" + Id + "/casefiles")).Objects;
+            return (await GetLinkedEntitiesAsync<CaseFile>(con, "folders/" + Id + "/casefiles")).Objects;
         }
 
-        public async Task<bool> AddCaseFile(PenneoConnector con, CaseFile caseFile)
+        public async Task<bool> AddCaseFileAsync(PenneoConnector con, CaseFile caseFile)
         {
-            return await LinkEntity(con, caseFile);
+            return await LinkEntityAsync(con, caseFile);
         }
 
-        public async Task<bool> RemoveCaseFile(PenneoConnector con, CaseFile caseFile)
+        public async Task<bool> RemoveCaseFileAsync(PenneoConnector con, CaseFile caseFile)
         {
             return await UnlinkEntity(con, caseFile);
         }
 
-        public async Task<IEnumerable<Validation>> GetValidations(PenneoConnector con)
+        public async Task<IEnumerable<Validation>> GetValidationsAsync(PenneoConnector con)
         {
             if (!Id.HasValue)
             {
                 return new List<Validation>();
             }
-            return (await GetLinkedEntities<Validation>(con, "folders/" + Id + "/validations")).Objects;
+            return (await GetLinkedEntitiesAsync<Validation>(con, "folders/" + Id + "/validations")).Objects;
         }
 
-        public async Task<bool> AddValidation(PenneoConnector con, Validation validation)
+        public async Task<bool> AddValidationAsync(PenneoConnector con, Validation validation)
         {
-            return await LinkEntity(con, validation);
+            return await LinkEntityAsync(con, validation);
         }
 
-        public async Task<bool> RemoveValidation(PenneoConnector con, Validation validation)
+        public async Task<bool> RemoveValidationAsync(PenneoConnector con, Validation validation)
         {
             return await UnlinkEntity(con, validation);
         }

@@ -31,17 +31,23 @@ namespace Penneo
             {
                 return SigningRequestStatus.New;
             }
-            return (SigningRequestStatus) Status;
+            return (SigningRequestStatus)Status;
         }
 
-        public async Task<string> GetLink(PenneoConnector con)
+        /// <summary>
+        /// Get the signing request link
+        /// </summary>
+        public async Task<string> GetLinkAsync(PenneoConnector con)
         {
-            return await GetTextAssets(con, ASSET_LINK);
+            return await GetTextAssetsAsync(con, ASSET_LINK);
         }
 
-        public async Task<bool> Send(PenneoConnector con)
+        /// <summary>
+        /// Send the signing request for signing
+        /// </summary>
+        public async Task<bool> SendAsync(PenneoConnector con)
         {
-            return (await PerformAction(con, ACTION_SEND)).Success;
+            return (await PerformActionAsync(con, ACTION_SEND)).Success;
         }
     }
 

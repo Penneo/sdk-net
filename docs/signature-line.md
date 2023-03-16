@@ -10,7 +10,7 @@ The example below illustrates how to link a new signature line to an existing do
 var mySignatureLine = new SignatureLine(myDocument, "attorney");
 
 // Finally, persist the new object
-await mySignatureLine.Persist(connector);
+await mySignatureLine.PersistAsync(connector);
 ```
 
 ## Linking a signer to a signature line
@@ -18,7 +18,7 @@ To link a signer to a signature line, simply use the __SetSigner()__ method on t
 
 ```csharp
 // Link an existing signer to the signature line
-await mySignatureLine.SetSigner(connector, mySigner);
+await mySignatureLine.SetSignerAsync(connector, mySigner);
 ```
 
 ## Getting the signature lines from a document and setting an activation and expiration date to each one
@@ -28,7 +28,7 @@ DateTime today = DateTime.UtcNow;
 DateTime tomorrow = today.AddDays(1);
 DateTime dayAfterTomorrow = today.AddDays(2);
 
-foreach (var mySignatureLine in await myDocument.GetSignatureLines(connector))
+foreach (var mySignatureLine in await myDocument.GetSignatureLinesAsync(connector))
 {
     mySignatureLine.ActiveAt = tomorrow;
     mySignatureLine.ExpireAt = dayAfterTomorrow;

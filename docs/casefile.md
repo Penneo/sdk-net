@@ -9,7 +9,7 @@ Creating a case file is dead simple:
 var myCaseFile = new CaseFile("My brand new case file");
 
 // Finally, persist the object
-await myCaseFile.Persist(connector);
+await myCaseFile.PersistAsync(connector);
 ```
 $
 ## Sending a case file out for signing
@@ -41,16 +41,16 @@ Below is a couple of examples:
 var query = new Query(con);
 
 // Retrieve all case files
-var myCaseFiles = await query.FindAll<CaseFile>();
+var myCaseFiles = await query.FindAllAsync<CaseFile>();
 
 // Retrieve a specific case file (by id)
-var myCaseFile = await query.Find<CaseFile>(271184);
+var myCaseFile = await query.FindAsync<CaseFile>(271184);
 
 // Retrieve case files from offset 10 until 110 ordered by title in ascending order
-var myCaseFiles = await query.FindBy<CaseFile>(	
+var myCaseFiles = await query.FindByAsync<CaseFile>(
 	orderBy: new Dictionary<string, string>(){ {"title", "asc" } },
-	limit: 10,
-	offset: 100
+	perPage: 10,
+	page: 100
 );
 ```
 
@@ -59,17 +59,17 @@ A case file can be completely deleted from Penneo's document store as long as it
 
 ```csharp
 // Delete case file
-await myCaseFile.Delete(connector);
+await myCaseFile.DeleteAsync(connector);
 ```
 
 ## Retrieving linked objects
 A case file contains both signer and document objects. These objects can be retrieved using the following methods:
 
-* __GetDocuments()__
+* __GetDocumentsAsync()__
 Returns the documents linked to the case file as an array of document objects.
-* __GetSigners()__
+* __GetSignersAsync()__
 Returns the signers linked to the case file as an array of signer objects.
-* __FindSigner(int id)__
+* __FindSignerAsync(int id)__
 Find and return a specific signer by _id_.
 
 ## State variables

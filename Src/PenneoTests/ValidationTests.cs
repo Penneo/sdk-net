@@ -47,14 +47,14 @@ namespace PenneoTests
         public void GetLinkTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestGetTextAsset(con, () => new Validation().GetLink(con));
+            TestUtil.TestGetTextAsset(con, () => new Validation().GetLinkAsync(con));
         }
 
         [Test]
         public void GetPdfTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestGetFileAsset(con, () => new Validation().GetPdf(con));
+            TestUtil.TestGetFileAsset(con, () => new Validation().GetPdfAsync(con));
         }
 
         [Test]
@@ -62,13 +62,13 @@ namespace PenneoTests
         {
             var con = TestUtil.CreatePenneoConnector();
             var data = new byte[] { 1, 2, 3 };
-            A.CallTo(() => con.ApiConnector.GetFileAssets(null, null)).WithAnyArguments().Returns(data);
+            A.CallTo(() => con.ApiConnector.GetFileAssetsAsync(null, null)).WithAnyArguments().Returns(data);
 
             var doc = new Validation();
             var savePath = Path.GetTempFileName();
             try
             {
-                doc.SavePdf(con, savePath);
+                doc.SavePdfAsync(con, savePath);
                 var readBytes = File.ReadAllBytes(savePath);
                 CollectionAssert.AreEqual(data, readBytes);
             }
@@ -76,14 +76,14 @@ namespace PenneoTests
             {
                 File.Delete(savePath);
             }
-            A.CallTo(() => con.ApiConnector.GetFileAssets(null, null)).WithAnyArguments().MustHaveHappened();
+            A.CallTo(() => con.ApiConnector.GetFileAssetsAsync(null, null)).WithAnyArguments().MustHaveHappened();
         }
 
         [Test]
         public void SendTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestPerformActionSuccess(con, () => new Validation().Send(con));
+            TestUtil.TestPerformActionSuccess(con, () => new Validation().SendAsync(con));
         }
     }
 }

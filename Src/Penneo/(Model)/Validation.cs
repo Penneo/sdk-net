@@ -46,14 +46,14 @@ namespace Penneo
             return (ValidationStatus) Status;
         }
 
-        public async Task<byte[]> GetPdf(PenneoConnector con)
+        public async Task<byte[]> GetPdfAsync(PenneoConnector con)
         {
-            return await GetFileAssets(con, ASSET_PDF);
+            return await GetFileAssetsAsync(con, ASSET_PDF);
         }
 
-        public async Task SavePdf(PenneoConnector con, string path)
+        public async Task SavePdfAsync(PenneoConnector con, string path)
         {
-            var data = await GetPdf(con);
+            var data = await GetPdfAsync(con);
             if (File.Exists(path))
             {
                 File.Delete(path);
@@ -61,24 +61,24 @@ namespace Penneo
             File.WriteAllBytes(path, data);
         }
 
-        public async Task<string> GetLink(PenneoConnector con)
+        public async Task<string> GetLinkAsync(PenneoConnector con)
         {
-            return await GetTextAssets(con, ASSET_LINK);
+            return await GetTextAssetsAsync(con, ASSET_LINK);
         }
 
         public async Task<ValidationContents> GetContents(PenneoConnector con)
         {
-            return await GetAsset<ValidationContents>(con, ASSET_CONTENTS);
+            return await GetAssetAsync<ValidationContents>(con, ASSET_CONTENTS);
         }
 
-        public async Task<bool> Send(PenneoConnector con)
+        public async Task<bool> SendAsync(PenneoConnector con)
         {
-            return (await PerformAction(con, ACTION_SEND)).Success;
+            return (await PerformActionAsync(con, ACTION_SEND)).Success;
         }
 
         public async Task<IEnumerable<LogEntry>> GetEventLog(PenneoConnector con)
         {
-            return (await GetLinkedEntities<LogEntry>(con)).Objects;
+            return (await GetLinkedEntitiesAsync<LogEntry>(con)).Objects;
         }
     }
 

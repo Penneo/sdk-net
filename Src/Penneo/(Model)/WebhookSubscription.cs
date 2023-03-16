@@ -26,10 +26,10 @@ namespace Penneo
         [JsonConverter(typeof(PenneoDateConverter))]
         public DateTime? Created;
 
-        public async Task<bool> Confirm(PenneoConnector con, string token)
+        public async Task<bool> ConfirmAsync(PenneoConnector con, string token)
         {
             var data = new Dictionary<string, object> {{"token", token}};
-            return (await PerformComplexAction(con, Method.Post, "confirm", data)).Success;
+            return (await PerformComplexActionAsync(con, Method.Post, "confirm", data)).Success;
         }
     }
 }

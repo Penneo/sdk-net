@@ -13,32 +13,32 @@ var hook = new WebhookSubscription();
 hook.Endpoint = "https://your url .your domain/path";
 hook.Topic = "casefile";
 
-await hook.Persist(connector);
+await hook.PersistAsync(connector);
 ```
 
 Currently, the `casefile` and `signer` topics are the only ones supported.
 
-After calling `.Persist()`, your servers will receive a HTTP call which will have a `confirmationToken` field in the body.
+After calling `.PersistAsync()`, your servers will receive a HTTP call which will have a `confirmationToken` field in the body.
 > Note: the body of the request is a JSON object, even though the proper `application/json` header might not be set.
 
 
 ## Confirming a webhook subscription
 ```csharp
-var hook = await query.Find<WebhookSubscription>(webhookId);
+var hook = await query.FindAsync<WebhookSubscription>(webhookId);
 
-await hook.Confirm(connector, confirmationToken);
+await hook.ConfirmAsync(connector, confirmationToken);
 ```
 
 If everything was successful, your servers will now be called on case file/signer updates.
 
 ## Finding webhook subscriptions
 ```csharp
-var hook = await query.Find<WebhookSubscription>(webhookId);
-var allHooks = await query.FindAll<WebhookSubscription>();
+var hook = await query.FindAsync<WebhookSubscription>(webhookId);
+var allHooks = await query.FindAllAsync<WebhookSubscription>();
 ```
 
 
 ## Deleting a webhook subscription
 ```csharp
-await hook.Delete(con);
+await hook.DeleteAsync(con);
 ```

@@ -26,10 +26,10 @@ namespace Penneo
         /// <summary>
         /// Get an entity by its Id
         /// </summary>
-        public async Task<T> Find<T>(int id)
+        public async Task<T> FindAsync<T>(int id)
             where T : Entity
         {
-            var output = await FindById<T>(id);
+            var output = await FindByIdAsync<T>(id);
             if (!output.Success)
             {
                 throw new Exception(output.ErrorMessage);
@@ -37,47 +37,47 @@ namespace Penneo
             return output.Object;
         }
 
-        public async Task<QuerySingleObjectResult<T>> FindById<T>(int id)
+        public async Task<QuerySingleObjectResult<T>> FindByIdAsync<T>(int id)
             where T : Entity
         {
             RestResponse response;
-            var objectResult = await _con.ApiConnector.ReadObject<T>(null, id);
+            var objectResult = await _con.ApiConnector.ReadObjectAsync<T>(null, id);
             return CreateSingleObjectResult(objectResult.Response, objectResult.Result, id);
         }
 
         /// <summary>
         /// Get the first entity matching the search criteria
         /// </summary>
-        public async Task<T> FindOneBy<T>(Dictionary<string, object> criteria = null, Dictionary<string, string> orderBy = null)
+        public async Task<T> FindOneByAsync<T>(Dictionary<string, object> criteria = null, Dictionary<string, string> orderBy = null)
             where T : Entity
         {
             var input = new QueryInput { Criteria = criteria, OrderBy = orderBy };
-            return (await FindOneBy<T>(input)).Object;
+            return (await FindOneByAsync<T>(input)).Object;
         }
 
-        public async Task<QuerySingleObjectResult<T>> FindOneBy<T>(QueryInput input)
+        public async Task<QuerySingleObjectResult<T>> FindOneByAsync<T>(QueryInput input)
             where T : Entity
         {
-            _con.Log("FindOneBy (" + typeof(T).Name + ")", LogSeverity.Information);
-            var result = new QuerySingleObjectResult<T>(await FindBy<T>(input));
+            _con.Log("FindOneByAsync (" + typeof(T).Name + ")", LogSeverity.Information);
+            var result = new QuerySingleObjectResult<T>(await FindByAsync<T>(input));
             return result;
         }
 
         /// <summary>
         /// Get all entities of the given type
         /// </summary>
-        public async Task<IEnumerable<T>> FindAll<T>()
+        public async Task<IEnumerable<T>> FindAllAsync<T>()
             where T : Entity
         {
-            _con.Log("FindAll (" + typeof(T).Name + ")", LogSeverity.Information);
+            _con.Log("FindAllAsync (" + typeof(T).Name + ")", LogSeverity.Information);
             var input = new QueryInput();
-            return (await FindBy<T>(input)).Objects;
+            return (await FindByAsync<T>(input)).Objects;
         }
 
         /// <summary>
         /// Get entities matching the search criteria
         /// </summary>
-        public async Task<IEnumerable<T>> FindBy<T>(Dictionary<string, object> criteria = null, Dictionary<string, string> orderBy = null, int? perPage = null, int? page = null)
+        public async Task<IEnumerable<T>> FindByAsync<T>(Dictionary<string, object> criteria = null, Dictionary<string, string> orderBy = null, int? perPage = null, int? page = null)
             where T : Entity
         {
             var input = new QueryInput();
@@ -86,14 +86,14 @@ namespace Penneo
             input.PerPage = perPage;
             input.Page = page;
             
-            var output = await FindBy<T>(input);
+            var output = await FindByAsync<T>(input);
             if (!output.Success)
             {
                 if (!string.IsNullOrEmpty(output.ErrorMessage))
                 {
                     throw new Exception(output.ErrorMessage);
                 }
-                throw new Exception("Unknown error during FindBy");
+                throw new Exception("Unknown error during FindByAsync");
             }
             return output.Objects;
         }
@@ -102,10 +102,10 @@ namespace Penneo
         /// Find entities based on an input object.
         /// Returns output with data and metadata
         /// </summary>
-        public async Task<QueryResult<T>> FindBy<T>(QueryInput input)
+        public async Task<QueryResult<T>> FindByAsync<T>(QueryInput input)
             where T : Entity
         {
-            _con.Log("FindBy (" + typeof(T).Name + ")", LogSeverity.Information);
+            _con.Log("FindByAsync (" + typeof(T).Name + ")", LogSeverity.Information);
 
             var criteria = input.Criteria;
             var orderBy = input.OrderBy;
@@ -135,7 +135,7 @@ namespace Penneo
             var output = new QueryResult<T>();
             output.Input = input;
             
-            var findByResult = await _con.ApiConnector.FindBy<T>(query, input.Page, input.PerPage);
+            var findByResult = await _con.ApiConnector.FindByAsync<T>(query, input.Page, input.PerPage);
 
             output.Success = findByResult.Success;
             output.Objects = findByResult.Objects;
@@ -194,14 +194,14 @@ namespace Penneo
         /// </summary>
         /// <param name="messageTemplateType">The default message template type. Defaults to signing request</param>
         /// <param name="isoLanguage">The language iso code for the message template as two letter isocode. Defaults to users language</param>
-        public async Task<QueryResult<MessageTemplate>> GetDefaultMessageTemplate(MessageTemplate.MessageTemplateType messageTemplateType = MessageTemplate.MessageTemplateType.SigningRequest, string isoLanguage = null)
+        public async Task<QueryResult<MessageTemplate>> GetDefaultMessageTemplateAsync(MessageTemplate.MessageTemplateType messageTemplateType = MessageTemplate.MessageTemplateType.SigningRequest, string isoLanguage = null)
         {
             var resource = _con.ServiceLocator.GetInstance<RestResources>().GetResource(typeof(MessageTemplate)) + $"/default?type={messageTemplateType.ToEnumString()}";
             if (!string.IsNullOrEmpty(isoLanguage))
             {
                 resource += $"&language={isoLanguage}";
             }
-            var result = await _con.ApiConnector.CallServer(resource);
+            var result = await _con.ApiConnector.CallServerAsync(resource);
             var obj = JsonConvert.DeserializeObject<MessageTemplate>(result.Content);
             obj.Title = "Standard";
             return new QueryResult<MessageTemplate>() { Objects = new[] { obj }, Success = true };
@@ -210,10 +210,10 @@ namespace Penneo
         /// <summary>
         /// Get the current user
         /// </summary>
-        public async Task<QuerySingleObjectResult<User>> GetUser()
+        public async Task<QuerySingleObjectResult<User>> GetUserAsync()
         {
             RestResponse response;
-            var objectResult = await _con.ApiConnector.ReadObject<User>(null, null, "user");
+            var objectResult = await _con.ApiConnector.ReadObjectAsync<User>(null, null, "user");
             return CreateSingleObjectResult(objectResult.Response, objectResult.Result, null);
         }
 
@@ -241,56 +241,56 @@ namespace Penneo
         /// <summary>
         /// Get the next page based on an earlier result
         /// </summary>
-        public async Task<QueryResult<T>> GetNextPage<T>(QueryResult<T> result)
+        public async Task<QueryResult<T>> GetNextPageAsync<T>(QueryResult<T> result)
             where T : Entity
         {
-            _con.Log("GetNextPage (" + typeof(T).Name + ")", LogSeverity.Information);
+            _con.Log("GetNextPageAsync (" + typeof(T).Name + ")", LogSeverity.Information);
             if (!result.NextPage.HasValue)
             {
                 return null;
             }
-            return await GetPage(result, result.NextPage);
+            return await GetPageAsync(result, result.NextPage);
         }
 
         /// <summary>
         /// Get the previous page based on an earlier result
         /// </summary>
-        public async Task<QueryResult<T>> GetPreviousPage<T>(QueryResult<T> result)
+        public async Task<QueryResult<T>> GetPreviousPageAsync<T>(QueryResult<T> result)
             where T : Entity
         {
-            _con.Log("GetPreviousPage (" + typeof(T).Name + ")", LogSeverity.Information);
+            _con.Log("GetPreviousPageAsync (" + typeof(T).Name + ")", LogSeverity.Information);
             if (!result.PrevPage.HasValue)
             {
                 return null;
             }
-            return await GetPage(result, result.PrevPage);
+            return await GetPageAsync(result, result.PrevPage);
         }
 
         /// <summary>
         /// Get the first page based on an earlier result
         /// </summary>
-        public async Task<QueryResult<T>> GetFirstPage<T>(QueryResult<T> result)
+        public async Task<QueryResult<T>> GetFirstPageAsync<T>(QueryResult<T> result)
             where T : Entity
         {
-            _con.Log("GetFirstPage (" + typeof(T).Name + ")", LogSeverity.Information);
+            _con.Log("GetFirstPageAsync (" + typeof(T).Name + ")", LogSeverity.Information);
             if (!result.FirstPage.HasValue)
             {
                 return null;
             }
-            return await GetPage(result, result.FirstPage);
+            return await GetPageAsync(result, result.FirstPage);
         }
 
         /// <summary>
         /// Get the first page of a given entity
         /// </summary>
-        public async Task<QueryResult<T>> GetFirstPage<T>(int? perPage = null)
+        public async Task<QueryResult<T>> GetFirstPageAsync<T>(int? perPage = null)
             where T : Entity
         {
-            _con.Log("GetFirstPage (" + typeof(T).Name + ")", LogSeverity.Information);
+            _con.Log("GetFirstPageAsync (" + typeof(T).Name + ")", LogSeverity.Information);
             var input = new QueryInput();
             input.Page = 1;
             input.PerPage = perPage;
-            return await FindBy<T>(input);
+            return await FindByAsync<T>(input);
         }
 
         private void ThrowIfNoPagination<T>(QueryResult<T> result, int? page)
@@ -302,13 +302,13 @@ namespace Penneo
             }
         }
 
-        private async Task<QueryResult<T>> GetPage<T>(QueryResult<T> result, int? page)
+        private async Task<QueryResult<T>> GetPageAsync<T>(QueryResult<T> result, int? page)
             where T : Entity
         {
             ThrowIfNoPagination(result, page);
             var pageInput = (QueryInput)result.Input.Clone();
             pageInput.Page = page;
-            return await FindBy<T>(pageInput);
+            return await FindByAsync<T>(pageInput);
         }
     }
 }

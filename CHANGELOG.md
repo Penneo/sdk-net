@@ -14,7 +14,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - **Please refer to the updated SDK documentation for details on how to migrate to the new version**. The updated usage example showcases the new async implementation, which may require code changes for existing users
 - Improved async handling by using await instead of `.Result`
 - Addressed issue #155 by doing proper async/await throughout the SDK 
-- Updated usage examples to showcase the use of `await` with `Persist()` and other methods. 
+- Updated usage examples to showcase the use of `await` with `PersistAsync()` and other methods. 
+- All async methods now have an `Async` suffix i.e. `Persist()` has been renamed to `PersistAsync()` following C# naming convention
 - Changed the previous usage examples which relied on using `.Result`
 
 ## [5.3.1] - 2023-02-13

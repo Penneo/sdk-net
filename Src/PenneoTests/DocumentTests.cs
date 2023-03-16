@@ -52,7 +52,7 @@ namespace PenneoTests
         {
             var con = TestUtil.CreatePenneoConnector();
             var doc = new Document();
-            await TestUtil.TestGetLinked(con, async () => await doc.GetCaseFile(con));
+            await TestUtil.TestGetLinked(con, async () => await doc.GetCaseFileAsync(con));
         }
 
         [Test]
@@ -96,21 +96,21 @@ namespace PenneoTests
         public async Task GetSignatureLinesTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            await TestUtil.TestGetLinked(con, async () => await CreateDocument().GetSignatureLines(con));
+            await TestUtil.TestGetLinked(con, async () => await CreateDocument().GetSignatureLinesAsync(con));
         }
 
         [Test]
         public void FindSignatureLineTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestFindLinked(con, async () => await CreateDocument().FindSignatureLine(con, 0));
+            TestUtil.TestFindLinked(con, async () => await CreateDocument().FindSignatureLineAsync(con, 0));
         }
 
         [Test]
         public void GetPdfTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestGetFileAsset(con, () => CreateEmptyDocument().GetPdf(con));
+            TestUtil.TestGetFileAsset(con, () => CreateEmptyDocument().GetPdfAsync(con));
         }
 
         [Test]
@@ -118,13 +118,13 @@ namespace PenneoTests
         {
             var con = TestUtil.CreatePenneoConnector();
             var data = File.ReadAllBytes(TestPdfPath);
-            A.CallTo(() => con.ApiConnector.GetFileAssets(null, null)).WithAnyArguments().Returns(data);
+            A.CallTo(() => con.ApiConnector.GetFileAssetsAsync(null, null)).WithAnyArguments().Returns(data);
 
             var doc = CreateDocument();
             var savePath = Path.GetTempFileName();
             try
             {
-                doc.SavePdf(con, savePath);
+                doc.SavePdfAsync(con, savePath);
                 var readBytes = File.ReadAllBytes(savePath);
                 CollectionAssert.AreEqual(data, readBytes);
             }
@@ -137,7 +137,7 @@ namespace PenneoTests
             var savePath2 = Path.GetTempFileName();
             try
             {
-                doc2.SavePdf(con, savePath);
+                doc2.SavePdfAsync(con, savePath);
                 var readBytes = File.ReadAllBytes(savePath);
                 CollectionAssert.AreEqual(data, readBytes);
             }
@@ -146,7 +146,7 @@ namespace PenneoTests
                 File.Delete(savePath2);
             }
 
-            A.CallTo(() => con.ApiConnector.GetFileAssets(null, null)).WithAnyArguments().MustHaveHappened();
+            A.CallTo(() => con.ApiConnector.GetFileAssetsAsync(null, null)).WithAnyArguments().MustHaveHappened();
         }
 
         [Test]
@@ -154,13 +154,13 @@ namespace PenneoTests
         {
             var con1 = TestUtil.CreatePenneoConnector();
             var doc1 = CreateDocument();
-            TestUtil.TestGetLinked(con1,  () => doc1.GetDocumentType(con1));
+            TestUtil.TestGetLinked(con1,  () => doc1.GetDocumentTypeAsync(con1));
 
             var con2 = TestUtil.CreatePenneoConnector();
             var doc2 = new Document();
             doc2.DocumentType = new DocumentType();
-            TestUtil.TestGetLinkedNotCalled(con2, () => doc2.GetDocumentType(con2));
-            Assert.AreEqual((await doc2.GetDocumentType(con2)), doc2.DocumentType);
+            TestUtil.TestGetLinkedNotCalled(con2, () => doc2.GetDocumentTypeAsync(con2));
+            Assert.AreEqual((await doc2.GetDocumentTypeAsync(con2)), doc2.DocumentType);
         }
 
         [Test]
