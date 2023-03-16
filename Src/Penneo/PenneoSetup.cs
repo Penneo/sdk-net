@@ -116,11 +116,7 @@ namespace Penneo
                   .Map(x => x.ActivatedAt, convert: x => TimeUtil.ToUnixTime((DateTime) x))
                   .Map(x => x.ExpireAt,convert: x => TimeUtil.ToUnixTime((DateTime) x))
                   .ForUpdate()
-                  .Map(x => x.Role)
-                  .Map(x => x.Conditions)
-                  .Map(x => x.SignOrder)
                   .Map(x => x.ActiveAt, convert: x => TimeUtil.ToUnixTime((DateTime) x))
-                  .Map(x => x.ActivatedAt, convert: x => TimeUtil.ToUnixTime((DateTime) x))
                   .Map(x => x.ExpireAt, convert: x => TimeUtil.ToUnixTime((DateTime) x))
                   .Create()
             );

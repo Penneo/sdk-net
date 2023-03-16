@@ -18,6 +18,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - All async methods now have an `Async` suffix i.e. `Persist()` has been renamed to `PersistAsync()` following C# naming convention
 - Changed the previous usage examples which relied on using `.Result`
 
+### Fixed
+- Fixed #165 that prevented signature lines from being updated due to invalid properties in the mapping builder for updates
+
 ## [5.3.1] - 2023-02-13
 ### Changed
 - Updated Newtonsoft.Json to 13.0.2
