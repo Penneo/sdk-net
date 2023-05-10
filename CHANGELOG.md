@@ -18,6 +18,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - All async methods now have an `Async` suffix i.e. `Persist()` has been renamed to `PersistAsync()` following C# naming convention
 - Changed the previous usage examples which relied on using `.Result`
 - Removed deprecated `limit` and `offset` query parameters. Use `perPage` and `page` instead
+- Removed obsolete `Documents.Options` and `Documents.OptionsJson` - use `Documents.Opts` instead
 
 ### Fixed
 - Fixed #165 that prevented signature lines from being updated due to invalid properties in the mapping builder for updates
