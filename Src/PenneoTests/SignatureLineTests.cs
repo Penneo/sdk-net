@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using FakeItEasy;
 using NUnit.Framework;
 using Penneo;
@@ -64,31 +65,31 @@ namespace PenneoTests
             var sl = CreateSignatureLine();
             var s = new Signer(sl.Document.CaseFile);
 
-            A.CallTo(() => con.ApiConnector.LinkEntity(sl, s)).Returns(true);
+            A.CallTo(() => con.ApiConnector.LinkEntityAsync(sl, s)).Returns(true);
 
-            sl.SetSigner(con, s);
+            sl.SetSignerAsync(con, s);
 
             Assert.AreEqual(s, sl.Signer);
-            A.CallTo(() => con.ApiConnector.LinkEntity(sl, s)).MustHaveHappened();
+            A.CallTo(() => con.ApiConnector.LinkEntityAsync(sl, s)).MustHaveHappened();
         }
 
         [Test]
-        public void SetSignerFailTest()
+        public async Task SetSignerFailTest()
         {
             var con = TestUtil.CreatePenneoConnector();
             var sl = CreateSignatureLine();
             var s = new Signer(sl.Document.CaseFile);
 
-            A.CallTo(() => con.ApiConnector.LinkEntity(sl, s)).Returns(false);
+            A.CallTo(() => con.ApiConnector.LinkEntityAsync(sl, s)).Returns(false);
 
             try
             {
-                var result = sl.SetSigner(con, s);
+                var result = await sl.SetSignerAsync(con, s);
                 Assert.IsFalse(result);
             }
             finally
             {
-                A.CallTo(() => con.ApiConnector.LinkEntity(sl, s)).MustHaveHappened();
+                A.CallTo(() => con.ApiConnector.LinkEntityAsync(sl, s)).MustHaveHappened();
             }
         }   
     }

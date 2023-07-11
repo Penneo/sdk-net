@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Penneo.SDK</id>
-    <version>5.3.1</version>
+    <version>6.0.0</version>
     <title>Penneo .Net SDK</title>
     <authors>Penneo</authors>
     <owners>Penneo</owners>
@@ -18,5 +18,8 @@
       <dependency id="Newtonsoft.Json" version="13.0.2" />
       <dependency id="System.Net.Http" version="4.3.3" />
     </dependencies>
+    <releaseNotes>
+      /// Appveyor pre-build script will automatically add the latest release notes from CHANGELOG.md
+    </releaseNotes>
   </metadata>
 </package>

@@ -46,7 +46,7 @@ namespace PenneoTests
             var con = TestUtil.CreatePenneoConnector();
             var folder = new Folder();
             var cf = new CaseFile();
-            TestUtil.TestLink(con, () => folder.AddCaseFile(con, cf), folder, cf);
+            TestUtil.TestLink(con, () => folder.AddCaseFileAsync(con, cf), folder, cf);
         }
 
         [Test]
@@ -55,7 +55,7 @@ namespace PenneoTests
             var con = TestUtil.CreatePenneoConnector();
             var folder = new Folder();
             var cf = new CaseFile();
-            TestUtil.TestUnlink(con, () => folder.RemoveCaseFile(con, cf), folder, cf);
+            TestUtil.TestUnlink(con, () => folder.RemoveCaseFileAsync(con, cf), folder, cf);
         }
 
         [Test]
@@ -64,7 +64,7 @@ namespace PenneoTests
             var con = TestUtil.CreatePenneoConnector();
             var folder = new Folder();
             var validation = new Validation();
-            TestUtil.TestLink(con, () => folder.AddValidation(con, validation), folder, validation);
+            TestUtil.TestLink(con, () => folder.AddValidationAsync(con, validation), folder, validation);
         }
 
         [Test]
@@ -73,7 +73,7 @@ namespace PenneoTests
             var con = TestUtil.CreatePenneoConnector();
             var folder = new Folder();
             var validation = new Validation();
-            TestUtil.TestUnlink(con, () => folder.RemoveValidation(con, validation), folder, validation);
+            TestUtil.TestUnlink(con, () => folder.RemoveValidationAsync(con, validation), folder, validation);
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Penneo.Connector;
 using Penneo.Util;
@@ -117,15 +118,17 @@ namespace Penneo
         /// <summary>
         /// Get the document type
         /// </summary>
-        public DocumentType GetDocumentType(PenneoConnector con)
+        public async Task<DocumentType> GetDocumentTypeAsync(PenneoConnector con)
         {
             if (Id.HasValue && DocumentType == null)
             {
-                var documentTypes = GetLinkedEntities<DocumentType>(con);
+                var documentTypes = await GetLinkedEntitiesAsync<DocumentType>(con);
                 DocumentType = documentTypes.Objects.FirstOrDefault();
             }
-            return DocumentType;
+            return await Task.FromResult(DocumentType);
         }
+
+
 
         /// <summary>
         /// Set the document type
@@ -133,30 +136,6 @@ namespace Penneo
         public void SetDocumentType(DocumentType type)
         {
             DocumentType = type;
-        }
-
-        /// <summary>
-        /// Options as json
-        /// </summary>
-        [JsonProperty("Options")]
-        [Obsolete("Obsolete. Use Opts")]
-        public string OptionsJson { get; set; }
-
-        /// <summary>
-        /// Options for the document
-        /// </summary>
-        [JsonIgnore]
-        [Obsolete("Obsolete. Use Opts")]
-        public Dictionary<string, object> Options
-        {
-            get
-            {
-                if (OptionsJson == null)
-                {
-                    return null;
-                }
-                return JsonConvert.DeserializeObject<Dictionary<string, object>>(OptionsJson);
-            }
         }
 
         /// <summary>
@@ -208,11 +187,11 @@ namespace Penneo
         /// <summary>
         /// Get the case file (load if not loaded)
         /// </summary>
-        public CaseFile GetCaseFile(PenneoConnector con)
+        public async Task<CaseFile> GetCaseFileAsync(PenneoConnector con)
         {
             if (CaseFile == null)
             {
-                CaseFile = GetLinkedEntities<CaseFile>(con).Objects.FirstOrDefault();
+                CaseFile = (await GetLinkedEntitiesAsync<CaseFile>(con)).Objects.FirstOrDefault();
             }
             return CaseFile;
         }
@@ -241,11 +220,11 @@ namespace Penneo
         /// Get the PDF document as byte array
         /// </summary>
         /// <returns></returns>
-        public byte[] GetPdf(PenneoConnector con)
+        public async Task<byte[]> GetPdfAsync(PenneoConnector con)
         {
             if (PdfRaw == null)
             {
-                PdfRaw = GetFileAssets(con, ASSET_PDF);
+                PdfRaw = await GetFileAssetsAsync(con, ASSET_PDF);
             }
             return PdfRaw;
         }
@@ -261,9 +240,9 @@ namespace Penneo
         /// <summary>
         /// Save the PDF document to a file
         /// </summary>
-        public void SavePdf(PenneoConnector con, string path)
+        public async Task SavePdfAsync(PenneoConnector con, string path)
         {
-            var data = GetPdf(con);
+            var data = await GetPdfAsync(con);
             if (File.Exists(path))
             {
                 File.Delete(path);
@@ -284,11 +263,11 @@ namespace Penneo
         /// <summary>
         /// Get signature lines on the document. If no signature lines are loaded, the method will fetch the lines from the back-end.
         /// </summary>
-        public IEnumerable<SignatureLine> GetSignatureLines(PenneoConnector con)
+        public async Task<IEnumerable<SignatureLine>> GetSignatureLinesAsync(PenneoConnector con)
         {
             if (_signatureLines == null)
             {
-                _signatureLines = GetLinkedEntities<SignatureLine>(con).Objects.ToList();
+                _signatureLines = (await GetLinkedEntitiesAsync<SignatureLine>(con)).Objects.ToList();
             }
             foreach (var sl in _signatureLines)
             {
@@ -303,13 +282,13 @@ namespace Penneo
         /// <summary>
         /// Find a specific signature line.
         /// </summary>
-        public SignatureLine FindSignatureLine(PenneoConnector con, int id)
+        public async Task<SignatureLine> FindSignatureLineAsync(PenneoConnector con, int id)
         {
             if (_signatureLines != null)
             {
                 return _signatureLines.FirstOrDefault(x => x.Id == id);
             }
-            var sl = FindLinkedEntity<SignatureLine>(con, id);
+            var sl = await FindLinkedEntityAsync<SignatureLine>(con, id);
             sl.Document = this;
             return sl;
         }

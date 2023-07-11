@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Penneo
 {
@@ -30,17 +31,23 @@ namespace Penneo
             {
                 return SigningRequestStatus.New;
             }
-            return (SigningRequestStatus) Status;
+            return (SigningRequestStatus)Status;
         }
 
-        public string GetLink(PenneoConnector con)
+        /// <summary>
+        /// Get the signing request link
+        /// </summary>
+        public async Task<string> GetLinkAsync(PenneoConnector con)
         {
-            return GetTextAssets(con, ASSET_LINK);
+            return await GetTextAssetsAsync(con, ASSET_LINK);
         }
 
-        public bool Send(PenneoConnector con)
+        /// <summary>
+        /// Send the signing request for signing
+        /// </summary>
+        public async Task<bool> SendAsync(PenneoConnector con)
         {
-            return PerformAction(con, ACTION_SEND).Success;
+            return (await PerformActionAsync(con, ACTION_SEND)).Success;
         }
     }
 

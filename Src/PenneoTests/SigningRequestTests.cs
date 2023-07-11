@@ -37,14 +37,14 @@ namespace PenneoTests
         public void GetLinkTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestGetTextAsset(con, () => new SigningRequest().GetLink(con));
+            TestUtil.TestGetTextAsset(con, () => new SigningRequest().GetLinkAsync(con));
         }
 
         [Test]
         public void SendTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestPerformActionSuccess(con, () => new SigningRequest().Send(con));
+            TestUtil.TestPerformActionSuccess(con, () => new SigningRequest().SendAsync(con));
         }
 
         [Test]

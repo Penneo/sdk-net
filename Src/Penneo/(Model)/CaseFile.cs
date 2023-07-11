@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Penneo.Connector;
-using Penneo.Util;
 
 namespace Penneo
 {
@@ -170,11 +170,11 @@ namespace Penneo
         /// Get documents for the case file. If the documents are not loaded, they will be fetched
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<Document> GetDocuments(PenneoConnector con)
+        public async Task<IEnumerable<Document>> GetDocumentsAsync(PenneoConnector con)
         {
             if (_documents == null)
             {
-                _documents = GetLinkedEntities<Document>(con).Objects.ToList();
+                _documents = (await GetLinkedEntitiesAsync<Document>(con)).Objects.ToList();
                 foreach (var doc in _documents)
                 {
                     doc.CaseFile = this;
@@ -209,11 +209,11 @@ namespace Penneo
         /// <summary>
         /// The signers in the case file. If the signers are not loaded, they will be fetched
         /// </summary>
-        public IEnumerable<Signer> GetSigners(PenneoConnector con)
+        public async Task<IEnumerable<Signer>> GetSignersAsync(PenneoConnector con)
         {
             if (Signers == null)
             {
-                Signers = GetLinkedEntities<Signer>(con).Objects.ToList();
+                Signers = (await GetLinkedEntitiesAsync<Signer>(con)).Objects.ToList();
             }
             return Signers;
         }
@@ -221,7 +221,7 @@ namespace Penneo
         /// <summary>
         /// Find a given signer on the case file. If the signer is not found in the list loaded signers, an attempt will be made to find the signer on the backend.
         /// </summary>
-        public Signer FindSigner(PenneoConnector con, int id)
+        public async Task<Signer> FindSignerAsync(PenneoConnector con, int id)
         {
             Signer signer = null;
             if (_signers != null)
@@ -230,7 +230,7 @@ namespace Penneo
             }
             if (signer == null)
             {
-                signer = FindLinkedEntity<Signer>(con, id);
+                signer = await FindLinkedEntityAsync<Signer>(con, id);
             }
             if (signer != null)
             {
@@ -243,11 +243,11 @@ namespace Penneo
         /// Get copy recipients of the case file. If the copy recipients are not already loaded, they will be fetched
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<CopyRecipient> GetCopyRecipients(PenneoConnector con)
+        public async Task<IEnumerable<CopyRecipient>> GetCopyRecipientsAsync(PenneoConnector con)
         {
             if (_copyRecipients == null)
             {
-                _copyRecipients = GetLinkedEntities<CopyRecipient>(con).Objects.ToList();
+                _copyRecipients = (await GetLinkedEntitiesAsync<CopyRecipient>(con)).Objects.ToList();
                 foreach (var doc in _copyRecipients)
                 {
                     doc.CaseFile = this;
@@ -275,77 +275,72 @@ namespace Penneo
             {
                 return CaseFileStatus.New;
             }
-            return (CaseFileStatus) Status;
-        }
 
-        [Obsolete("Obsolete since 1.0.18. Use GetTemplates instead.")]
-        public IEnumerable<CaseFileTemplate> GetCaseFileTemplates(PenneoConnector con)
-        {
-            return GetLinkedEntities<CaseFileTemplate>(con, "casefile/casefiletypes").Objects;
+            return (CaseFileStatus)Status;
         }
 
         /// <summary>
         /// Get all available case file templates
         /// </summary>
-        public QueryResult<CaseFileTemplate> GetTemplates(PenneoConnector con)
+        public async Task<QueryResult<CaseFileTemplate>> GetTemplatesAsync(PenneoConnector con)
         {
-            return GetLinkedEntities<CaseFileTemplate>(con, "casefile/casefiletypes");
+            return await GetLinkedEntitiesAsync<CaseFileTemplate>(con, "casefile/casefiletypes");
         }
 
         /// <summary>
         /// Get all available documents types for this case file
         /// </summary>
-        public IEnumerable<DocumentType> GetDocumentTypes(PenneoConnector con)
+        public async Task<IEnumerable<DocumentType>> GetDocumentTypesAsync(PenneoConnector con)
         {
-            return GetLinkedEntities<DocumentType>(con, "casefiles/" + Id + "/documenttypes").Objects;
+            return (await GetLinkedEntitiesAsync<DocumentType>(con, "casefiles/" + Id + "/documenttypes")).Objects;
         }
 
         /// <summary>
         /// Get all available signer types for this case file
         /// </summary>
-        public IEnumerable<SignerType> GetSignerTypes(PenneoConnector con)
+        public async Task<IEnumerable<SignerType>> GetSignerTypesAsync(PenneoConnector con)
         {
             if (!Id.HasValue)
             {
                 return new List<SignerType>();
             }
-            return GetLinkedEntities<SignerType>(con, "casefiles/" + Id + "/signertypes").Objects;
+            return (await GetLinkedEntitiesAsync<SignerType>(con, "casefiles/" + Id + "/signertypes")).Objects;
         }
 
         /// <summary>
         /// Gets the user instance (CustomerId and UserId must be set)
         /// </summary>
-        public User GetUser(PenneoConnector con)
+        public async Task<User> GetUserAsync(PenneoConnector con)
         {
             if (!CustomerId.HasValue || !UserId.HasValue)
             {
                 return null;
             }
-            var r = GetLinkedEntity<User>(con, "customers/" + CustomerId + "/users/" + UserId);
+            var r = await GetLinkedEntityAsync<User>(con, "customers/" + CustomerId + "/users/" + UserId);
             return r != null ? r.Object : null;
         }
 
         /// <summary>
         /// Gets the customer instance (CustomerId must be set)
         /// </summary>
-        public Customer GetCustomer(PenneoConnector con)
+        public async Task<Customer> GetCustomerAsync(PenneoConnector con)
         {
             if (!CustomerId.HasValue)
             {
                 return null;
             }
-            var r = GetLinkedEntity<Customer>(con, "customers/" + CustomerId);
+            var r = await GetLinkedEntityAsync<Customer>(con, "customers/" + CustomerId);
             return r != null ? r.Object : null;
         }
 
         /// <summary>
         /// Get the case file template for this case file
         /// </summary>
-        public CaseFileTemplate GetCaseFileTemplate(PenneoConnector con)
+        public async Task<CaseFileTemplate> GetCaseFileTemplateAsync(PenneoConnector con)
         {
             if (Id.HasValue && CaseFileTemplate == null)
             {
-                var caseFileTypes = GetLinkedEntities<CaseFileTemplate>(con);
+                var caseFileTypes = await GetLinkedEntitiesAsync<CaseFileTemplate>(con);
                 CaseFileTemplate = caseFileTypes.Objects.FirstOrDefault();
             }
             return CaseFileTemplate;
@@ -362,25 +357,25 @@ namespace Penneo
         /// <summary>
         /// Get all errors associated with the case file
         /// </summary>
-        public IEnumerable<string> GetErrors(PenneoConnector con)
+        public async Task<IEnumerable<string>> GetErrorsAsync(PenneoConnector con)
         {
-            return GetStringListAsset(con, "errors");
+            return await GetStringListAssetAsync(con, "errors");
         }
 
         /// <summary>
         /// Send the case file for signing
         /// </summary>
-        public bool Send(PenneoConnector con)
+        public async Task<bool> SendAsync(PenneoConnector con)
         {
-            return PerformAction(con, ACTION_SEND).Success;
+            return (await PerformActionAsync(con, ACTION_SEND)).Success;
         }
 
         /// <summary>
         /// Activate the case file
         /// </summary>
-        public bool Activate(PenneoConnector con)
+        public async Task<bool> ActivateAsync(PenneoConnector con)
         {
-            return PerformAction(con, ACTION_ACTIVATE).Success;
+            return (await PerformActionAsync(con, ACTION_ACTIVATE)).Success;
         }
     }
 }

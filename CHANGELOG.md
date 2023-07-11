@@ -9,6 +9,22 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [6.0.0] - 2023-03-14
+### Changed
+- **Please refer to the updated SDK documentation for details on how to migrate to the new version**. The updated usage example showcases the new async implementation, which may require code changes for existing users
+- Improved async handling by using await instead of `.Result`
+- Addressed issue #155 by doing proper async/await throughout the SDK 
+- Updated usage examples to showcase the use of `await` with `PersistAsync()` and other methods. 
+- All async methods now have an `Async` suffix i.e. `Persist()` has been renamed to `PersistAsync()` following C# naming convention
+- Changed the previous usage examples which relied on using `.Result`
+
+### Fixed
+- Fixed #165 that prevented signature lines from being updated due to invalid properties in the mapping builder for updates
+
+### Removed
+- Removed deprecated `limit` and `offset` query parameters. Use `perPage` and `page` instead
+- Removed obsolete `Documents.Options` and `Documents.OptionsJson` - use `Documents.Opts` instead
+
 ## [5.3.1] - 2023-02-13
 ### Changed
 - Updated Newtonsoft.Json to 13.0.2

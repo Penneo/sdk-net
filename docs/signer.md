@@ -22,14 +22,14 @@ mySigner.SsnType = "dk:cpr"; // additional values here https://app.penneo.com/ap
 mySigner.VATIdentificationNumber = 12345678;
 
 // Finally, persist the new object
-mySigner.Persist();
+await mySigner.PersistAsync(connector);
 ```
 
-## Creating a signer with delayed sendout, expiry or a role lable:
+## Creating a signer with delayed send out, expiry or a role label:
 
 ```csharp
 var mySigner = new Signer(myCaseFile, "John Doe");
-mySigner.Persist();
+await mySigner.PersistAsync(connector);
 
 // This is similar to mySigner.addSignerType(), but allows for finer graned control
 var map = new SignerTypeMap
@@ -41,7 +41,7 @@ var map = new SignerTypeMap
     ExpireAt = DateTime.Today.AddDays(90),
 };
 
-map.Persist();
+await map.PersistAsync(connector);
 // Be careful, persisting the map multiple times will make the signer have to sign multiple times
 ```
 
@@ -50,5 +50,5 @@ Every time you create a new signer, a signing request is also generated for the 
 
 ```csharp
 // Retrieve the signing request object
-mySigningRequest = mySigner.GetSigningRequest();
+mySigningRequest = await mySigner.GetSigningRequestAsync(connector);
 ```

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Penneo
 {
@@ -16,9 +17,9 @@ namespace Penneo
             set { _customers = value; }
         }
 
-        public IEnumerable<Customer> GetCustomers(PenneoConnector con)
+        public async Task<IEnumerable<Customer>> GetCustomers(PenneoConnector con)
         {
-            return _customers ?? (_customers = GetLinkedEntities<Customer>(con).Objects.ToList());
+            return _customers ?? (_customers = (await GetLinkedEntitiesAsync<Customer>(con)).Objects.ToList());
         }
     }
 }

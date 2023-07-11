@@ -10,7 +10,7 @@ The process is best explained by an example:
 
 ```csharp
 // Create a new validation with details of the user to validate
-myValidation = new Validation("John Doe", "john@doe.com");
+var myValidation = new Validation("John Doe", "john@doe.com");
 myValidation.Title = "My validation";
 
 // Define the content of the email
@@ -18,10 +18,10 @@ myValidation.EmailSubject = "Validation inquiry";
 myValidation.EmailText = "Dear john. Please validate yourself using this link.";
 
 // Persist the new validation object
-myValidation.Persist();
+await myValidation.PersistAsync(connector);
 
 // Finally, send out the validation link
-myValidation.Send();
+await myValidation.SendAsync(connector);
 ```
 
 ### Reminder emails
@@ -32,17 +32,17 @@ If you don't want Penneo to distribute your validation links, you can handle the
 
 ```csharp
 // Create a new validation with details of the user to validate
-myValidation = new Validation("John Doe");
+var myValidation = new Validation("John Doe");
 myValidation.Title = "My validation";
 
 // Persist the new validation object
-myValidation.Persist();
+await myValidation.PersistAsync(connector);
 
 // Activate the validation object
-myValidation.Send();
+await myValidation.SendAsync(connector);
 
 // Retrieve the validation link that you would like to distribute
-myLink = myValidation.GetLink();
+var myLink = await myValidation.GetLinkAsync(connector);
 
 // In case you would like to re-send the validation request from Penneo at a later point, you need to set the email details
 myValidation.Email = "john@doe.com";
@@ -50,7 +50,7 @@ myValidation.EmailSubject = "Validation inquiry";
 myValidation.EmailText = "Dear john. Please validate yourself using this link.";
 
 // Persist the new validation object
-myValidation.Persist();
+await myValidation.PersistAsync(connector);
 
 ```
 
@@ -64,7 +64,7 @@ When the user completes the validation process, the signer is redirected to the 
 myValidation.SuccessUrl = "http://go/here/on/success";
 
 // Store the changes to the validation object
-myValidation.Persist();
+await myValidation.PersistAsync(connector);
 ```
 
 It is also possible to change the default explanatory text provided on the validation web-page to better fit your companies or customers validation use case. You can set a custom text like so:
@@ -74,7 +74,7 @@ It is also possible to change the default explanatory text provided on the valid
 myValidation.CustomText = "Here is my custom text<br>Please validate yourself!";
 
 // Store the changes to the validation object
-myValidation.Persist();
+await myValidation.PersistAsync(connector);
 ```
 
 The custom text can't contain any HTML tags, except for the <br> tag.
@@ -85,7 +85,7 @@ The custom text can't contain any HTML tags, except for the <br> tag.
 When the user completes the validation process, the contents can be retrieved as follows:
 
 ```csharp
-myValidation.GetContents();
+await myValidation.GetContentsAsync(connector);
 ```
 
 If the validation is ready (when __GetStatus()__ returns _Ready_), the social security number is returned. However, if the validation is completed (when __GetStatus()__ returns _Completed_), information from the public registry is also returned.
@@ -94,7 +94,7 @@ If the validation is ready (when __GetStatus()__ returns _Ready_), the social se
 Once the validation is completed (when __GetStatus()__ returns _Completed_), the resulting validation document can be retrieved:
 
 ```csharp
-myValidation.GetPdf();
+var pdf = await myValidation.GetPdfAsync(connector);
 ```
 
 The validation document contains all the information that Penneo has gathered about the validated person.

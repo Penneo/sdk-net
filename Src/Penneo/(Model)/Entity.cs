@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Penneo.Connector;
 using Penneo.Mapping;
 using RestSharp;
@@ -70,10 +71,10 @@ namespace Penneo
         /// <summary>
         /// Persist the entity to the storage
         /// </summary>
-        public bool Persist(PenneoConnector con)
+        public async Task<bool> PersistAsync(PenneoConnector con)
         {
             con.Log((IsNew ? "Creating" : "Updating") + " " + GetType().Name + " (" + (Id.HasValue ? Id.ToString() : "new") + ")", LogSeverity.Information);
-            var success = con.ApiConnector.WriteObject(this);
+            var success = await con.ApiConnector.WriteObjectAsync(this);
             if (!success)
             {
                 con.Log((IsNew ? "Creating" : "Updating") + " " + GetType().Name + " (" + (Id.HasValue ? Id.ToString() : "new") + ") failed", LogSeverity.Information);
@@ -84,10 +85,10 @@ namespace Penneo
         /// <summary>
         /// Delete the entity from the storage
         /// </summary>
-        public void Delete(PenneoConnector con)
+        public async Task DeleteAsync(PenneoConnector con)
         {
             con.Log("Deleting " + GetType().Name + " (" + (Id.HasValue ? Id.ToString() : "new") + ")", LogSeverity.Information);
-            if (!con.ApiConnector.DeleteObject(this))
+            if (!await con.ApiConnector.DeleteObjectAsync(this))
             {
                 throw new Exception("Penneo: Could not delete the " + GetType().Name);
             }
@@ -105,96 +106,96 @@ namespace Penneo
         /// <summary>
         /// Link this entity with the given child in the storage
         /// </summary>
-        protected bool LinkEntity(PenneoConnector con, Entity child)
+        protected async Task<bool> LinkEntityAsync(PenneoConnector con, Entity child)
         {
             con.Log("Linking " +
-                      GetType().Name + " (" + (Id.HasValue ? Id.ToString() : "new") + ") TO " +
-                      child.GetType().Name + " (" + (child.Id.HasValue ? Id.ToString() : "new") + ")", LogSeverity.Information);
-            return con.ApiConnector.LinkEntity(this, child);
+                    GetType().Name + " (" + (Id.HasValue ? Id.ToString() : "new") + ") TO " +
+                    child.GetType().Name + " (" + (child.Id.HasValue ? Id.ToString() : "new") + ")", LogSeverity.Information);
+            return await con.ApiConnector.LinkEntityAsync(this, child);
         }
 
         /// <summary>
         /// Unlink this entity with the given child in the storage
         /// </summary>
-        protected bool UnlinkEntity(PenneoConnector con, Entity child)
+        protected async Task<bool> UnlinkEntity(PenneoConnector con, Entity child)
         {
             con.Log("Unlinking " +
-                      GetType().Name + " (" + (Id.HasValue ? Id.ToString() : "new") + ") TO " +
-                      child.GetType().Name + " (" + (child.Id.HasValue ? Id.ToString() : "new") + ")", LogSeverity.Information);
-            return con.ApiConnector.UnlinkEntity(this, child);
+                    GetType().Name + " (" + (Id.HasValue ? Id.ToString() : "new") + ") TO " +
+                    child.GetType().Name + " (" + (child.Id.HasValue ? Id.ToString() : "new") + ")", LogSeverity.Information);
+            return await con.ApiConnector.UnlinkEntityAsync(this, child);
         }
 
         /// <summary>
         /// Get all entities linked with this entity in the storage
         /// </summary>
-        protected QueryResult<T> GetLinkedEntities<T>(PenneoConnector con, string url = null)
+        protected async Task<QueryResult<T>> GetLinkedEntitiesAsync<T>(PenneoConnector con, string url = null)
             where T: Entity
         {
-            return con.ApiConnector.GetLinkedEntities<T>(this, url);
+            return await con.ApiConnector.GetLinkedEntitiesAsync<T>(this, url);
         }
 
         /// <summary>
         /// Get entity linked with this entity based on url
         /// </summary>
-        protected QuerySingleObjectResult<T> GetLinkedEntity<T>(PenneoConnector con, string url = null)
+        protected async Task<QuerySingleObjectResult<T>> GetLinkedEntityAsync<T>(PenneoConnector con, string url = null)
             where T: Entity
         {
-            return con.ApiConnector.GetLinkedEntity<T>(this, url);
+            return await con.ApiConnector.GetLinkedEntityAsync<T>(this, url);
         }
 
         /// <summary>
         /// Find a specific linked entity
         /// </summary>
-        protected T FindLinkedEntity<T>(PenneoConnector con, int id)
+        protected async Task<T> FindLinkedEntityAsync<T>(PenneoConnector con, int id)
         {
-            return con.ApiConnector.FindLinkedEntity<T>(this, id);
+            return await con.ApiConnector.FindLinkedEntityAsync<T>(this, id);
         }
 
         /// <summary>
         /// Get file assets with the given name for this entity
         /// </summary>
-        protected byte[] GetFileAssets(PenneoConnector con, string assetName)
+        protected async Task<byte[]> GetFileAssetsAsync(PenneoConnector con, string assetName)
         {
-            return con.ApiConnector.GetFileAssets(this, assetName);
+            return await con.ApiConnector.GetFileAssetsAsync(this, assetName);
         }
 
         /// <summary>
         /// Get text assets with the given name for this entity
         /// </summary>
-        protected string GetTextAssets(PenneoConnector con, string assetName)
+        protected async Task<string> GetTextAssetsAsync(PenneoConnector con, string assetName)
         {
-            return con.ApiConnector.GetTextAssets(this, assetName);
+            return await con.ApiConnector.GetTextAssetsAsync(this, assetName);
         }
 
-        protected T GetAsset<T>(PenneoConnector con, string assetName)
+        protected async Task<T> GetAssetAsync<T>(PenneoConnector con, string assetName)
         {
-            return con.ApiConnector.GetAsset<T>(this, assetName);
+            return await con.ApiConnector.GetAssetAsync<T>(this, assetName);
         }
 
         /// <summary>
         /// Get list of string asset with the given name for this entity
         /// </summary>
-        protected IEnumerable<string> GetStringListAsset(PenneoConnector con, string assetName)
+        protected async Task<IEnumerable<string>> GetStringListAssetAsync(PenneoConnector con, string assetName)
         {
-            return con.ApiConnector.GetStringListAsset(this, assetName);
+            return await con.ApiConnector.GetStringListAssetAsync(this, assetName);
         }
 
         /// <summary>
         /// Perform the given action on this entity
         /// </summary>
-        protected ServerResult PerformAction(PenneoConnector con, string action)
+        protected async Task<ServerResult> PerformActionAsync(PenneoConnector con, string action)
         {
-            return con.ApiConnector.PerformAction(this, action);
+            return await con.ApiConnector.PerformAction(this, action);
         }
 
-        protected ServerResult PerformComplexAction(
+        protected async Task<ServerResult> PerformComplexActionAsync(
             PenneoConnector con,
             Method method,
             string action,
             Dictionary<string, object> data
         )
         {
-            return con.ApiConnector.PerformComplexAction(this, method, action, data);
+            return await con.ApiConnector.PerformComplexActionAsync(this, method, action, data);
         }
 
         /// <summary>

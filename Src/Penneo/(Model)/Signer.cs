@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace Penneo
@@ -53,11 +54,11 @@ namespace Penneo
             get { return CaseFile; }
         }
 
-        public SigningRequest GetSigningRequest(PenneoConnector con)
+        public async Task<SigningRequest> GetSigningRequest(PenneoConnector con)
         {
             if (SigningRequest == null)
             {
-                SigningRequest = GetLinkedEntities<SigningRequest>(con).Objects.FirstOrDefault();
+                SigningRequest = (await GetLinkedEntitiesAsync<SigningRequest>(con)).Objects.FirstOrDefault();
             }
             return SigningRequest;
         }
@@ -69,24 +70,24 @@ namespace Penneo
         /// <param name="con"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public bool AddSignerType(PenneoConnector con, SignerType type)
+        public async Task<bool> AddSignerType(PenneoConnector con, SignerType type)
         {
-            return LinkEntity(con, type);
+            return await LinkEntityAsync(con, type);
         }
 
-        public bool RemoveSignerType(PenneoConnector con, SignerType type)
+        public async Task<bool> RemoveSignerType(PenneoConnector con, SignerType type)
         {
-            return UnlinkEntity(con, type);
+            return await UnlinkEntity(con, type);
         }
 
-        public IEnumerable<SignerType> GetSignerTypes(PenneoConnector con)
+        public async Task<IEnumerable<SignerType>> GetSignerTypes(PenneoConnector con)
         {
-            return GetLinkedEntities<SignerType>(con).Objects;
+            return (await GetLinkedEntitiesAsync<SignerType>(con)).Objects;
         }
 
-        public IEnumerable<LogEntry> GetEventLog(PenneoConnector con)
+        public async Task<IEnumerable<LogEntry>> GetEventLog(PenneoConnector con)
         {
-            return GetLinkedEntities<LogEntry>(con).Objects;
+            return (await GetLinkedEntitiesAsync<LogEntry>(con)).Objects;
         }
     }
 }
