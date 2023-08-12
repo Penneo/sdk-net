@@ -20,7 +20,6 @@ namespace PenneoTests
         [Test]
         public void ConstructorTest()
         {
-            var con = TestUtil.CreatePenneoConnector();
             var s = CreateSignatureLine();
             Assert.IsNotNull(s.Document);
             Assert.AreEqual("role", s.Role);

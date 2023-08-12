@@ -17,7 +17,6 @@ namespace PenneoTests
         [Test]
         public void ConstructorTest()
         {
-            var con = TestUtil.CreatePenneoConnector();
             var s = CreateSigner();
             Assert.IsNotNull(s.CaseFile);
             Assert.AreEqual("john", s.Name);

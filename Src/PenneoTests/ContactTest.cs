@@ -47,13 +47,13 @@ namespace PenneoTests
         {
             const string json = "{\"name\":\"cname\",\"email\":\"mail@mail.dk\",\"id\":1234}";
 
-            var Contact = JsonConvert.DeserializeObject<Contact>(json);
+            var contact = JsonConvert.DeserializeObject<Contact>(json);
 
             //Case File
-            Assert.IsNotNull(Contact);
-            Assert.AreEqual(1234, Contact.Id);
-            Assert.AreEqual("cname", Contact.Name);
-            Assert.AreEqual("mail@mail.dk", Contact.Email);
+            Assert.IsNotNull(contact);
+            Assert.AreEqual(1234, contact.Id);
+            Assert.AreEqual("cname", contact.Name);
+            Assert.AreEqual("mail@mail.dk", contact.Email);
         }
 
     }
