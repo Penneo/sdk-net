@@ -33,12 +33,12 @@ namespace PenneoTests
             return new ApiConnector(null, null, null, null, null, null, null, AuthType.WSSE);
         }
 
-        public static void TestPersist(PenneoConnector con, Func<Entity> f)
+        public static async Task TestPersist(PenneoConnector con, Func<Entity> f)
         {
             A.CallTo(() => con.ApiConnector.WriteObjectAsync(null)).WithAnyArguments();
 
             var e = f();
-            e.PersistAsync(con); 
+            await e.PersistAsync(con); 
 
             A.CallTo(() => con.ApiConnector.WriteObjectAsync(e)).MustHaveHappened();
         }
@@ -54,11 +54,11 @@ namespace PenneoTests
             Assert.IsFalse(result);
         }
 
-        public static void TestDelete(PenneoConnector con, Func<Entity> f)
+        public static async Task TestDelete(PenneoConnector con, Func<Entity> f)
         {
             var e = f();
             A.CallTo(() => con.ApiConnector.DeleteObjectAsync(e)).Returns(true);
-            e.DeleteAsync(con);
+            await e.DeleteAsync(con);
             A.CallTo(() => con.ApiConnector.DeleteObjectAsync(e)).MustHaveHappened();
         }   
 
@@ -73,8 +73,7 @@ namespace PenneoTests
             }
             A.CallTo(() => con.ApiConnector.FindByAsync<T>(null, null, null)).WithAnyArguments()
                 .Returns(Task.FromResult(
-                    new FindByResult<T> { Success = true, Objects = new List<T>(), Response = _response200 }))
-                .AssignsOutAndRefParameters(list, _response200);
+                    new FindByResult<T> { Success = true, Objects = list, Response = _response200 }));
 
             var q = new Query(con);
             var result = (await q.FindAllAsync<T>()).ToList();
@@ -137,11 +136,11 @@ namespace PenneoTests
         }
 
 
-        public static void TestPerformActionSuccess(PenneoConnector con, Action action)
+        public static async Task TestPerformActionSuccess(PenneoConnector con, Func<Task>func)
         {
             A.CallTo(() => con.ApiConnector.PerformAction(null, null)).WithAnyArguments().Returns(new ServerResult());
 
-            action();
+            await func();
 
             A.CallTo(() => con.ApiConnector.PerformAction(null, null)).WithAnyArguments().MustHaveHappened();
         }

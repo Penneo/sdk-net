@@ -56,30 +56,30 @@ namespace PenneoTests
         }
 
         [Test]
-        public void PersistSuccessTest()
+        public async Task PersistSuccessTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestPersist(con, CreateDocument);
+            await TestUtil.TestPersist(con, CreateDocument);
         }
 
         [Test]
-        public void PersistFailTest()
+        public async Task PersistFailTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestPersistFail(con, CreateDocument);
+            await TestUtil.TestPersistFail(con, CreateDocument);
         }
 
         [Test]
-        public void DeleteTest()
+        public async Task DeleteTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestDelete(con, CreateDocument);
+            await TestUtil.TestDelete(con, CreateDocument);
         }
 
         [Test]
-        public void GetTest()
+        public async Task GetTest()
         {
-            TestUtil.TestGet<Document>();
+            await TestUtil.TestGet<Document>();
         }
 
         [Test]
@@ -114,7 +114,7 @@ namespace PenneoTests
         }
 
         [Test]
-        public void SavePdfTest()
+        public async Task SavePdfTest()
         {
             var con = TestUtil.CreatePenneoConnector();
             var data = File.ReadAllBytes(TestPdfPath);
@@ -124,8 +124,8 @@ namespace PenneoTests
             var savePath = Path.GetTempFileName();
             try
             {
-                doc.SavePdfAsync(con, savePath);
-                var readBytes = File.ReadAllBytes(savePath);
+                await doc.SavePdfAsync(con, savePath);
+                var readBytes = await File.ReadAllBytesAsync(savePath);
                 CollectionAssert.AreEqual(data, readBytes);
             }
             finally
@@ -137,8 +137,8 @@ namespace PenneoTests
             var savePath2 = Path.GetTempFileName();
             try
             {
-                doc2.SavePdfAsync(con, savePath);
-                var readBytes = File.ReadAllBytes(savePath);
+                await doc2.SavePdfAsync(con, savePath);
+                var readBytes = await File.ReadAllBytesAsync(savePath);
                 CollectionAssert.AreEqual(data, readBytes);
             }
             finally
@@ -154,7 +154,7 @@ namespace PenneoTests
         {
             var con1 = TestUtil.CreatePenneoConnector();
             var doc1 = CreateDocument();
-            TestUtil.TestGetLinked(con1,  () => doc1.GetDocumentTypeAsync(con1));
+            await TestUtil.TestGetLinked(con1,  () => doc1.GetDocumentTypeAsync(con1));
 
             var con2 = TestUtil.CreatePenneoConnector();
             var doc2 = new Document();

@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Threading.Tasks;
+using NUnit.Framework;
 using Penneo;
 
 namespace PenneoTests
@@ -14,30 +15,30 @@ namespace PenneoTests
         }
 
         [Test]
-        public void PersistSuccessTest()
+        public async Task PersistSuccessTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestPersist(con, () => new Folder());
+            await TestUtil.TestPersist(con, () => new Folder());
         }
 
         [Test]
-        public void PersistFailTest()
+        public async Task PersistFailTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestPersistFail(con, () => new Folder());
+            await TestUtil.TestPersistFail(con, () => new Folder());
         }
 
         [Test]
-        public void DeleteTest()
+        public async Task DeleteTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestDelete(con, () => new Folder());
+            await TestUtil.TestDelete(con, () => new Folder());
         }
 
         [Test]
-        public void GetTest()
+        public async Task GetTest()
         {
-            TestUtil.TestGet<Folder>();
+            await TestUtil.TestGet<Folder>();
         }
 
         [Test]

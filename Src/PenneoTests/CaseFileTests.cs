@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using Penneo;
@@ -17,44 +18,44 @@ namespace PenneoTests
         }
 
         [Test]
-        public void PersistSuccessTest()
+        public async Task PersistSuccessTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestPersist(con, () => new CaseFile());
+            await TestUtil.TestPersist(con, () => new CaseFile());
         }
 
         [Test]
-        public void PersistFailTest()
+        public async Task PersistFailTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestPersistFail(con, () => new CaseFile());
+            await TestUtil.TestPersistFail(con, () => new CaseFile());
         }
 
         [Test]
-        public void DeleteTest()
+        public async Task DeleteTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestDelete(con, () => new CaseFile());
+            await TestUtil.TestDelete(con, () => new CaseFile());
         }
 
         [Test]
-        public void GetTest()
+        public async Task GetTest()
         {
-            TestUtil.TestGet<CaseFile>();
+            await TestUtil.TestGet<CaseFile>();
         }
 
         [Test]
-        public void GetDocumentsTest()
+        public async Task GetDocumentsTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestGetLinked(con, () => new CaseFile().GetDocumentsAsync(con));
+            await TestUtil.TestGetLinked(con, () => new CaseFile().GetDocumentsAsync(con));
         }
 
         [Test]
-        public void GetSignersTest()
+        public async Task GetSignersTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestGetLinked(con, () => new CaseFile().GetSignersAsync(con));
+            await TestUtil.TestGetLinked(con, () => new CaseFile().GetSignersAsync(con));
         }
 
         [Test]
@@ -65,17 +66,17 @@ namespace PenneoTests
         }
 
         [Test]
-        public void SendTest()
+        public async Task SendTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestPerformActionSuccess(con, () => new CaseFile().SendAsync(con));
+            await TestUtil.TestPerformActionSuccess(con, () => new CaseFile().SendAsync(con));
         }
         
         [Test]
-        public void ActivateTest()
+        public async Task ActivateTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestPerformActionSuccess(con, () => new CaseFile().ActivateAsync(con));
+            await TestUtil.TestPerformActionSuccess(con, () => new CaseFile().ActivateAsync(con));
         }
 
         [Test]

@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Threading.Tasks;
+using NUnit.Framework;
 using Penneo;
 
 namespace PenneoTests
@@ -25,37 +26,37 @@ namespace PenneoTests
         }
 
         [Test]
-        public void PersistSuccessTest()
+        public async Task PersistSuccessTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestPersist(con, CreateSigner);
+            await TestUtil.TestPersist(con, CreateSigner);
         }
 
         [Test]
-        public void PersistFailTest()
+        public async Task PersistFailTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestPersistFail(con, CreateSigner);
+            await TestUtil.TestPersistFail(con, CreateSigner);
         }
 
         [Test]
-        public void DeleteTest()
+        public async Task DeleteTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestDelete(con, CreateSigner);
+            await TestUtil.TestDelete(con, CreateSigner);
         }
 
         [Test]
-        public void GetTest()
+        public async Task GetTest()
         {
-            TestUtil.TestGet<Signer>();
+            await TestUtil.TestGet<Signer>();
         }
 
         [Test]
-        public void GetSigningRequestTest()
+        public async Task GetSigningRequestTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestGetLinked(con, () => CreateSigner().GetSigningRequest(con));
+            await TestUtil.TestGetLinked(con, () => CreateSigner().GetSigningRequest(con));
         }        
     }
 }

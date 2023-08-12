@@ -39,11 +39,11 @@ namespace PenneoTests
         }
 
         [Test]
-        public void FindOneByTest()
+        public async Task FindOneByTest()
         {
             var con = TestUtil.CreatePenneoConnector();
             var q = new Query(con);
-            FindOneTest(con, () => q.FindOneByAsync<CaseFile>());
+            await FindOneTest(con, () => q.FindOneByAsync<CaseFile>());
         }
 
         [Test]
@@ -89,8 +89,7 @@ namespace PenneoTests
             IEnumerable<T> returned = new[] { instance };
             A.CallTo(() => con.ApiConnector.FindByAsync<T>(null, null, null)).WithAnyArguments()
                 .Returns(Task.FromResult(new FindByResult<T>
-                    { Success = true, Objects = returned, Response = _response200 }))
-                .AssignsOutAndRefParameters(returned, _response200);
+                    { Success = true, Objects = returned, Response = _response200 }));
 
             var obj = await f();
 

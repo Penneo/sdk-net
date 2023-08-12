@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Threading.Tasks;
 using FakeItEasy;
 using NUnit.Framework;
 using Penneo;
@@ -17,30 +18,30 @@ namespace PenneoTests
         }
 
         [Test]
-        public void PersistSuccessTest()
+        public async Task PersistSuccessTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestPersist(con, () => new Validation());
+            await TestUtil.TestPersist(con, () => new Validation());
         }
 
         [Test]
-        public void PersistFailTest()
+        public async Task PersistFailTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestPersistFail(con, () => new Validation());
+            await TestUtil.TestPersistFail(con, () => new Validation());
         }
 
         [Test]
-        public void DeleteTest()
+        public async Task DeleteTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestDelete(con, () => new Validation());
+            await TestUtil.TestDelete(con, () => new Validation());
         }
 
         [Test]
-        public void GetTest()
+        public async Task GetTest()
         {
-            TestUtil.TestGet<Validation>();
+            await TestUtil.TestGet<Validation>();
         }
 
         [Test]
@@ -58,7 +59,7 @@ namespace PenneoTests
         }
 
         [Test]
-        public void SavePdfTest()
+        public async Task SavePdfTest()
         {
             var con = TestUtil.CreatePenneoConnector();
             var data = new byte[] { 1, 2, 3 };
@@ -68,7 +69,7 @@ namespace PenneoTests
             var savePath = Path.GetTempFileName();
             try
             {
-                doc.SavePdfAsync(con, savePath);
+                await doc.SavePdfAsync(con, savePath);
                 var readBytes = File.ReadAllBytes(savePath);
                 CollectionAssert.AreEqual(data, readBytes);
             }
@@ -81,10 +82,10 @@ namespace PenneoTests
         }
 
         [Test]
-        public void SendTest()
+        public async Task SendTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestPerformActionSuccess(con, () => new Validation().SendAsync(con));
+            await TestUtil.TestPerformActionSuccess(con, () => new Validation().SendAsync(con));
         }
     }
 }

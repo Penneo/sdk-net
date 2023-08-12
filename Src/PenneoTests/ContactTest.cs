@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using Penneo;
@@ -17,30 +18,30 @@ namespace PenneoTests
         }
 
         [Test]
-        public void PersistSuccessTest()
+        public async Task PersistSuccessTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestPersist(con, () => new Contact());
+            await TestUtil.TestPersist(con, () => new Contact());
         }
 
         [Test]
-        public void PersistFailTest()
+        public async Task PersistFailTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestPersistFail(con, () => new Contact());
+            await TestUtil.TestPersistFail(con, () => new Contact());
         }
 
         [Test]
-        public void DeleteTest()
+        public async Task DeleteTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestDelete(con, () => new Contact());
+            await TestUtil.TestDelete(con, () => new Contact());
         }
 
         [Test]
-        public void GetTest()
+        public async Task GetTest()
         {
-            TestUtil.TestGet<Contact>();
+            await TestUtil.TestGet<Contact>();
         }
 
         [Test]

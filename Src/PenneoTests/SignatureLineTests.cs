@@ -32,34 +32,34 @@ namespace PenneoTests
         }
 
         [Test]
-        public void PersistSuccessTest()
+        public async Task PersistSuccessTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestPersist(con, CreateSignatureLine);
+            await TestUtil.TestPersist(con, CreateSignatureLine);
         }
 
         [Test]
-        public void PersistFailTest()
+        public async Task PersistFailTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestPersistFail(con, CreateSignatureLine);
+            await TestUtil.TestPersistFail(con, CreateSignatureLine);
         }
 
         [Test]
-        public void DeleteTest()
+        public async Task DeleteTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestDelete(con, CreateSignatureLine);
+            await TestUtil.TestDelete(con, CreateSignatureLine);
         }
 
         [Test]
-        public void GetTest()
+        public async Task GetTest()
         {
-            TestUtil.TestGet<SignatureLine>();
+            await TestUtil.TestGet<SignatureLine>();
         }
 
         [Test]
-        public void SetSignerSuccessTest()
+        public async Task SetSignerSuccessTest()
         {
             var con = TestUtil.CreatePenneoConnector();
             var sl = CreateSignatureLine();
@@ -67,7 +67,7 @@ namespace PenneoTests
 
             A.CallTo(() => con.ApiConnector.LinkEntityAsync(sl, s)).Returns(true);
 
-            sl.SetSignerAsync(con, s);
+            await sl.SetSignerAsync(con, s);
 
             Assert.AreEqual(s, sl.Signer);
             A.CallTo(() => con.ApiConnector.LinkEntityAsync(sl, s)).MustHaveHappened();
