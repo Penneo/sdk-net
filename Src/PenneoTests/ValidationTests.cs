@@ -45,17 +45,17 @@ namespace PenneoTests
         }
 
         [Test]
-        public void GetLinkTest()
+        public async Task GetLinkTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestGetTextAsset(con, () => new Validation().GetLinkAsync(con));
+            await TestUtil.TestGetTextAsset(con, () => new Validation().GetLinkAsync(con));
         }
 
         [Test]
-        public void GetPdfTest()
+        public async Task GetPdfTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestGetFileAsset(con, () => new Validation().GetPdfAsync(con));
+            await TestUtil.TestGetFileAsset(con, () => new Validation().GetPdfAsync(con));
         }
 
         [Test]

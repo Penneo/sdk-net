@@ -35,10 +35,10 @@ namespace PenneoTests
         }
 
         [Test]
-        public void GetLinkTest()
+        public async Task GetLinkTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestGetTextAsset(con, () => new SigningRequest().GetLinkAsync(con));
+            await TestUtil.TestGetTextAsset(con, () => new SigningRequest().GetLinkAsync(con));
         }
 
         [Test]

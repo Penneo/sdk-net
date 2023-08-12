@@ -59,10 +59,10 @@ namespace PenneoTests
         }
 
         [Test]
-        public void FindSignerTest()
+        public async Task FindSignerTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestFindLinked(con, () => new CaseFile().FindSignerAsync(con, 0));
+            await TestUtil.TestFindLinked(con, () => new CaseFile().FindSignerAsync(con, 0));
         }
 
         [Test]

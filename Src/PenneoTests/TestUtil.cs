@@ -112,16 +112,16 @@ namespace PenneoTests
         }
 
 
-        public static void TestGetLinkedNotCalled<TChild>(PenneoConnector con, Func<Task<TChild>> getter)
+        public static async Task TestGetLinkedNotCalled<TChild>(PenneoConnector con, Func<Task<TChild>> getter)
             where TChild: Entity
         {
             var mockedResult = new QueryResult<TChild>() { Objects = new List<TChild>() , StatusCode = HttpStatusCode.OK};
             A.CallTo(() => con.ApiConnector.GetLinkedEntitiesAsync<TChild>(null, null)).WithAnyArguments().Returns(mockedResult);
-            getter();
+            await getter();
             A.CallTo(() => con.ApiConnector.GetLinkedEntitiesAsync<TChild>(null, null)).WithAnyArguments().MustNotHaveHappened();
         }
 
-        public static async void TestFindLinked<TChild>(PenneoConnector con, Func<Task<TChild>> getter)
+        public static async Task TestFindLinked<TChild>(PenneoConnector con, Func<Task<TChild>> getter)
             where TChild : Entity
         {
             var instance = (TChild)Activator.CreateInstance(typeof(TChild));
@@ -145,40 +145,40 @@ namespace PenneoTests
             A.CallTo(() => con.ApiConnector.PerformAction(null, null)).WithAnyArguments().MustHaveHappened();
         }
 
-        public static void TestLink(PenneoConnector con, Action action, Entity parent, Entity child)
+        public static async Task TestLink(PenneoConnector con, Func<Task> func, Entity parent, Entity child)
         {
             A.CallTo(() => con.ApiConnector.LinkEntityAsync(parent, child)).WithAnyArguments().Returns(true);
 
-            action();
+            await func();
 
             A.CallTo(() => con.ApiConnector.LinkEntityAsync(parent, child)).WithAnyArguments().MustHaveHappened();
         }
 
-        public static void TestUnlink(PenneoConnector con, Action action, Entity parent, Entity child)
+        public static async Task TestUnlink(PenneoConnector con, Func<Task> func, Entity parent, Entity child)
         {
             A.CallTo(() => con.ApiConnector.UnlinkEntityAsync(parent, child)).WithAnyArguments().Returns(true);
 
-            action();
+            await func();
 
             A.CallTo(() => con.ApiConnector.UnlinkEntityAsync(parent, child)).WithAnyArguments().MustHaveHappened();
         }
 
-        public static void TestGetFileAsset(PenneoConnector con, Action action)
+        public static async Task TestGetFileAsset(PenneoConnector con, Func<Task> func)
         {
             var data = new byte[] {1, 2, 3};
             A.CallTo(() => con.ApiConnector.GetFileAssetsAsync(null, null)).WithAnyArguments().Returns(data);
 
-            action();
+            await func();
 
             A.CallTo(() => con.ApiConnector.GetFileAssetsAsync(null, null)).WithAnyArguments().MustHaveHappened();
         }
 
-        public static void TestGetTextAsset(PenneoConnector con, Action action)
+        public static async Task TestGetTextAsset(PenneoConnector con, Func<Task> func)
         {
             const string data = "123";
             A.CallTo(() => con.ApiConnector.GetTextAssetsAsync(null, null)).WithAnyArguments().Returns(data);
 
-            action();
+            await func();
 
             A.CallTo(() => con.ApiConnector.GetTextAssetsAsync(null, null)).WithAnyArguments().MustHaveHappened();
         }

@@ -42,39 +42,39 @@ namespace PenneoTests
         }
 
         [Test]
-        public void AddCaseFileTest()
+        public async Task AddCaseFileTest()
         {
             var con = TestUtil.CreatePenneoConnector();
             var folder = new Folder();
             var cf = new CaseFile();
-            TestUtil.TestLink(con, () => folder.AddCaseFileAsync(con, cf), folder, cf);
+            await TestUtil.TestLink(con, () => folder.AddCaseFileAsync(con, cf), folder, cf);
         }
 
         [Test]
-        public void RemoveCaseFileTest()
+        public async Task RemoveCaseFileTest()
         {
             var con = TestUtil.CreatePenneoConnector();
             var folder = new Folder();
             var cf = new CaseFile();
-            TestUtil.TestUnlink(con, () => folder.RemoveCaseFileAsync(con, cf), folder, cf);
+            await TestUtil.TestUnlink(con, () => folder.RemoveCaseFileAsync(con, cf), folder, cf);
         }
 
         [Test]
-        public void AddValidationTest()
+        public async Task AddValidationTest()
         {
             var con = TestUtil.CreatePenneoConnector();
             var folder = new Folder();
             var validation = new Validation();
-            TestUtil.TestLink(con, () => folder.AddValidationAsync(con, validation), folder, validation);
+            await TestUtil.TestLink(con, () => folder.AddValidationAsync(con, validation), folder, validation);
         }
 
         [Test]
-        public void RemoveValidationTest()
+        public async Task RemoveValidationTest()
         {
             var con = TestUtil.CreatePenneoConnector();
             var folder = new Folder();
             var validation = new Validation();
-            TestUtil.TestUnlink(con, () => folder.RemoveValidationAsync(con, validation), folder, validation);
+            await TestUtil.TestUnlink(con, () => folder.RemoveValidationAsync(con, validation), folder, validation);
         }
     }
 }
