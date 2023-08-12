@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Penneo
+﻿namespace Penneo
 {
     public class CopyRecipient : Entity
     {

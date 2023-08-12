@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Penneo.Connector;
-using Penneo.Mapping;
-using Penneo.Util;
 
 namespace Penneo
 {
