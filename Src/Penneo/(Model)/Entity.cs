@@ -74,7 +74,7 @@ namespace Penneo
         public async Task<bool> PersistAsync(PenneoConnector con)
         {
             con.Log((IsNew ? "Creating" : "Updating") + " " + GetType().Name + " (" + (Id.HasValue ? Id.ToString() : "new") + ")", LogSeverity.Information);
-            var success = await con.ApiConnector.WriteObjectAsync(this);
+            var success = await con.ApiConnector.WriteObjectAsync(this).ConfigureAwait(false);
             if (!success)
             {
                 con.Log((IsNew ? "Creating" : "Updating") + " " + GetType().Name + " (" + (Id.HasValue ? Id.ToString() : "new") + ") failed", LogSeverity.Information);
@@ -88,7 +88,7 @@ namespace Penneo
         public async Task DeleteAsync(PenneoConnector con)
         {
             con.Log("Deleting " + GetType().Name + " (" + (Id.HasValue ? Id.ToString() : "new") + ")", LogSeverity.Information);
-            if (!await con.ApiConnector.DeleteObjectAsync(this))
+            if (!await con.ApiConnector.DeleteObjectAsync(this).ConfigureAwait(false))
             {
                 throw new Exception("Penneo: Could not delete the " + GetType().Name);
             }
@@ -106,96 +106,96 @@ namespace Penneo
         /// <summary>
         /// Link this entity with the given child in the storage
         /// </summary>
-        protected async Task<bool> LinkEntityAsync(PenneoConnector con, Entity child)
+        protected Task<bool> LinkEntityAsync(PenneoConnector con, Entity child)
         {
             con.Log("Linking " +
                     GetType().Name + " (" + (Id.HasValue ? Id.ToString() : "new") + ") TO " +
                     child.GetType().Name + " (" + (child.Id.HasValue ? Id.ToString() : "new") + ")", LogSeverity.Information);
-            return await con.ApiConnector.LinkEntityAsync(this, child);
+            return con.ApiConnector.LinkEntityAsync(this, child);
         }
 
         /// <summary>
         /// Unlink this entity with the given child in the storage
         /// </summary>
-        protected async Task<bool> UnlinkEntity(PenneoConnector con, Entity child)
+        protected Task<bool> UnlinkEntity(PenneoConnector con, Entity child)
         {
             con.Log("Unlinking " +
                     GetType().Name + " (" + (Id.HasValue ? Id.ToString() : "new") + ") TO " +
                     child.GetType().Name + " (" + (child.Id.HasValue ? Id.ToString() : "new") + ")", LogSeverity.Information);
-            return await con.ApiConnector.UnlinkEntityAsync(this, child);
+            return con.ApiConnector.UnlinkEntityAsync(this, child);
         }
 
         /// <summary>
         /// Get all entities linked with this entity in the storage
         /// </summary>
-        protected async Task<QueryResult<T>> GetLinkedEntitiesAsync<T>(PenneoConnector con, string url = null)
+        protected Task<QueryResult<T>> GetLinkedEntitiesAsync<T>(PenneoConnector con, string url = null)
             where T: Entity
         {
-            return await con.ApiConnector.GetLinkedEntitiesAsync<T>(this, url);
+            return con.ApiConnector.GetLinkedEntitiesAsync<T>(this, url);
         }
 
         /// <summary>
         /// Get entity linked with this entity based on url
         /// </summary>
-        protected async Task<QuerySingleObjectResult<T>> GetLinkedEntityAsync<T>(PenneoConnector con, string url = null)
+        protected Task<QuerySingleObjectResult<T>> GetLinkedEntityAsync<T>(PenneoConnector con, string url = null)
             where T: Entity
         {
-            return await con.ApiConnector.GetLinkedEntityAsync<T>(this, url);
+            return con.ApiConnector.GetLinkedEntityAsync<T>(this, url);
         }
 
         /// <summary>
         /// Find a specific linked entity
         /// </summary>
-        protected async Task<T> FindLinkedEntityAsync<T>(PenneoConnector con, int id)
+        protected Task<T> FindLinkedEntityAsync<T>(PenneoConnector con, int id)
         {
-            return await con.ApiConnector.FindLinkedEntityAsync<T>(this, id);
+            return con.ApiConnector.FindLinkedEntityAsync<T>(this, id);
         }
 
         /// <summary>
         /// Get file assets with the given name for this entity
         /// </summary>
-        protected async Task<byte[]> GetFileAssetsAsync(PenneoConnector con, string assetName)
+        protected Task<byte[]> GetFileAssetsAsync(PenneoConnector con, string assetName)
         {
-            return await con.ApiConnector.GetFileAssetsAsync(this, assetName);
+            return con.ApiConnector.GetFileAssetsAsync(this, assetName);
         }
 
         /// <summary>
         /// Get text assets with the given name for this entity
         /// </summary>
-        protected async Task<string> GetTextAssetsAsync(PenneoConnector con, string assetName)
+        protected Task<string> GetTextAssetsAsync(PenneoConnector con, string assetName)
         {
-            return await con.ApiConnector.GetTextAssetsAsync(this, assetName);
+            return con.ApiConnector.GetTextAssetsAsync(this, assetName);
         }
 
-        protected async Task<T> GetAssetAsync<T>(PenneoConnector con, string assetName)
+        protected Task<T> GetAssetAsync<T>(PenneoConnector con, string assetName)
         {
-            return await con.ApiConnector.GetAssetAsync<T>(this, assetName);
+            return con.ApiConnector.GetAssetAsync<T>(this, assetName);
         }
 
         /// <summary>
         /// Get list of string asset with the given name for this entity
         /// </summary>
-        protected async Task<IEnumerable<string>> GetStringListAssetAsync(PenneoConnector con, string assetName)
+        protected Task<IEnumerable<string>> GetStringListAssetAsync(PenneoConnector con, string assetName)
         {
-            return await con.ApiConnector.GetStringListAssetAsync(this, assetName);
+            return con.ApiConnector.GetStringListAssetAsync(this, assetName);
         }
 
         /// <summary>
         /// Perform the given action on this entity
         /// </summary>
-        protected async Task<ServerResult> PerformActionAsync(PenneoConnector con, string action)
+        protected Task<ServerResult> PerformActionAsync(PenneoConnector con, string action)
         {
-            return await con.ApiConnector.PerformAction(this, action);
+            return con.ApiConnector.PerformAction(this, action);
         }
 
-        protected async Task<ServerResult> PerformComplexActionAsync(
+        protected Task<ServerResult> PerformComplexActionAsync(
             PenneoConnector con,
             Method method,
             string action,
             Dictionary<string, object> data
         )
         {
-            return await con.ApiConnector.PerformComplexActionAsync(this, method, action, data);
+            return con.ApiConnector.PerformComplexActionAsync(this, method, action, data);
         }
 
         /// <summary>

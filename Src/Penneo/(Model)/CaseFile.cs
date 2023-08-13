@@ -174,7 +174,7 @@ namespace Penneo
         {
             if (_documents == null)
             {
-                _documents = (await GetLinkedEntitiesAsync<Document>(con)).Objects.ToList();
+                _documents = (await GetLinkedEntitiesAsync<Document>(con).ConfigureAwait(false)).Objects.ToList();
                 foreach (var doc in _documents)
                 {
                     doc.CaseFile = this;
@@ -213,7 +213,7 @@ namespace Penneo
         {
             if (Signers == null)
             {
-                Signers = (await GetLinkedEntitiesAsync<Signer>(con)).Objects.ToList();
+                Signers = (await GetLinkedEntitiesAsync<Signer>(con).ConfigureAwait(false)).Objects.ToList();
             }
             return Signers;
         }
@@ -230,7 +230,7 @@ namespace Penneo
             }
             if (signer == null)
             {
-                signer = await FindLinkedEntityAsync<Signer>(con, id);
+                signer = await FindLinkedEntityAsync<Signer>(con, id).ConfigureAwait(false);
             }
             if (signer != null)
             {
@@ -247,7 +247,7 @@ namespace Penneo
         {
             if (_copyRecipients == null)
             {
-                _copyRecipients = (await GetLinkedEntitiesAsync<CopyRecipient>(con)).Objects.ToList();
+                _copyRecipients = (await GetLinkedEntitiesAsync<CopyRecipient>(con).ConfigureAwait(false)).Objects.ToList();
                 foreach (var doc in _copyRecipients)
                 {
                     doc.CaseFile = this;
@@ -282,9 +282,9 @@ namespace Penneo
         /// <summary>
         /// Get all available case file templates
         /// </summary>
-        public async Task<QueryResult<CaseFileTemplate>> GetTemplatesAsync(PenneoConnector con)
+        public Task<QueryResult<CaseFileTemplate>> GetTemplatesAsync(PenneoConnector con)
         {
-            return await GetLinkedEntitiesAsync<CaseFileTemplate>(con, "casefile/casefiletypes");
+            return GetLinkedEntitiesAsync<CaseFileTemplate>(con, "casefile/casefiletypes");
         }
 
         /// <summary>
@@ -292,7 +292,7 @@ namespace Penneo
         /// </summary>
         public async Task<IEnumerable<DocumentType>> GetDocumentTypesAsync(PenneoConnector con)
         {
-            return (await GetLinkedEntitiesAsync<DocumentType>(con, "casefiles/" + Id + "/documenttypes")).Objects;
+            return (await GetLinkedEntitiesAsync<DocumentType>(con, "casefiles/" + Id + "/documenttypes").ConfigureAwait(false)).Objects;
         }
 
         /// <summary>
@@ -304,7 +304,7 @@ namespace Penneo
             {
                 return new List<SignerType>();
             }
-            return (await GetLinkedEntitiesAsync<SignerType>(con, "casefiles/" + Id + "/signertypes")).Objects;
+            return (await GetLinkedEntitiesAsync<SignerType>(con, "casefiles/" + Id + "/signertypes").ConfigureAwait(false)).Objects;
         }
 
         /// <summary>
@@ -316,7 +316,7 @@ namespace Penneo
             {
                 return null;
             }
-            var r = await GetLinkedEntityAsync<User>(con, "customers/" + CustomerId + "/users/" + UserId);
+            var r = await GetLinkedEntityAsync<User>(con, "customers/" + CustomerId + "/users/" + UserId).ConfigureAwait(false);
             return r != null ? r.Object : null;
         }
 
@@ -329,8 +329,8 @@ namespace Penneo
             {
                 return null;
             }
-            var r = await GetLinkedEntityAsync<Customer>(con, "customers/" + CustomerId);
-            return r != null ? r.Object : null;
+            var r = await GetLinkedEntityAsync<Customer>(con, "customers/" + CustomerId).ConfigureAwait(false);
+            return r?.Object;
         }
 
         /// <summary>
@@ -340,7 +340,7 @@ namespace Penneo
         {
             if (Id.HasValue && CaseFileTemplate == null)
             {
-                var caseFileTypes = await GetLinkedEntitiesAsync<CaseFileTemplate>(con);
+                var caseFileTypes = await GetLinkedEntitiesAsync<CaseFileTemplate>(con).ConfigureAwait(false);
                 CaseFileTemplate = caseFileTypes.Objects.FirstOrDefault();
             }
             return CaseFileTemplate;
@@ -357,9 +357,9 @@ namespace Penneo
         /// <summary>
         /// Get all errors associated with the case file
         /// </summary>
-        public async Task<IEnumerable<string>> GetErrorsAsync(PenneoConnector con)
+        public Task<IEnumerable<string>> GetErrorsAsync(PenneoConnector con)
         {
-            return await GetStringListAssetAsync(con, "errors");
+            return GetStringListAssetAsync(con, "errors");
         }
 
         /// <summary>
@@ -367,7 +367,7 @@ namespace Penneo
         /// </summary>
         public async Task<bool> SendAsync(PenneoConnector con)
         {
-            return (await PerformActionAsync(con, ACTION_SEND)).Success;
+            return (await PerformActionAsync(con, ACTION_SEND).ConfigureAwait(false)).Success;
         }
 
         /// <summary>
@@ -375,7 +375,7 @@ namespace Penneo
         /// </summary>
         public async Task<bool> ActivateAsync(PenneoConnector con)
         {
-            return (await PerformActionAsync(con, ACTION_ACTIVATE)).Success;
+            return (await PerformActionAsync(con, ACTION_ACTIVATE).ConfigureAwait(false)).Success;
         }
     }
 }

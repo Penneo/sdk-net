@@ -130,12 +130,12 @@ namespace Penneo.Connector
             }
             if (!obj.IsNew)
             {
-                var response = await CallServerAsync(obj.GetRelativeUrl(_con) + "/" + obj.Id, data, Method.Put);
+                var response = await CallServerAsync(obj.GetRelativeUrl(_con) + "/" + obj.Id, data, Method.Put).ConfigureAwait(false);
                 return ExtractResponse(obj, response, result);
             }
             else
             {
-                var response = await CallServerAsync(obj.GetRelativeUrl(_con), data, Method.Post);
+                var response = await CallServerAsync(obj.GetRelativeUrl(_con), data, Method.Post).ConfigureAwait(false);
                 var successful = ExtractResponse(obj, response, result);
                 if (successful)
                 {
@@ -175,13 +175,13 @@ namespace Penneo.Connector
         /// </summary>
         public async Task<bool> DeleteObjectAsync(Entity obj)
         {
-            var response = await CallServerAsync(obj.GetRelativeUrl(_con) + '/' + obj.Id, null, Method.Delete);
+            var response = await CallServerAsync(obj.GetRelativeUrl(_con) + '/' + obj.Id, null, Method.Delete).ConfigureAwait(false);
             return response != null && (response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.NoContent);
         }
 
-        public async Task<ReadObjectResult<T>> ReadObjectAsync<T>(Entity parent, int? id) where T : Entity
+        public Task<ReadObjectResult<T>> ReadObjectAsync<T>(Entity parent, int? id) where T : Entity
         {
-            return await ReadObjectAsync<T>(parent, id, null);
+            return ReadObjectAsync<T>(parent, id, null);
         }
 
         public async Task<ReadObjectResult<T>> ReadObjectAsync<T>(Entity parent, int? id, string relativeUrl) where T : Entity
@@ -191,7 +191,7 @@ namespace Penneo.Connector
             {
                 url += "/" + id;
             }
-            var response = await CallServerAsync(url);
+            var response = await CallServerAsync(url).ConfigureAwait(false);
             if (response == null || response.StatusCode != HttpStatusCode.OK)
             {
                 return new ReadObjectResult<T> { Response = response, Result = default };
@@ -211,7 +211,7 @@ namespace Penneo.Connector
         public async Task<bool> LinkEntityAsync(Entity parent, Entity child)
         {
             var url = parent.GetRelativeUrl(_con) + "/" + parent.Id + "/" + _restResources.GetResource(child.GetType()) + "/" + child.Id;
-            var response = await CallServerAsync(url, method: Method.Post);
+            var response = await CallServerAsync(url, method: Method.Post).ConfigureAwait(false);
             var result = new ServerResult();
             return ExtractResponse(parent, response, result);
         }
@@ -222,7 +222,7 @@ namespace Penneo.Connector
         public async Task<bool> UnlinkEntityAsync(Entity parent, Entity child)
         {
             var url = parent.GetRelativeUrl(_con) + "/" + parent.Id + "/" + _restResources.GetResource(child.GetType()) + "/" + child.Id;
-            var response = await CallServerAsync(url, method: Method.Delete);
+            var response = await CallServerAsync(url, method: Method.Delete).ConfigureAwait(false);
             var result = new ServerResult();
             return ExtractResponse(parent, response, result);
         }
@@ -243,7 +243,7 @@ namespace Penneo.Connector
                 actualUrl = url;
             }
 
-            var response = await CallServerAsync(actualUrl);
+            var response = await CallServerAsync(actualUrl).ConfigureAwait(false);
             var result = new QueryResult<T>();
             if (ExtractResponse(obj, response, result))
             {
@@ -268,7 +268,7 @@ namespace Penneo.Connector
                 actualUrl = url;
             }
 
-            var response = await CallServerAsync(actualUrl);
+            var response = await CallServerAsync(actualUrl).ConfigureAwait(false);
             var result = new QuerySingleObjectResult<T>();
             if (ExtractResponse(obj, response, result))
             {
@@ -283,7 +283,7 @@ namespace Penneo.Connector
         public async Task<T> FindLinkedEntityAsync<T>(Entity obj, int id)
         {
             var url = obj.GetRelativeUrl(_con) + "/" + obj.Id + "/" + _restResources.GetResource<T>() + "/" + id;
-            var response = await CallServerAsync(url);
+            var response = await CallServerAsync(url).ConfigureAwait(false);
             if (response == null || !_successStatusCodes.Contains(response.StatusCode))
             {
                 throw new Exception("Penneo: Internal problem encountered");
@@ -294,7 +294,7 @@ namespace Penneo.Connector
         public async Task<T> GetAssetAsync<T>(Entity obj, string assetName)
         {
             var url = obj.GetRelativeUrl(_con) + "/" + obj.Id + "/" + assetName;
-            var response = await CallServerAsync(url);
+            var response = await CallServerAsync(url).ConfigureAwait(false);
             if (response == null || string.IsNullOrEmpty(response.Content) || !_successStatusCodes.Contains(response.StatusCode))
             {
                 return default(T);
@@ -308,7 +308,7 @@ namespace Penneo.Connector
         /// </summary>
         public async Task<byte[]> GetFileAssetsAsync(Entity obj, string assetName)
         {
-            var encoded = await GetTextAssetsAsync(obj, assetName);
+            var encoded = await GetTextAssetsAsync(obj, assetName).ConfigureAwait(false);
             return Convert.FromBase64String(encoded);
         }
 
@@ -318,7 +318,7 @@ namespace Penneo.Connector
         public async Task<string> GetTextAssetsAsync(Entity obj, string assetName)
         {
             var url = obj.GetRelativeUrl(_con) + "/" + obj.Id + "/" + assetName;
-            var response = await CallServerAsync(url);
+            var response = await CallServerAsync(url).ConfigureAwait(false);
             var result = JsonConvert.DeserializeObject<string[]>(response.Content);
             return result[0];
         }
@@ -329,7 +329,7 @@ namespace Penneo.Connector
         public async Task<IEnumerable<string>> GetStringListAssetAsync(Entity obj, string assetName)
         {
             var url = obj.GetRelativeUrl(_con) + "/" + obj.Id + "/" + assetName;
-            var response = await CallServerAsync(url);
+            var response = await CallServerAsync(url).ConfigureAwait(false);
             var result = JsonConvert.DeserializeObject<string[]>(response.Content);
             return result;
         }
@@ -348,7 +348,7 @@ namespace Penneo.Connector
                 options = new Dictionary<string, Dictionary<string, object>>();
                 options["query"] = query;
             }
-            var response = await CallServerAsync(resource, null, Method.Get, options, page: page, perPage: perPage);
+            var response = await CallServerAsync(resource, null, Method.Get, options, page: page, perPage: perPage).ConfigureAwait(false);
             if (response == null || !_successStatusCodes.Contains(response.StatusCode))
             {
                 return new FindByResult<T> { Success = false };
@@ -373,7 +373,7 @@ namespace Penneo.Connector
         {
             var result = new ServerResult();
             var url = obj.GetRelativeUrl(_con) + "/" + obj.Id + "/" + action;
-            var response = await CallServerAsync(url, data, method);
+            var response = await CallServerAsync(url, data, method).ConfigureAwait(false);
             if (response == null || !_successStatusCodes.Contains(response.StatusCode))
             {
                 result.Success = false;
@@ -578,7 +578,7 @@ namespace Penneo.Connector
                 var request = PrepareRequest(url, data, method, options, page, perPage);
                 LogRequest(request, url, method.ToString());
 
-                RestResponse response = await _client.ExecuteAsync(request);
+                var response = await _client.ExecuteAsync(request).ConfigureAwait(false);
 
                 LogResponse(response, url, method.ToString());
 
