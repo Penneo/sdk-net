@@ -245,7 +245,7 @@ namespace Penneo
             _con.Log("GetNextPageAsync (" + typeof(T).Name + ")", LogSeverity.Information);
             if (!result.NextPage.HasValue)
             {
-                return null;
+                return Task.FromResult<QueryResult<T>>(null);
             }
             return GetPageAsync(result, result.NextPage);
         }
@@ -259,7 +259,7 @@ namespace Penneo
             _con.Log("GetPreviousPageAsync (" + typeof(T).Name + ")", LogSeverity.Information);
             if (!result.PrevPage.HasValue)
             {
-                return null;
+                return Task.FromResult<QueryResult<T>>(null);
             }
             return GetPageAsync(result, result.PrevPage);
         }
@@ -273,7 +273,7 @@ namespace Penneo
             _con.Log("GetFirstPageAsync (" + typeof(T).Name + ")", LogSeverity.Information);
             if (!result.FirstPage.HasValue)
             {
-                return null;
+                return Task.FromResult<QueryResult<T>>(null);
             }
             return GetPageAsync(result, result.FirstPage);
         }
