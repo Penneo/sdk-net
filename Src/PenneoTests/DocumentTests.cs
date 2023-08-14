@@ -40,7 +40,6 @@ namespace PenneoTests
         [Test]
         public void ConstructorTest()
         {
-            var con = TestUtil.CreatePenneoConnector();
             var doc = CreateDocument();
             Assert.IsNotNull(doc.CaseFile);
             Assert.AreEqual("doc", doc.Title);
@@ -56,36 +55,35 @@ namespace PenneoTests
         }
 
         [Test]
-        public void PersistSuccessTest()
+        public async Task PersistSuccessTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestPersist(con, CreateDocument);
+            await TestUtil.TestPersist(con, CreateDocument);
         }
 
         [Test]
-        public void PersistFailTest()
+        public async Task PersistFailTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestPersistFail(con, CreateDocument);
+            await TestUtil.TestPersistFail(con, CreateDocument);
         }
 
         [Test]
-        public void DeleteTest()
+        public async Task DeleteTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestDelete(con, CreateDocument);
+            await TestUtil.TestDelete(con, CreateDocument);
         }
 
         [Test]
-        public void GetTest()
+        public async Task GetTest()
         {
-            TestUtil.TestGet<Document>();
+            await TestUtil.TestGet<Document>();
         }
 
         [Test]
         public void MakeSignableTest()
         {
-            var con = TestUtil.CreatePenneoConnector();
             var doc = CreateDocument();
             doc.MakeSignable();
             Assert.AreEqual("signable", doc.SignType);
@@ -100,21 +98,21 @@ namespace PenneoTests
         }
 
         [Test]
-        public void FindSignatureLineTest()
+        public async Task FindSignatureLineTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestFindLinked(con, async () => await CreateDocument().FindSignatureLineAsync(con, 0));
+            await TestUtil.TestFindLinked(con, async () => await CreateDocument().FindSignatureLineAsync(con, 0));
         }
 
         [Test]
-        public void GetPdfTest()
+        public async Task GetPdfTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestGetFileAsset(con, () => CreateEmptyDocument().GetPdfAsync(con));
+            await TestUtil.TestGetFileAsset(con, () => CreateEmptyDocument().GetPdfAsync(con));
         }
 
         [Test]
-        public void SavePdfTest()
+        public async Task SavePdfTest()
         {
             var con = TestUtil.CreatePenneoConnector();
             var data = File.ReadAllBytes(TestPdfPath);
@@ -124,8 +122,8 @@ namespace PenneoTests
             var savePath = Path.GetTempFileName();
             try
             {
-                doc.SavePdfAsync(con, savePath);
-                var readBytes = File.ReadAllBytes(savePath);
+                await doc.SavePdfAsync(con, savePath);
+                var readBytes = await File.ReadAllBytesAsync(savePath);
                 CollectionAssert.AreEqual(data, readBytes);
             }
             finally
@@ -137,8 +135,8 @@ namespace PenneoTests
             var savePath2 = Path.GetTempFileName();
             try
             {
-                doc2.SavePdfAsync(con, savePath);
-                var readBytes = File.ReadAllBytes(savePath);
+                await doc2.SavePdfAsync(con, savePath);
+                var readBytes = await File.ReadAllBytesAsync(savePath);
                 CollectionAssert.AreEqual(data, readBytes);
             }
             finally
@@ -154,12 +152,12 @@ namespace PenneoTests
         {
             var con1 = TestUtil.CreatePenneoConnector();
             var doc1 = CreateDocument();
-            TestUtil.TestGetLinked(con1,  () => doc1.GetDocumentTypeAsync(con1));
+            await TestUtil.TestGetLinked(con1,  () => doc1.GetDocumentTypeAsync(con1));
 
             var con2 = TestUtil.CreatePenneoConnector();
             var doc2 = new Document();
             doc2.DocumentType = new DocumentType();
-            TestUtil.TestGetLinkedNotCalled(con2, () => doc2.GetDocumentTypeAsync(con2));
+            await TestUtil.TestGetLinkedNotCalled(con2, () => doc2.GetDocumentTypeAsync(con2));
             Assert.AreEqual((await doc2.GetDocumentTypeAsync(con2)), doc2.DocumentType);
         }
 
@@ -175,7 +173,6 @@ namespace PenneoTests
         [Test]
         public void GetStatusTest()
         {
-            var con = TestUtil.CreatePenneoConnector();
             var doc = CreateDocument();
             doc.Status = null;
             Assert.AreEqual(DocumentStatus.New, doc.GetStatus());

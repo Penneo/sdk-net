@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Threading.Tasks;
+using NUnit.Framework;
 using Penneo;
 
 namespace PenneoTests
@@ -14,66 +15,66 @@ namespace PenneoTests
         }
 
         [Test]
-        public void PersistSuccessTest()
+        public async Task PersistSuccessTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestPersist(con, () => new Folder());
+            await TestUtil.TestPersist(con, () => new Folder());
         }
 
         [Test]
-        public void PersistFailTest()
+        public async Task PersistFailTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestPersistFail(con, () => new Folder());
+            await TestUtil.TestPersistFail(con, () => new Folder());
         }
 
         [Test]
-        public void DeleteTest()
+        public async Task DeleteTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestDelete(con, () => new Folder());
+            await TestUtil.TestDelete(con, () => new Folder());
         }
 
         [Test]
-        public void GetTest()
+        public async Task GetTest()
         {
-            TestUtil.TestGet<Folder>();
+            await TestUtil.TestGet<Folder>();
         }
 
         [Test]
-        public void AddCaseFileTest()
-        {
-            var con = TestUtil.CreatePenneoConnector();
-            var folder = new Folder();
-            var cf = new CaseFile();
-            TestUtil.TestLink(con, () => folder.AddCaseFileAsync(con, cf), folder, cf);
-        }
-
-        [Test]
-        public void RemoveCaseFileTest()
+        public async Task AddCaseFileTest()
         {
             var con = TestUtil.CreatePenneoConnector();
             var folder = new Folder();
             var cf = new CaseFile();
-            TestUtil.TestUnlink(con, () => folder.RemoveCaseFileAsync(con, cf), folder, cf);
+            await TestUtil.TestLink(con, () => folder.AddCaseFileAsync(con, cf), folder, cf);
         }
 
         [Test]
-        public void AddValidationTest()
+        public async Task RemoveCaseFileTest()
+        {
+            var con = TestUtil.CreatePenneoConnector();
+            var folder = new Folder();
+            var cf = new CaseFile();
+            await TestUtil.TestUnlink(con, () => folder.RemoveCaseFileAsync(con, cf), folder, cf);
+        }
+
+        [Test]
+        public async Task AddValidationTest()
         {
             var con = TestUtil.CreatePenneoConnector();
             var folder = new Folder();
             var validation = new Validation();
-            TestUtil.TestLink(con, () => folder.AddValidationAsync(con, validation), folder, validation);
+            await TestUtil.TestLink(con, () => folder.AddValidationAsync(con, validation), folder, validation);
         }
 
         [Test]
-        public void RemoveValidationTest()
+        public async Task RemoveValidationTest()
         {
             var con = TestUtil.CreatePenneoConnector();
             var folder = new Folder();
             var validation = new Validation();
-            TestUtil.TestUnlink(con, () => folder.RemoveValidationAsync(con, validation), folder, validation);
+            await TestUtil.TestUnlink(con, () => folder.RemoveValidationAsync(con, validation), folder, validation);
         }
     }
 }

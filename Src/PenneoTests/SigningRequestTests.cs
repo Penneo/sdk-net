@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Threading.Tasks;
+using NUnit.Framework;
 using Penneo;
 
 namespace PenneoTests
@@ -7,44 +8,44 @@ namespace PenneoTests
     public class SigningRequestTests
     {        
         [Test]
-        public void PersistSuccessTest()
+        public async Task PersistSuccessTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestPersist(con, () => new SigningRequest());
+            await TestUtil.TestPersist(con, () => new SigningRequest());
         }
 
         [Test]
-        public void PersistFailTest()
+        public async Task PersistFailTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestPersistFail(con, () => new SigningRequest());
+            await TestUtil.TestPersistFail(con, () => new SigningRequest());
         }
 
         [Test]
-        public void DeleteTest()
+        public async Task DeleteTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestDelete(con, () => new SigningRequest());
+            await TestUtil.TestDelete(con, () => new SigningRequest());
         }
 
         [Test]
-        public void GetTest()
+        public async Task GetTest()
         {
-            TestUtil.TestGet<SigningRequest>();
+            await TestUtil.TestGet<SigningRequest>();
         }
 
         [Test]
-        public void GetLinkTest()
+        public async Task GetLinkTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestGetTextAsset(con, () => new SigningRequest().GetLinkAsync(con));
+            await TestUtil.TestGetTextAsset(con, () => new SigningRequest().GetLinkAsync(con));
         }
 
         [Test]
-        public void SendTest()
+        public async Task SendTest()
         {
             var con = TestUtil.CreatePenneoConnector();
-            TestUtil.TestPerformActionSuccess(con, () => new SigningRequest().SendAsync(con));
+            await TestUtil.TestPerformActionSuccess(con, () => new SigningRequest().SendAsync(con));
         }
 
         [Test]

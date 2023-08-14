@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Newtonsoft.Json;
-
-namespace Penneo
+﻿namespace Penneo
 {
     public class Contact : Entity
     {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Penneo
+﻿namespace Penneo
 {
     public class SignerType : Entity
     {

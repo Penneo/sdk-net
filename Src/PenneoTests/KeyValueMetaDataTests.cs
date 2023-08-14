@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Newtonsoft.Json;
 using NUnit.Framework;
-using Penneo;
 using Penneo.Util;
 
 namespace PenneoTests

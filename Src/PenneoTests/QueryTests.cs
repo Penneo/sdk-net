@@ -39,27 +39,27 @@ namespace PenneoTests
         }
 
         [Test]
-        public void FindOneByTest()
+        public async Task FindOneByTest()
         {
             var con = TestUtil.CreatePenneoConnector();
             var q = new Query(con);
-            FindOneTest(con, () => q.FindOneByAsync<CaseFile>());
+            await FindOneTest(con, () => q.FindOneByAsync<CaseFile>());
         }
 
         [Test]
-        public void FindAllTest()
+        public async Task FindAllTest()
         {
             var con = TestUtil.CreatePenneoConnector();
             var q = new Query(con);
-            FindCollectionTest(con, async () => await q.FindAllAsync<CaseFile>());
+            await FindCollectionTest(con, async () => await q.FindAllAsync<CaseFile>());
         }
 
         [Test]
-        public void FindByTest()
+        public async Task FindByTest()
         {
             var con = TestUtil.CreatePenneoConnector();
             var q = new Query(con);
-            FindCollectionTest(con, async () => await q.FindByAsync<Document>(
+            await FindCollectionTest(con, async () => await q.FindByAsync<Document>(
                 new Dictionary<string, object> { { "title", "the" } },
                 new Dictionary<string, string>() { { "created", "desc" } },
                 10, 5
@@ -67,7 +67,7 @@ namespace PenneoTests
 
         }
 
-        private static async void FindCollectionTest<T>(PenneoConnector con, Func<Task<IEnumerable<T>>> f)
+        private static async Task FindCollectionTest<T>(PenneoConnector con, Func<Task<IEnumerable<T>>> f)
             where T : Entity
         {
             IEnumerable<T> returned = new[] { (T)Activator.CreateInstance(typeof(T)) };
@@ -89,8 +89,7 @@ namespace PenneoTests
             IEnumerable<T> returned = new[] { instance };
             A.CallTo(() => con.ApiConnector.FindByAsync<T>(null, null, null)).WithAnyArguments()
                 .Returns(Task.FromResult(new FindByResult<T>
-                    { Success = true, Objects = returned, Response = _response200 }))
-                .AssignsOutAndRefParameters(returned, _response200);
+                    { Success = true, Objects = returned, Response = _response200 }));
 
             var obj = await f();
 
