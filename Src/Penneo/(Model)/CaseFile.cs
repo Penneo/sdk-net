@@ -317,7 +317,7 @@ namespace Penneo
                 return null;
             }
             var r = await GetLinkedEntityAsync<User>(con, "customers/" + CustomerId + "/users/" + UserId).ConfigureAwait(false);
-            return r != null ? r.Object : null;
+            return r?.Object;
         }
 
         /// <summary>

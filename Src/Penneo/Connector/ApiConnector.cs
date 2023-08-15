@@ -398,7 +398,7 @@ namespace Penneo.Connector
         /// </summary>
         public string LastResponseContent
         {
-            get { return _lastResponse != null ? _lastResponse.Content : null; }
+            get { return _lastResponse?.Content; }
         }
 
         #endregion
