@@ -14,7 +14,7 @@ namespace PenneoTests
         {
             var queryResult = new QueryResult<CaseFile>();
             const string linkHeader = "Link=<https://app.penneo.com/api/v1/casefiles?page=17&per_page=10>; rel=\"next\",<https://app.penneo.com/api/v1/casefiles?page=1&per_page=10>; rel=\"first\",<https://app.penneo.com/api/v1/casefiles?page=15&per_page=10>; rel=\"prev\"";
-            PaginationUtil.ParseRepsonseHeadersForPagination(linkHeader, queryResult);
+            PaginationUtil.ParseResponseHeadersForPagination(linkHeader, queryResult);
             Assert.AreEqual(17, queryResult.NextPage);
             Assert.AreEqual(15, queryResult.PrevPage);
             Assert.AreEqual(1, queryResult.FirstPage);
