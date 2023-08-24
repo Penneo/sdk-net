@@ -37,9 +37,9 @@ namespace Penneo
         /// <summary>
         /// Get the signing request link
         /// </summary>
-        public async Task<string> GetLinkAsync(PenneoConnector con)
+        public Task<string> GetLinkAsync(PenneoConnector con)
         {
-            return await GetTextAssetsAsync(con, ASSET_LINK);
+            return GetTextAssetsAsync(con, ASSET_LINK);
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Penneo
         /// </summary>
         public async Task<bool> SendAsync(PenneoConnector con)
         {
-            return (await PerformActionAsync(con, ACTION_SEND)).Success;
+            return (await PerformActionAsync(con, ACTION_SEND).ConfigureAwait(false)).Success;
         }
     }
 

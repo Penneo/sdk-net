@@ -67,17 +67,17 @@ namespace Penneo
             {
                 return new List<CaseFile>();
             }
-            return (await GetLinkedEntitiesAsync<CaseFile>(con, "folders/" + Id + "/casefiles")).Objects;
+            return (await GetLinkedEntitiesAsync<CaseFile>(con, "folders/" + Id + "/casefiles").ConfigureAwait(false)).Objects;
         }
 
-        public async Task<bool> AddCaseFileAsync(PenneoConnector con, CaseFile caseFile)
+        public Task<bool> AddCaseFileAsync(PenneoConnector con, CaseFile caseFile)
         {
-            return await LinkEntityAsync(con, caseFile);
+            return LinkEntityAsync(con, caseFile);
         }
 
-        public async Task<bool> RemoveCaseFileAsync(PenneoConnector con, CaseFile caseFile)
+        public Task<bool> RemoveCaseFileAsync(PenneoConnector con, CaseFile caseFile)
         {
-            return await UnlinkEntity(con, caseFile);
+            return UnlinkEntity(con, caseFile);
         }
 
         public async Task<IEnumerable<Validation>> GetValidationsAsync(PenneoConnector con)
@@ -86,17 +86,17 @@ namespace Penneo
             {
                 return new List<Validation>();
             }
-            return (await GetLinkedEntitiesAsync<Validation>(con, "folders/" + Id + "/validations")).Objects;
+            return (await GetLinkedEntitiesAsync<Validation>(con, "folders/" + Id + "/validations").ConfigureAwait(false)).Objects;
         }
 
-        public async Task<bool> AddValidationAsync(PenneoConnector con, Validation validation)
+        public Task<bool> AddValidationAsync(PenneoConnector con, Validation validation)
         {
-            return await LinkEntityAsync(con, validation);
+            return LinkEntityAsync(con, validation);
         }
 
-        public async Task<bool> RemoveValidationAsync(PenneoConnector con, Validation validation)
+        public Task<bool> RemoveValidationAsync(PenneoConnector con, Validation validation)
         {
-            return await UnlinkEntity(con, validation);
+            return UnlinkEntity(con, validation);
         }
 
         public override string ToString()

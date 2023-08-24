@@ -108,11 +108,11 @@ namespace Penneo
             {
                 if (SignerId.HasValue)
                 {
-                    Signer = await Document.CaseFile.FindSignerAsync(con, SignerId.Value);
+                    Signer = await Document.CaseFile.FindSignerAsync(con, SignerId.Value).ConfigureAwait(false);
                 }
                 else
                 {
-                    Signer = (await GetLinkedEntitiesAsync<Signer>(con)).Objects.FirstOrDefault();
+                    Signer = (await GetLinkedEntitiesAsync<Signer>(con).ConfigureAwait(false)).Objects.FirstOrDefault();
                     if (Signer != null)
                     {
                         Signer.CaseFile = Document.CaseFile;
@@ -123,10 +123,10 @@ namespace Penneo
             return Signer;
         }
 
-        public async Task<bool> SetSignerAsync(PenneoConnector con, Signer signer)
+        public Task<bool> SetSignerAsync(PenneoConnector con, Signer signer)
         {
             Signer = signer;
-            return await LinkEntityAsync(con, Signer);
+            return LinkEntityAsync(con, Signer);
         }
     }
 }

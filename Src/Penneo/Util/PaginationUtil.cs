@@ -11,7 +11,7 @@ namespace Penneo.Util
         /// Parses a pagination Link header for next page, previous page, first page and number of objects per page
         /// Updates the given query result with the parse result
         /// </summary>
-        public static void ParseRepsonseHeadersForPagination<T>(string linkHeader, QueryResult<T> output)
+        public static void ParseResponseHeadersForPagination<T>(string linkHeader, QueryResult<T> output)
             where T : Entity
         {
             var relations = linkHeader.ToString().Split(',');

@@ -120,10 +120,10 @@ namespace Penneo
         {
             if (Id.HasValue && DocumentType == null)
             {
-                var documentTypes = await GetLinkedEntitiesAsync<DocumentType>(con);
+                var documentTypes = await GetLinkedEntitiesAsync<DocumentType>(con).ConfigureAwait(false);
                 DocumentType = documentTypes.Objects.FirstOrDefault();
             }
-            return await Task.FromResult(DocumentType);
+            return DocumentType;
         }
 
 
@@ -189,7 +189,7 @@ namespace Penneo
         {
             if (CaseFile == null)
             {
-                CaseFile = (await GetLinkedEntitiesAsync<CaseFile>(con)).Objects.FirstOrDefault();
+                CaseFile = (await GetLinkedEntitiesAsync<CaseFile>(con).ConfigureAwait(false)).Objects.FirstOrDefault();
             }
             return CaseFile;
         }
@@ -222,7 +222,7 @@ namespace Penneo
         {
             if (PdfRaw == null)
             {
-                PdfRaw = await GetFileAssetsAsync(con, ASSET_PDF);
+                PdfRaw = await GetFileAssetsAsync(con, ASSET_PDF).ConfigureAwait(false);
             }
             return PdfRaw;
         }
@@ -240,7 +240,7 @@ namespace Penneo
         /// </summary>
         public async Task SavePdfAsync(PenneoConnector con, string path)
         {
-            var data = await GetPdfAsync(con);
+            var data = await GetPdfAsync(con).ConfigureAwait(false);
             if (File.Exists(path))
             {
                 File.Delete(path);
@@ -265,7 +265,7 @@ namespace Penneo
         {
             if (_signatureLines == null)
             {
-                _signatureLines = (await GetLinkedEntitiesAsync<SignatureLine>(con)).Objects.ToList();
+                _signatureLines = (await GetLinkedEntitiesAsync<SignatureLine>(con).ConfigureAwait(false)).Objects.ToList();
             }
             foreach (var sl in _signatureLines)
             {
@@ -286,7 +286,7 @@ namespace Penneo
             {
                 return _signatureLines.FirstOrDefault(x => x.Id == id);
             }
-            var sl = await FindLinkedEntityAsync<SignatureLine>(con, id);
+            var sl = await FindLinkedEntityAsync<SignatureLine>(con, id).ConfigureAwait(false);
             sl.Document = this;
             return sl;
         }

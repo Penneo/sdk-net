@@ -27,7 +27,7 @@ namespace Penneo
         public async Task<T> FindAsync<T>(int id)
             where T : Entity
         {
-            var output = await FindByIdAsync<T>(id);
+            var output = await FindByIdAsync<T>(id).ConfigureAwait(false);
             if (!output.Success)
             {
                 throw new Exception(output.ErrorMessage);
@@ -39,7 +39,7 @@ namespace Penneo
             where T : Entity
         {
             RestResponse response;
-            var objectResult = await _con.ApiConnector.ReadObjectAsync<T>(null, id);
+            var objectResult = await _con.ApiConnector.ReadObjectAsync<T>(null, id).ConfigureAwait(false);
             return CreateSingleObjectResult(objectResult.Response, objectResult.Result, id);
         }
 
@@ -50,14 +50,14 @@ namespace Penneo
             where T : Entity
         {
             var input = new QueryInput { Criteria = criteria, OrderBy = orderBy };
-            return (await FindOneByAsync<T>(input)).Object;
+            return (await FindOneByAsync<T>(input).ConfigureAwait(false)).Object;
         }
 
         public async Task<QuerySingleObjectResult<T>> FindOneByAsync<T>(QueryInput input)
             where T : Entity
         {
             _con.Log("FindOneByAsync (" + typeof(T).Name + ")", LogSeverity.Information);
-            var result = new QuerySingleObjectResult<T>(await FindByAsync<T>(input));
+            var result = new QuerySingleObjectResult<T>(await FindByAsync<T>(input).ConfigureAwait(false));
             return result;
         }
 
@@ -69,7 +69,7 @@ namespace Penneo
         {
             _con.Log("FindAllAsync (" + typeof(T).Name + ")", LogSeverity.Information);
             var input = new QueryInput();
-            return (await FindByAsync<T>(input)).Objects;
+            return (await FindByAsync<T>(input).ConfigureAwait(false)).Objects;
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace Penneo
             input.PerPage = perPage;
             input.Page = page;
             
-            var output = await FindByAsync<T>(input);
+            var output = await FindByAsync<T>(input).ConfigureAwait(false);
             if (!output.Success)
             {
                 if (!string.IsNullOrEmpty(output.ErrorMessage))
@@ -133,7 +133,7 @@ namespace Penneo
             var output = new QueryResult<T>();
             output.Input = input;
             
-            var findByResult = await _con.ApiConnector.FindByAsync<T>(query, input.Page, input.PerPage);
+            var findByResult = await _con.ApiConnector.FindByAsync<T>(query, input.Page, input.PerPage).ConfigureAwait(false);
 
             output.Success = findByResult.Success;
             output.Objects = findByResult.Objects;
@@ -158,7 +158,7 @@ namespace Penneo
                         findByResult.Response.Headers.FirstOrDefault(x => x.Name.Equals("link", StringComparison.OrdinalIgnoreCase));
                     if (linkHeader != null && linkHeader.Value != null)
                     {
-                        PaginationUtil.ParseRepsonseHeadersForPagination(linkHeader.Value.ToString(), output);
+                        PaginationUtil.ParseResponseHeadersForPagination(linkHeader.Value.ToString(), output);
                     }
                 }
 
@@ -199,7 +199,7 @@ namespace Penneo
             {
                 resource += $"&language={isoLanguage}";
             }
-            var result = await _con.ApiConnector.CallServerAsync(resource);
+            var result = await _con.ApiConnector.CallServerAsync(resource).ConfigureAwait(false);
             var obj = JsonConvert.DeserializeObject<MessageTemplate>(result.Content);
             obj.Title = "Standard";
             return new QueryResult<MessageTemplate>() { Objects = new[] { obj }, Success = true };
@@ -211,7 +211,7 @@ namespace Penneo
         public async Task<QuerySingleObjectResult<User>> GetUserAsync()
         {
             RestResponse response;
-            var objectResult = await _con.ApiConnector.ReadObjectAsync<User>(null, null, "user");
+            var objectResult = await _con.ApiConnector.ReadObjectAsync<User>(null, null, "user").ConfigureAwait(false);
             return CreateSingleObjectResult(objectResult.Response, objectResult.Result, null);
         }
 
@@ -239,56 +239,56 @@ namespace Penneo
         /// <summary>
         /// Get the next page based on an earlier result
         /// </summary>
-        public async Task<QueryResult<T>> GetNextPageAsync<T>(QueryResult<T> result)
+        public Task<QueryResult<T>> GetNextPageAsync<T>(QueryResult<T> result)
             where T : Entity
         {
             _con.Log("GetNextPageAsync (" + typeof(T).Name + ")", LogSeverity.Information);
             if (!result.NextPage.HasValue)
             {
-                return null;
+                return Task.FromResult<QueryResult<T>>(null);
             }
-            return await GetPageAsync(result, result.NextPage);
+            return GetPageAsync(result, result.NextPage);
         }
 
         /// <summary>
         /// Get the previous page based on an earlier result
         /// </summary>
-        public async Task<QueryResult<T>> GetPreviousPageAsync<T>(QueryResult<T> result)
+        public Task<QueryResult<T>> GetPreviousPageAsync<T>(QueryResult<T> result)
             where T : Entity
         {
             _con.Log("GetPreviousPageAsync (" + typeof(T).Name + ")", LogSeverity.Information);
             if (!result.PrevPage.HasValue)
             {
-                return null;
+                return Task.FromResult<QueryResult<T>>(null);
             }
-            return await GetPageAsync(result, result.PrevPage);
+            return GetPageAsync(result, result.PrevPage);
         }
 
         /// <summary>
         /// Get the first page based on an earlier result
         /// </summary>
-        public async Task<QueryResult<T>> GetFirstPageAsync<T>(QueryResult<T> result)
+        public Task<QueryResult<T>> GetFirstPageAsync<T>(QueryResult<T> result)
             where T : Entity
         {
             _con.Log("GetFirstPageAsync (" + typeof(T).Name + ")", LogSeverity.Information);
             if (!result.FirstPage.HasValue)
             {
-                return null;
+                return Task.FromResult<QueryResult<T>>(null);
             }
-            return await GetPageAsync(result, result.FirstPage);
+            return GetPageAsync(result, result.FirstPage);
         }
 
         /// <summary>
         /// Get the first page of a given entity
         /// </summary>
-        public async Task<QueryResult<T>> GetFirstPageAsync<T>(int? perPage = null)
+        public Task<QueryResult<T>> GetFirstPageAsync<T>(int? perPage = null)
             where T : Entity
         {
             _con.Log("GetFirstPageAsync (" + typeof(T).Name + ")", LogSeverity.Information);
             var input = new QueryInput();
             input.Page = 1;
             input.PerPage = perPage;
-            return await FindByAsync<T>(input);
+            return FindByAsync<T>(input);
         }
 
         private void ThrowIfNoPagination<T>(QueryResult<T> result, int? page)
@@ -300,13 +300,13 @@ namespace Penneo
             }
         }
 
-        private async Task<QueryResult<T>> GetPageAsync<T>(QueryResult<T> result, int? page)
+        private Task<QueryResult<T>> GetPageAsync<T>(QueryResult<T> result, int? page)
             where T : Entity
         {
             ThrowIfNoPagination(result, page);
             var pageInput = (QueryInput)result.Input.Clone();
             pageInput.Page = page;
-            return await FindByAsync<T>(pageInput);
+            return FindByAsync<T>(pageInput);
         }
     }
 }

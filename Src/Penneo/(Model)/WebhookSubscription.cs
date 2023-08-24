@@ -29,7 +29,7 @@ namespace Penneo
         public async Task<bool> ConfirmAsync(PenneoConnector con, string token)
         {
             var data = new Dictionary<string, object> {{"token", token}};
-            return (await PerformComplexActionAsync(con, Method.Post, "confirm", data)).Success;
+            return (await PerformComplexActionAsync(con, Method.Post, "confirm", data).ConfigureAwait(false)).Success;
         }
     }
 }

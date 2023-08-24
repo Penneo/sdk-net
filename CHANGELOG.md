@@ -9,6 +9,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [6.1.0] - 2023-08-23
+### Added
+- Using ```ConfigureAwait(false)``` to avoid deadlocks
+### Fixed
+- Fixing typo in ```PaginationUtil.ParseRepsonseHeadersForPagination```
+
 ## [6.0.0] - 2023-03-14
 ### Changed
 - **Please refer to the updated SDK documentation for details on how to migrate to the new version**. The updated usage example showcases the new async implementation, which may require code changes for existing users
