@@ -18,6 +18,11 @@ mySigner.SsnType = "dk:cpr"; // additional values here https://app.penneo.com/ap
                              // reading SsnType from existing signers only works if using the api/v3 and up
                              // if using a lower version, you will see 'legacy' even if another value is actually set
 
+// The SMS validation is relying on the same mechanism using 'sms' as the ssnType
+// The social security number to use must then contain a mobile number include the country code but not the leading +
+mySigner.SsnType = "sms";
+mySigner.SocialSecurityNumber = "4511223344";
+
 // Set the optional VAT identification number
 mySigner.VATIdentificationNumber = 12345678;
 
