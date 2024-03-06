@@ -9,9 +9,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-## [6.1.1] - 2024-03-05
+## [6.1.2] - 2024-03-06
 ### Added
 - Update the signer documentation example to showcase the usage of the SMS access control feature
+
+
+## [6.1.1] - 2024-04-05
+Skipped due to CI/CD issues
 
 
 ## [6.1.0] - 2023-08-23
