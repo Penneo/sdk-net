@@ -55,6 +55,10 @@ namespace Penneo
         /// </summary>
         public string DocumentId { get; set; }
         /// <summary>
+        /// The order of the document
+        /// </summary>
+        public int? DocumentOrder { get; set; }
+        /// <summary>
         /// The title of the document
         /// </summary>
         public string Title { get; set; }
