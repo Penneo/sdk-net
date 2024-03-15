@@ -51,9 +51,29 @@ namespace Penneo
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cf">Link the document to the case file</param>
+        /// <param name="title">Add the title of the document as string</param>
+        /// <param name="documentOrder">Add the order of the document as int</param>
+        /// <param name="pdfFile">Add PDF as filepath or base64 encoded file content string</param>
+        public Document(CaseFile cf, string title, int documentOrder, string pdfFile)
+            : this(cf)
+        {
+            CaseFile = cf;
+            Title = title;
+            DocumentOrder = documentOrder;
+            PdfFile = pdfFile;
+        }
+
+        /// <summary>
         /// The document identifier
         /// </summary>
         public string DocumentId { get; set; }
+        /// <summary>
+        /// The order of the document
+        /// </summary>
+        public int? DocumentOrder { get; set; }
         /// <summary>
         /// The title of the document
         /// </summary>

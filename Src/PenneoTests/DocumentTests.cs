@@ -16,7 +16,7 @@ namespace PenneoTests
         private static Document CreateDocument()
         {
             var cf = new CaseFile();
-            var doc = new Document(cf, "doc", TestPdfPath);
+            var doc = new Document(cf, "doc", 1, TestPdfPath);
             doc.Id = 1;
             return doc;
         }
@@ -43,6 +43,7 @@ namespace PenneoTests
             var doc = CreateDocument();
             Assert.IsNotNull(doc.CaseFile);
             Assert.AreEqual("doc", doc.Title);
+            Assert.AreEqual(1, doc.DocumentOrder);
             Assert.AreEqual(TestPdfPath, doc.PdfFile);
         }
 

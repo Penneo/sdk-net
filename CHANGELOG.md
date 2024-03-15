@@ -9,6 +9,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [6.2.0] - 2024-03-15
+- Added support for setting documentOrder when creating or updating a document.
+
+
 ## [6.1.2] - 2024-03-06
 ### Added
 - Update the signer documentation example to showcase the usage of the SMS access control feature
