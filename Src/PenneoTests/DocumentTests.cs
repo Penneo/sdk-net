@@ -16,7 +16,8 @@ namespace PenneoTests
         private static Document CreateDocument()
         {
             var cf = new CaseFile();
-            var doc = new Document(cf, "doc", 1, TestPdfPath);
+            var doc = new Document(cf, "doc", TestPdfPath);
+            doc.DocumentOrder = 1;
             doc.Id = 1;
             return doc;
         }
