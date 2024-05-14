@@ -15,9 +15,9 @@ namespace PenneoTests
             var queryResult = new QueryResult<CaseFile>();
             const string linkHeader = "Link=<https://app.penneo.com/api/v1/casefiles?page=17&per_page=10>; rel=\"next\",<https://app.penneo.com/api/v1/casefiles?page=1&per_page=10>; rel=\"first\",<https://app.penneo.com/api/v1/casefiles?page=15&per_page=10>; rel=\"prev\"";
             PaginationUtil.ParseResponseHeadersForPagination(linkHeader, queryResult);
-            Assert.AreEqual(17, queryResult.NextPage);
-            Assert.AreEqual(15, queryResult.PrevPage);
-            Assert.AreEqual(1, queryResult.FirstPage);
+            Assert.That(queryResult.NextPage, Is.EqualTo(17));
+            Assert.That(queryResult.PrevPage, Is.EqualTo(15));
+            Assert.That(queryResult.FirstPage, Is.EqualTo(1));
         }
 
         [Test]
@@ -55,13 +55,13 @@ namespace PenneoTests
             var request = connector.PrepareRequest(string.Empty, page: 5, perPage: 10);
 
             var paginationHeader = request.Parameters.FirstOrDefault(x => x.Name.Equals("x-paginate"));
-            Assert.IsTrue(paginationHeader != null && paginationHeader.Value.ToString().Equals("true", StringComparison.OrdinalIgnoreCase));
+            Assert.That(paginationHeader != null && paginationHeader.Value.ToString().Equals("true", StringComparison.OrdinalIgnoreCase), Is.True);
 
             var pageParameter = request.Parameters.FirstOrDefault(x => x.Name.Equals("page"));
-            Assert.IsTrue(pageParameter != null && pageParameter.Value.ToString() == "5");
+            Assert.That(pageParameter != null && pageParameter.Value.ToString() == "5", Is.True);
 
             var perPageParameter = request.Parameters.FirstOrDefault(x => x.Name.Equals("per_page"));
-            Assert.IsTrue(perPageParameter != null && perPageParameter.Value.ToString() == "10");
+            Assert.That(perPageParameter != null && perPageParameter.Value.ToString() == "10", Is.True);
         }
 
         [Test]
@@ -71,13 +71,13 @@ namespace PenneoTests
             var request = connector.PrepareRequest(string.Empty);
 
             var paginationHeader = request.Parameters.FirstOrDefault(x => x.Name.Equals("x-paginate"));
-            Assert.IsTrue(paginationHeader == null);
+            Assert.That(paginationHeader, Is.Null);
 
             var pageParameter = request.Parameters.FirstOrDefault(x => x.Name.Equals("page"));
-            Assert.IsTrue(pageParameter == null);
+            Assert.That(pageParameter, Is.Null);
 
             var perPageParameter = request.Parameters.FirstOrDefault(x => x.Name.Equals("per_page"));
-            Assert.IsTrue(perPageParameter == null);
+            Assert.That(perPageParameter, Is.Null);
         }
     }
 }

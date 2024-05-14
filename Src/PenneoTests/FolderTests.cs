@@ -11,7 +11,7 @@ namespace PenneoTests
         public void ConstructorTest()
         {
             var f = new Folder("title");
-            Assert.AreEqual("title", f.Title);
+            Assert.That(f.Title, Is.EqualTo("title"));
         }
 
         [Test]

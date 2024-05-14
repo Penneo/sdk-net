@@ -14,7 +14,7 @@ namespace PenneoTests
         public void ConstructorTest()
         {
             var cf = new CaseFile("CF");
-            Assert.AreEqual("CF", cf.Title);
+            Assert.That(cf.Title, Is.EqualTo("CF"));
         }
 
         [Test]
@@ -87,51 +87,51 @@ namespace PenneoTests
             var caseFile = JsonConvert.DeserializeObject<CaseFile>(json);
 
             //Case File
-            Assert.IsNotNull(caseFile);
-            Assert.AreEqual(245, caseFile.Id);
-            Assert.AreEqual("CF", caseFile.Title);
-            Assert.AreEqual(1, caseFile.Status);
-            Assert.AreEqual(2, caseFile.SignIteration);
-            Assert.AreEqual(3, caseFile.VisibilityMode);
-            Assert.AreEqual(new DateTime(2014, 9, 30, 15, 58, 56), caseFile.Created);
-            Assert.AreEqual("hi", caseFile.Reference);
+            Assert.That(caseFile, Is.Not.Null);
+            Assert.That(caseFile.Id, Is.EqualTo(245));
+            Assert.That(caseFile.Title, Is.EqualTo("CF"));
+            Assert.That(caseFile.Status, Is.EqualTo(1));
+            Assert.That(caseFile.SignIteration, Is.EqualTo(2));
+            Assert.That(caseFile.VisibilityMode, Is.EqualTo(3));
+            Assert.That(caseFile.Created, Is.EqualTo(new DateTime(2014, 9, 30, 15, 58, 56)));
+            Assert.That(caseFile.Reference, Is.EqualTo("hi"));
 
             //Signers
-            Assert.IsNotNull(caseFile.Signers);
-            Assert.AreEqual(1, caseFile.Signers.Count());
+            Assert.That(caseFile.Signers, Is.Not.Null);
+            Assert.That(caseFile.Signers.Count(), Is.EqualTo(1));
             var signer = caseFile.Signers.First();
-            Assert.AreEqual(334, signer.Id);
-            Assert.AreEqual("A signer", signer.Name);
+            Assert.That(signer.Id, Is.EqualTo(334));
+            Assert.That(signer.Name, Is.EqualTo("A signer"));
 
             //Signing Request
-            Assert.IsNotNull(signer.SigningRequest);
+            Assert.That(signer.SigningRequest, Is.Not.Null);
             var sr = signer.SigningRequest;
-            Assert.AreEqual(334, sr.Id);
-            Assert.AreEqual("test@example.com", sr.Email);
-            Assert.AreEqual("Test subject", sr.EmailSubject);
-            Assert.AreEqual("Test text", sr.EmailText);
-            Assert.AreEqual(1, sr.Status);
-            Assert.AreEqual(true, sr.AccessControl);
+            Assert.That(sr.Id, Is.EqualTo(334));
+            Assert.That(sr.Email, Is.EqualTo("test@example.com"));
+            Assert.That(sr.EmailSubject, Is.EqualTo("Test subject"));
+            Assert.That(sr.EmailText, Is.EqualTo("Test text"));
+            Assert.That(sr.Status, Is.EqualTo(1));
+            Assert.That(sr.AccessControl, Is.True);
 
             //Document
-            Assert.IsNotNull(caseFile.Documents);
-            Assert.AreEqual(1, caseFile.Documents.Count());
+            Assert.That(caseFile.Documents, Is.Not.Null);
+            Assert.That(caseFile.Documents.Count(), Is.EqualTo(1));
             var doc = caseFile.Documents.First();
-            Assert.AreEqual(359, doc.Id);
-            Assert.AreEqual("CB5VL-GS115-G5KDD-GFHKH-IPGAX-3J0LZ", doc.DocumentId);
-            Assert.AreEqual("My Doc", doc.Title);
-            Assert.AreEqual(0, doc.Status);
-            Assert.AreEqual(true, doc.Signable);
-            Assert.AreEqual(new DateTime(2014, 9, 30, 15, 59, 04), doc.Created);
-            Assert.AreEqual(new DateTime(2014, 9, 30, 15, 59, 04), doc.Modified);
-            Assert.AreEqual(new DateTime(2014, 9, 30, 15, 59, 04), doc.Completed);
+            Assert.That(doc.Id, Is.EqualTo(359));
+            Assert.That(doc.DocumentId, Is.EqualTo("CB5VL-GS115-G5KDD-GFHKH-IPGAX-3J0LZ"));
+            Assert.That(doc.Title, Is.EqualTo("My Doc"));
+            Assert.That(doc.Status, Is.EqualTo(0));
+            Assert.That(doc.Signable, Is.True);
+            Assert.That(doc.Created, Is.EqualTo(new DateTime(2014, 9, 30, 15, 59, 04)));
+            Assert.That(doc.Modified, Is.EqualTo(new DateTime(2014, 9, 30, 15, 59, 04)));
+            Assert.That(doc.Completed, Is.EqualTo(new DateTime(2014, 9, 30, 15, 59, 04)));
 
             //Signature Line
-            Assert.IsNotNull(doc.SignatureLines);
-            Assert.AreEqual(1, doc.SignatureLines.Count());
+            Assert.That(doc.SignatureLines, Is.Not.Null);
+            Assert.That(doc.SignatureLines.Count(), Is.EqualTo(1));
             var sl = doc.SignatureLines.First();
-            Assert.AreEqual(477, sl.Id);
-            Assert.AreEqual(334, sl.SignerId);
+            Assert.That(sl.Id, Is.EqualTo(477));
+            Assert.That(sl.SignerId, Is.EqualTo(334));
         }
     }
 }

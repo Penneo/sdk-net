@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Penneo;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using NUnit.Framework.Legacy;
 using Penneo.Connector;
 using RestSharp;
 
@@ -33,8 +34,8 @@ namespace PenneoTests
             var q = new Query(con);
             var obj = await q.FindAsync<CaseFile>(1);
 
-            Assert.AreEqual(1, obj.Id);
-            Assert.AreEqual(expected.Title, obj.Title);
+            Assert.That(obj.Id, Is.EqualTo(1));
+            Assert.That(obj.Title, Is.EqualTo(expected.Title));
             A.CallTo(() => con.ApiConnector.ReadObjectAsync<CaseFile>(null, 1)).WithAnyArguments().MustHaveHappened();
         }
 
@@ -76,7 +77,7 @@ namespace PenneoTests
 
             var objects = await f();
 
-            Assert.IsNotNull(objects);
+            Assert.That(objects, Is.Not.Null);
             CollectionAssert.AreEqual(returned.ToList(), objects.ToList());
 
             A.CallTo(() => con.ApiConnector.FindByAsync<T>(null, null, null)).WithAnyArguments().MustHaveHappened();
@@ -93,8 +94,8 @@ namespace PenneoTests
 
             var obj = await f();
 
-            Assert.IsNotNull(obj);
-            Assert.AreEqual(instance, obj);
+            Assert.That(obj, Is.Not.Null);
+            Assert.That(obj, Is.EqualTo(instance));
 
             A.CallTo(() => con.ApiConnector.FindByAsync<T>(null, null, null)).WithAnyArguments().MustHaveHappened();
         }

@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using FakeItEasy;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using Penneo;
 using Penneo.Connector;
 using RestSharp;
@@ -51,7 +52,7 @@ namespace PenneoTests
             var result = await e.PersistAsync(con);
             
             A.CallTo(() => con.ApiConnector.WriteObjectAsync(e)).MustHaveHappened();
-            Assert.IsFalse(result);
+            Assert.That(result, Is.False);
         }
 
         public static async Task TestDelete(PenneoConnector con, Func<Entity> f)
@@ -92,8 +93,8 @@ namespace PenneoTests
             var result = await getter();
 
             A.CallTo(() => con.ApiConnector.GetLinkedEntitiesAsync<TChild>(null, null)).WithAnyArguments().MustHaveHappened();
-            Assert.IsNotNull(result);
-            Assert.AreEqual(list.Count, result.Count());
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Count(), Is.EqualTo(list.Count));
         }
 
         public static async Task TestGetLinked<TChild>(PenneoConnector con, Func<Task<TChild>> getter)
@@ -107,8 +108,8 @@ namespace PenneoTests
             var result = await getter();
 
             A.CallTo(() => con.ApiConnector.GetLinkedEntitiesAsync<TChild>(null, null)).WithAnyArguments().MustHaveHappened();
-            Assert.IsNotNull(result);
-            Assert.AreEqual(instance, result);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.SameAs(instance));
         }
 
 
@@ -131,8 +132,8 @@ namespace PenneoTests
             var result = await task;
 
             A.CallTo(() => con.ApiConnector.FindLinkedEntityAsync<TChild>(null, 0)).WithAnyArguments().MustHaveHappened();
-            Assert.IsNotNull(result);
-            Assert.AreEqual(instance, result);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.SameAs(instance));
         }
 
 

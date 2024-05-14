@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using FakeItEasy;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using Penneo;
 
 namespace PenneoTests
@@ -42,10 +43,10 @@ namespace PenneoTests
         public void ConstructorTest()
         {
             var doc = CreateDocument();
-            Assert.IsNotNull(doc.CaseFile);
-            Assert.AreEqual("doc", doc.Title);
-            Assert.AreEqual(1, doc.DocumentOrder);
-            Assert.AreEqual(TestPdfPath, doc.PdfFile);
+            Assert.That(doc.CaseFile, Is.Not.Null);
+            Assert.That(doc.Title, Is.EqualTo("doc"));
+            Assert.That(doc.DocumentOrder, Is.EqualTo(1));
+            Assert.That(doc.PdfFile, Is.EqualTo(TestPdfPath));
         }
 
         [Test]
@@ -88,7 +89,7 @@ namespace PenneoTests
         {
             var doc = CreateDocument();
             doc.MakeSignable();
-            Assert.AreEqual("signable", doc.SignType);
+            Assert.That(doc.SignType, Is.EqualTo("signable"));
         }
 
 
@@ -160,7 +161,7 @@ namespace PenneoTests
             var doc2 = new Document();
             doc2.DocumentType = new DocumentType();
             await TestUtil.TestGetLinkedNotCalled(con2, () => doc2.GetDocumentTypeAsync(con2));
-            Assert.AreEqual((await doc2.GetDocumentTypeAsync(con2)), doc2.DocumentType);
+            Assert.That(doc2.DocumentType, Is.EqualTo(await doc2.GetDocumentTypeAsync(con2)));
         }
 
         [Test]
@@ -169,7 +170,7 @@ namespace PenneoTests
             var dt = new DocumentType();
             var doc = new Document();
             doc.SetDocumentType(dt);
-            Assert.AreEqual(dt, doc.DocumentType);
+            Assert.That(doc.DocumentType, Is.EqualTo(dt));
         }
 
         [Test]
@@ -177,10 +178,10 @@ namespace PenneoTests
         {
             var doc = CreateDocument();
             doc.Status = null;
-            Assert.AreEqual(DocumentStatus.New, doc.GetStatus());
+            Assert.That(doc.GetStatus(), Is.EqualTo(DocumentStatus.New));
 
             doc.Status = (int?)DocumentStatus.Completed;
-            Assert.AreEqual(DocumentStatus.Completed, doc.GetStatus());
+            Assert.That(doc.GetStatus(), Is.EqualTo(DocumentStatus.Completed));
         }
 
         [Test]
@@ -188,7 +189,7 @@ namespace PenneoTests
         {
             var data = Convert.FromBase64String(Base64String);
             var doc = CreateBase64Document();
-            Assert.AreEqual(data, doc.PdfRaw);
+            Assert.That(doc.PdfRaw, Is.EqualTo(data));
         }
     }
 }

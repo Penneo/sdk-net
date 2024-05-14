@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using FakeItEasy;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using Penneo;
 
 namespace PenneoTests
@@ -13,8 +14,8 @@ namespace PenneoTests
         public void ConstructorTest()
         {
             var cf = new Validation("name", "email");
-            Assert.AreEqual("name", cf.Name);
-            Assert.AreEqual("email", cf.Email);
+            Assert.That(cf.Name, Is.EqualTo("name"));
+            Assert.That(cf.Email, Is.EqualTo("email"));
         }
 
         [Test]
