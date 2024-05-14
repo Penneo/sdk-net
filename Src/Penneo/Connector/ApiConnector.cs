@@ -420,11 +420,8 @@ namespace Penneo.Connector
                 $"Trying to use the {_endpoint} API endpoint. Please use /v3 or above."
                 );
             }
-
-            _clientOptions = new RestClientOptions(baseUrl: _endpoint)
-            {
-                UserAgent = "Penneo%2Fsdk-net%40" + Info.Version
-            };
+            
+            _clientOptions = GetClientOptions();
 
             _client = new RestClient(_clientOptions);
 
@@ -435,22 +432,24 @@ namespace Penneo.Connector
                 _headers["penneo-api-user"] = _user;
             }
 
-            if (_authType == AuthType.WSSE)
-            {
-                _client.Authenticator = new WSSEAuthenticator(_key, _secret);
-            }
-            else
-            {
-                throw new NotSupportedException("Unknown authentication type " + _authType);
-            }
             LatestEntityServerResults = new Dictionary<Guid, ServerResult>();
+        }
+
+        private RestClientOptions GetClientOptions()
+        {
+            return new RestClientOptions(baseUrl: _endpoint)
+            {
+                UserAgent = "Penneo%2Fsdk-net%40" + Info.Version,
+                Authenticator = _authType == AuthType.WSSE ? new WSSEAuthenticator(_key, _secret) : throw new NotSupportedException("Unknown authentication type " + _authType)
+            };
         }
 
         public void ChangeKeySecret(string key, string secret)
         {
             _key = key;
             _secret = secret;
-            _client.Authenticator = new WSSEAuthenticator(_key, _secret);
+            _clientOptions = GetClientOptions();
+            _client = new RestClient(_clientOptions);
         }
 
         /*
