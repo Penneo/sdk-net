@@ -9,6 +9,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [7.0.0] - 2024-05-15
+- Updated dependencies
+
 ## [6.2.0] - 2024-03-15
 - Added support for setting documentOrder when creating or updating a document.
 
