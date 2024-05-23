@@ -25,13 +25,13 @@ namespace PenneoTests
             var createValues = mapping.GetCreateValues(obj);
             var updateValues = mapping.GetUpdateValues(obj);
 
-            Assert.IsNotNull(createValues);
-            Assert.IsTrue(createValues.Count == 1);
-            Assert.AreEqual(title, (string)createValues["Title"]);
+            Assert.That(createValues, Is.Not.Null);
+            Assert.That(createValues.Count, Is.EqualTo(1));
+            Assert.That((string)createValues["Title"], Is.EqualTo(title));
 
-            Assert.IsNotNull(updateValues);
-            Assert.IsTrue(updateValues.Count == 1);
-            Assert.AreEqual(title, (string)updateValues["Title"]);
+            Assert.That(updateValues, Is.Not.Null);
+            Assert.That(updateValues.Count, Is.EqualTo(1));
+            Assert.That((string)updateValues["Title"], Is.EqualTo(title));
         }
 
         [Test]
@@ -50,13 +50,13 @@ namespace PenneoTests
             var createValues = mapping.GetCreateValues(obj);
             var updateValues = mapping.GetUpdateValues(obj);
 
-            Assert.IsNotNull(createValues);
-            Assert.IsTrue(createValues.Count == 1);
-            Assert.AreEqual(status, (int)createValues["Status"]);
+            Assert.That(createValues, Is.Not.Null);
+            Assert.That(createValues.Count, Is.EqualTo(1));
+            Assert.That((int)createValues["Status"], Is.EqualTo(status));
 
-            Assert.IsNotNull(updateValues);
-            Assert.IsTrue(updateValues.Count == 1);
-            Assert.AreEqual(status, (int) updateValues["Status"]);
+            Assert.That(updateValues, Is.Not.Null);
+            Assert.That(updateValues.Count, Is.EqualTo(1));
+            Assert.That((int)updateValues["Status"], Is.EqualTo(status));
         }
 
         [Test]
@@ -64,7 +64,7 @@ namespace PenneoTests
         {
             var mappings = new Mappings();
 
-            Assert.IsNull(mappings.GetMapping(typeof(CaseFile)));
+            Assert.That(mappings.GetMapping(typeof(CaseFile)), Is.Null);
 
             mappings.AddMapping(
             new MappingBuilder<CaseFile>()
@@ -72,7 +72,7 @@ namespace PenneoTests
                 .Map(x => x.Status)
                 .Create());
 
-            Assert.IsNotNull(mappings.GetMapping(typeof(CaseFile)));
+            Assert.That(mappings.GetMapping(typeof(CaseFile)), Is.Not.Null);
         }
 
         [Test]

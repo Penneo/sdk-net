@@ -53,10 +53,10 @@ namespace PenneoTests
         {
             var s = new SigningRequest();
             s.Status = null;
-            Assert.AreEqual(SigningRequestStatus.New, s.GetStatus());
+            Assert.That(s.GetStatus(), Is.EqualTo(SigningRequestStatus.New));
 
             s.Status = (int?)SigningRequestStatus.Signed;
-            Assert.AreEqual(SigningRequestStatus.Signed, s.GetStatus());
+            Assert.That(s.GetStatus(), Is.EqualTo(SigningRequestStatus.Signed));
         }
     }
 }

@@ -12,7 +12,7 @@ namespace PenneoTests
         public void ConstructorTest()
         {
             var c = new Contact("C");
-            Assert.AreEqual("C", c.Name);
+            Assert.That(c.Name, Is.EqualTo("C"));
         }
 
         [Test]
@@ -50,11 +50,10 @@ namespace PenneoTests
             var contact = JsonConvert.DeserializeObject<Contact>(json);
 
             //Case File
-            Assert.IsNotNull(contact);
-            Assert.AreEqual(1234, contact.Id);
-            Assert.AreEqual("cname", contact.Name);
-            Assert.AreEqual("mail@mail.dk", contact.Email);
+            Assert.That(contact, Is.Not.Null);
+            Assert.That(contact.Id, Is.EqualTo(1234));
+            Assert.That(contact.Name, Is.EqualTo("cname"));
+            Assert.That(contact.Email, Is.EqualTo("mail@mail.dk"));
         }
-
     }
 }

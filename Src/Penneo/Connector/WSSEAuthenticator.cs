@@ -48,7 +48,7 @@ namespace Penneo.Connector
         /// <summary>
         /// Adds WSSE security headers to the request
         /// </summary>        
-        public ValueTask Authenticate(RestClient client, RestRequest request)
+        public ValueTask Authenticate(IRestClient client, RestRequest request)
         {
             var created = DateTime.Now.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
             var nonce = Base64Encode(Noncer());

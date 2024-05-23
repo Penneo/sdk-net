@@ -18,10 +18,10 @@ namespace PenneoTests
         public void ConstructorTest()
         {
             var s = CreateSigner();
-            Assert.IsNotNull(s.CaseFile);
-            Assert.AreEqual("john", s.Name);
-            Assert.AreEqual("1111111111", s.SocialSecurityNumber);
-            Assert.AreEqual(s.CaseFile, s.Parent);
+            Assert.That(s.CaseFile, Is.Not.Null);
+            Assert.That(s.Name, Is.EqualTo("john"));
+            Assert.That(s.SocialSecurityNumber, Is.EqualTo("1111111111"));
+            Assert.That(s.Parent, Is.SameAs(s.CaseFile));
         }
 
         [Test]

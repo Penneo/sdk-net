@@ -21,13 +21,13 @@ namespace PenneoTests
         public void ConstructorTest()
         {
             var s = CreateSignatureLine();
-            Assert.IsNotNull(s.Document);
-            Assert.AreEqual("role", s.Role);
-            Assert.AreEqual(1, s.SignOrder);
-            Assert.AreEqual("conditions", s.Conditions);
-            Assert.IsNotNull(s.ActiveAt);
-            Assert.IsNotNull(s.ExpireAt);
-            Assert.AreEqual(s.Document, s.Parent);
+            Assert.That(s.Document, Is.Not.Null);
+            Assert.That(s.Role, Is.EqualTo("role"));
+            Assert.That(s.SignOrder, Is.EqualTo(1));
+            Assert.That(s.Conditions, Is.EqualTo("conditions"));
+            Assert.That(s.ActiveAt, Is.Not.Null);
+            Assert.That(s.ExpireAt, Is.Not.Null);
+            Assert.That(s.Parent, Is.SameAs(s.Document));
         }
 
         [Test]
@@ -68,7 +68,7 @@ namespace PenneoTests
 
             await sl.SetSignerAsync(con, s);
 
-            Assert.AreEqual(s, sl.Signer);
+            Assert.That(sl.Signer, Is.SameAs(s));
             A.CallTo(() => con.ApiConnector.LinkEntityAsync(sl, s)).MustHaveHappened();
         }
 
@@ -84,7 +84,7 @@ namespace PenneoTests
             try
             {
                 var result = await sl.SetSignerAsync(con, s);
-                Assert.IsFalse(result);
+                Assert.That(result, Is.False);
             }
             finally
             {

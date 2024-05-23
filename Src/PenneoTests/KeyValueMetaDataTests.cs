@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using Penneo.Util;
 
 namespace PenneoTests
@@ -16,13 +17,13 @@ namespace PenneoTests
             const string val = "myValue";
             var helper = new KeyValueMetaDataHelper();
             helper.Add(key, val);
-            Assert.AreEqual(1, helper.Count);
-            Assert.AreEqual(val, helper.GetMetaDataValue(key));
+            Assert.That(helper.Count, Is.EqualTo(1));
+            Assert.That(helper.GetMetaDataValue(key), Is.EqualTo(val));
 
             var json = helper.ToJson();
-            Assert.IsTrue(!string.IsNullOrEmpty(json));
-            Assert.IsTrue(json.Contains(key));
-            Assert.IsTrue(json.Contains(val));
+            Assert.That(json, Is.Not.Null.And.Not.Empty);
+            Assert.That(json, Does.Contain(key));
+            Assert.That(json, Does.Contain(val));
         }
 
         [Test]
@@ -32,7 +33,7 @@ namespace PenneoTests
             var val = new byte[] { 1, 2, 3 };
             var helper = new KeyValueMetaDataHelper();
             helper.AddBytes(key, val);
-            Assert.AreEqual(1, helper.Count);
+            Assert.That(helper.Count, Is.EqualTo(1));
             CollectionAssert.AreEqual(val, (byte[])helper.GetMetaDataValue(key));
         }
 
@@ -48,7 +49,7 @@ namespace PenneoTests
             helper.AddFile(key, filePath);
             var bytes = (byte[])helper.GetMetaDataValue(key);
             var text = Encoding.UTF8.GetString(bytes);
-            Assert.IsTrue(content.Equals(text, StringComparison.InvariantCulture));
+            Assert.That(content.Equals(text, StringComparison.InvariantCulture), Is.True);
         }
 
         [Test]
@@ -58,7 +59,7 @@ namespace PenneoTests
             const string val = "myValue";
             var helper = new KeyValueMetaDataHelper("{'" + key + "':'" + val + "'}");
             var result = (string)helper.GetMetaDataValue(key);
-            Assert.IsTrue(val.Equals(result, StringComparison.InvariantCulture));
+            Assert.That(val.Equals(result, StringComparison.InvariantCulture), Is.True);
         }
     }
 }
