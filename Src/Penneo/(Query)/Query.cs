@@ -156,7 +156,7 @@ namespace Penneo
                 {
                     var linkHeader =
                         findByResult.Response.Headers.FirstOrDefault(x => x.Name.Equals("link", StringComparison.OrdinalIgnoreCase));
-                    if (linkHeader != null && linkHeader.Value != null)
+                    if (linkHeader != null && !String.IsNullOrEmpty(linkHeader.Value as string))
                     {
                         PaginationUtil.ParseResponseHeadersForPagination(linkHeader.Value.ToString(), output);
                     }
