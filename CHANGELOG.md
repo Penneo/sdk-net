@@ -9,6 +9,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [7.0.2] - 2024-09-05
+### Fixed
+- Updated RestSharp from `110.2.0` to `112.0.0`
+
 ## [7.0.1] - 2024-06-25
 ### Fixed
 - Fixed an issue where queries would fail if the query result only returned a single page
