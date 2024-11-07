@@ -9,6 +9,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## 7.0.3 - 2024-11-07
+### Fixed
+- Resolved an issue where `CaseFile.Language` and `CaseFile.Reference` were reset to default values upon subsequent persistence or updates of a `CaseFile`
+
 ## [7.0.2] - 2024-09-05
 ### Fixed
 - Updated RestSharp from `110.2.0` to `112.0.0`
