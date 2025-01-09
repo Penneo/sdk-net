@@ -32,11 +32,18 @@ namespace Penneo
 
         public string ValidatedName { get; set; }
 
+        /// <summary>
+        /// The signer's social security number or mobile number (including the country code with or without the leading '+').
+        /// Social security numbers are validated at signing and can be also be validated to get access to the documents when the casefile is set to hold sensitive data or when access control is enabled on the signing request.
+        /// When the ssnType 'sms' is used, the value is only tested when accessing the document.
+        /// </summary>
         [JsonProperty(PropertyName = "socialSecurityNumberPlain")]
         public string SocialSecurityNumber { get; set; }
 
         /// <summary>
-        /// See https://app.penneo.com/api/v3/signers/ssn-types for available types
+        /// The type of data in 'socialSecurityNumberPlain'. For example 'dk:cpr', or 'se:pin' or 'sms'.
+        /// See https://app.penneo.com/api/v3/signers/ssn-types for available types. Defaults to 'legacy'.
+        /// When 'sms' is used, enabling access control on the signing request is mandatory.
         /// </summary>
         public string SsnType = "legacy";
 

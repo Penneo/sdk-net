@@ -9,6 +9,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [7.0.4] - 2025-01-09
+### Added
+- Added summary explanations for `SocialSecurityNumber` and `SsnType` properties in the `Signer` class
+
+
 ## 7.0.3 - 2024-11-07
 ### Fixed
 - Resolved an issue where `CaseFile.Language` and `CaseFile.Reference` were reset to default values upon subsequent persistence or updates of a `CaseFile`
