@@ -231,7 +231,7 @@ namespace Penneo.Connector
         /// <see cref="IApiConnector.GetLinkedEntitiesAsyncAsync{T}"/>
         /// </summary>
         public async Task<QueryResult<T>> GetLinkedEntitiesAsync<T>(Entity obj, string url = null)
-            where T: Entity
+            where T : Entity
         {
             string actualUrl;
             if (string.IsNullOrEmpty(url))
@@ -348,11 +348,25 @@ namespace Penneo.Connector
                 options = new Dictionary<string, Dictionary<string, object>>();
                 options["query"] = query;
             }
-            var response = await CallServerAsync(resource, null, Method.Get, options, page: page, perPage: perPage).ConfigureAwait(false);
-            if (response == null || !_successStatusCodes.Contains(response.StatusCode))
-            {
+
+            var response = await CallServerAsync(
+                    resource,
+                    null,
+                    Method.Get,
+                    options,
+                    page: page,
+                    perPage: perPage
+                ).ConfigureAwait(false);
+
+            if (response == null)
                 return new FindByResult<T> { Success = false };
-            }
+
+            if (!_successStatusCodes.Contains(response.StatusCode))
+                return new FindByResult<T>
+                {
+                    Success = false,
+                    Response = response,
+                };
 
             var objects = CreateObjects<T>(response.Content);
             return new FindByResult<T> { Success = true, Objects = objects, Response = response };
@@ -420,7 +434,7 @@ namespace Penneo.Connector
                 $"Trying to use the {_endpoint} API endpoint. Please use /v3 or above."
                 );
             }
-            
+
             _clientOptions = GetClientOptions();
 
             _client = new RestClient(_clientOptions);
@@ -510,7 +524,7 @@ namespace Penneo.Connector
                 {
                     throw new NotSupportedException("PerPage must be greater than zero");
                 }
-                request.AddParameter("per_page", (int) perPage);
+                request.AddParameter("per_page", (int)perPage);
             }
             if (page.HasValue)
             {
@@ -518,7 +532,7 @@ namespace Penneo.Connector
                 {
                     throw new NotSupportedException("Page must be greater than zero");
                 }
-                request.AddParameter("page", (int) page);
+                request.AddParameter("page", (int)page);
             }
 
             if (data != null)
@@ -622,7 +636,7 @@ namespace Penneo.Connector
         /// Create objects from a json string
         /// </summary>
         private IEnumerable<T> CreateObjects<T>(string json)
-            where T: Entity
+            where T : Entity
         {
             var direct = JsonConvert.DeserializeObject<List<T>>(json);
             return direct;
