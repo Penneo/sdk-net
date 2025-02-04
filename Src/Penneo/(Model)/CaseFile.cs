@@ -184,6 +184,19 @@ namespace Penneo
         }
 
         /// <summary>
+        /// Get folders for the case file.
+        /// </summary>
+        public async Task<IEnumerable<Folder>> GetFoldersAsync(PenneoConnector con)
+        {
+            if (!Id.HasValue)
+            {
+                return new List<Folder>();
+            }
+            return (await GetLinkedEntitiesAsync<Folder>(con, "casefiles/" + Id + "/folders").ConfigureAwait(false)).Objects;
+        }
+
+
+        /// <summary>
         /// The signers in the case file.
         /// NOTE: This property will only return already loaded signers
         /// </summary>
