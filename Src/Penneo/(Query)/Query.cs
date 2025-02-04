@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -83,7 +84,7 @@ namespace Penneo
             input.OrderBy = orderBy;
             input.PerPage = perPage;
             input.Page = page;
-            
+
             var output = await FindByAsync<T>(input).ConfigureAwait(false);
             if (!output.Success)
             {
@@ -91,7 +92,13 @@ namespace Penneo
                 {
                     throw new Exception(output.ErrorMessage);
                 }
-                throw new Exception("Unknown error during FindByAsync");
+
+                if (output.StatusCode != null)
+                {
+                    throw new Exception($"FindByAsync failed with no error message. StatusCode: {output.StatusCode}");
+                }
+
+                throw new Exception($"Unknown error during FindByAsync.");
             }
             return output.Objects;
         }
@@ -132,13 +139,17 @@ namespace Penneo
 
             var output = new QueryResult<T>();
             output.Input = input;
-            
+
             var findByResult = await _con.ApiConnector.FindByAsync<T>(query, input.Page, input.PerPage).ConfigureAwait(false);
 
             output.Success = findByResult.Success;
             output.Objects = findByResult.Objects;
-            output.StatusCode = findByResult.Response.StatusCode;
-            output.ErrorMessage = findByResult.Response.ErrorMessage;
+
+            if (findByResult.Response != null)
+            {
+                output.ErrorMessage = findByResult.Response?.ErrorMessage;
+                output.StatusCode = findByResult.Response.StatusCode;
+            }
 
             if (output.Success)
             {
