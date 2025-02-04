@@ -9,6 +9,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [7.1.0]
+### Added
+- `GetFoldersAsync()` method to Casefile entity which allows fetching a casefile's related folders
+
+### Fixed
+- Mitigated a Null Object reference issue when using `FindByAsync()` query with invalid credentials and api response is empty
+
 ## [7.0.4] - 2025-01-09
 ### Added
 - Added summary explanations for `SocialSecurityNumber` and `SsnType` properties in the `Signer` class
