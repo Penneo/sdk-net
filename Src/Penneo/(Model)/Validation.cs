@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Penneo
 {
-    public class Validation : Entity
+    public class Validation : EntityWithIntId
     {
         private const string ASSET_PDF = "pdf";
         private const string ASSET_LINK = "link";

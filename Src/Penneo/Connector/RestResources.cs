@@ -45,7 +45,7 @@ namespace Penneo.Connector
             {
                 return r;
             }
-            return GetResource(parent.GetType()) + "/" + parent.Id + "/" + r;
+            return GetResource(parent.GetType()) + "/" + parent.GetIdAsString() + "/" + r;
         }
     }
 }

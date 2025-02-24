@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace Penneo
 {
-    public class Signer : Entity
+    public class Signer : EntityWithIntId
     {
         public Signer()
         {

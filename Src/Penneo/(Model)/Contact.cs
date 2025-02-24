@@ -1,6 +1,6 @@
 ﻿namespace Penneo
 {
-    public class Contact : Entity
+    public class Contact : EntityWithIntId
     {
         public Contact()
         {

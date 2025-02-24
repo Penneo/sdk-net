@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace Penneo
 {
-    public class Folder : Entity
+    public class Folder : EntityWithIntId
     {
         private int? _parentId;
         private Folder _parentFolder;

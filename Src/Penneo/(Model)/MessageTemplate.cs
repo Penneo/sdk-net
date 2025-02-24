@@ -2,7 +2,7 @@
 
 namespace Penneo
 {
-    public class MessageTemplate : Entity
+    public class MessageTemplate : EntityWithIntId
     {
         #region MessageTemplateType enum
         /// <summary>
@@ -20,6 +20,10 @@ namespace Penneo
             SigningCcRecipient
         }
         #endregion
+        /// <summary>
+        /// The Id of the entity
+        /// </summary>
+        public int? Id { get; set; }
         public string Title { get; set; }
         public string Subject { get; set; }
         public string Message { get; set; }

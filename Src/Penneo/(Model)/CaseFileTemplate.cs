@@ -2,7 +2,7 @@
 
 namespace Penneo
 {
-    public class CaseFileTemplate : Entity
+    public class CaseFileTemplate : EntityWithIntId
     {
         public string Name { get; set; }
         public IEnumerable<DocumentType> DocumentTypes { get; set; }

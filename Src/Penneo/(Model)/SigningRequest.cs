@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Penneo
 {
-    public class SigningRequest : Entity
+    public class SigningRequest : EntityWithIntId
     {
         private const string ASSET_LINK = "link";
         private const string ACTION_SEND = "send";

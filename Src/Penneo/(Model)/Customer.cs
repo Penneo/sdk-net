@@ -1,6 +1,6 @@
 ﻿namespace Penneo
 {
-    public class Customer : Entity
+    public class Customer : EntityWithIntId
     {
         public string Name { get; set; }
         public string Address { get; set; }

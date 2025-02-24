@@ -7,10 +7,9 @@ using Penneo.Connector;
 
 namespace Penneo
 {
-    public class CaseFile : Entity
+    public class CaseFile : EntityWithIntId
     {
         #region CaseFileStatus enum
-
         /// <summary>
         /// Available case file statuses
         /// </summary>

@@ -1,6 +1,6 @@
 ﻿namespace Penneo
 {
-    public class CopyRecipient : Entity
+    public class CopyRecipient : EntityWithIntId
     {
         public CopyRecipient()
         {

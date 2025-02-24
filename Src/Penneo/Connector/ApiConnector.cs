@@ -538,7 +538,10 @@ namespace Penneo.Connector
             if (data != null)
             {
                 request.RequestFormat = DataFormat.Json;
-                request.AddJsonBody(data);
+                var json = JsonConvert.SerializeObject(data, new JsonSerializerSettings {
+                    Converters = { new StringEnumConverter() }
+                });
+                request.AddParameter("application/json", json, ParameterType.RequestBody);
             }
             return request;
         }

@@ -9,7 +9,7 @@ using Penneo.Connector;
 
 namespace Penneo
 {
-    public class Document : Entity
+    public class Document : EntityWithIntId
     {
         private const string TYPE_ATTACHMENT = "attachment";
         private const string TYPE_SIGNABLE = "signable";

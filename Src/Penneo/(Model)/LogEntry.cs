@@ -4,7 +4,7 @@ using Penneo.Connector;
 
 namespace Penneo
 {
-    public class LogEntry : Entity
+    public class LogEntry : EntityWithIntId
     {
         public int EventType { get; set; }
 
