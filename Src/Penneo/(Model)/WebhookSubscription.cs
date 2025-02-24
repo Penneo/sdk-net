@@ -8,11 +8,17 @@ namespace Penneo
     /// </summary>
     public class WebhookSubscription : EntityWithStringId
     {
+        public int CustomerId { get; set; }
+        
+        public string Secret { get; set; }
+
+        public bool IsActive { get; set; }
+        
         /// <summary>
         /// List of event types that should trigger the webhook
         /// </summary>
         public EventType[] EventTypes;
-
+        
         /// <summary>
         /// Target URL for the webhook
         /// </summary>

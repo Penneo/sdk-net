@@ -13,6 +13,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - WebhookSubscription has been upgraded to use the new webhook API. The new API is more flexible and allows for more advanced use cases (see documentation for details). The SDK no longer support creating new webhooks via the old API - all new subscriptions should use the new API instead.
 
+### Fixed
+- Entity properties not being fully updated and populated on `.PersistAsync()` calls 
+
 ## [7.2.0]
 ### Added
 - Allow setting language on the signer level via `Signer.Language`

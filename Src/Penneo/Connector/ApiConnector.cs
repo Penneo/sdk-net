@@ -141,9 +141,10 @@ namespace Penneo.Connector
                 var successful = ExtractResponse(obj, response, result);
                 if (successful)
                 {
-                    //Update id given from server
-                    var fromServer = (Entity)JsonConvert.DeserializeObject(response.Content, obj.GetType());
-                    if (fromServer != null) obj.SetIdFromServer(fromServer);
+                    if (!string.IsNullOrEmpty(response.Content))
+                    {
+                        JsonConvert.PopulateObject(response.Content, obj);
+                    }
                 }
                 return successful;
             }
@@ -169,6 +170,12 @@ namespace Penneo.Connector
                 }
             }
             SetLatestEntityServerResult(obj, result);
+            
+            if (!string.IsNullOrEmpty(response.Content))
+            {
+                JsonConvert.PopulateObject(response.Content, obj);
+            }
+            
             return result.Success;
         }
 
