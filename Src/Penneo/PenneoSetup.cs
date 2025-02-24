@@ -16,6 +16,10 @@ namespace Penneo
             _serviceLocator = serviceLocator;
         }
 
+        
+        // Resources with leading slash are considered absolute i.e. if baseUrl is https://app.penneo.com/api/v3/,
+        // then `casefiles` will be https://app.penneo.com/api/v3/casefiles
+        // but `/webhook/api/v1/subscriptions` will be https://app.penneo.com/webhook/api/v1/subscriptions
         public virtual void InitializeRestResources()
         {
             var r = new RestResources();
@@ -36,7 +40,8 @@ namespace Penneo
             r.Add<MessageTemplate>("casefile/message/templates");
             r.Add<User>("users");
             r.Add<Customer>("customers");
-            r.Add<WebhookSubscription>("webhook/subscriptions");
+            r.Add<WebhookSubscription>("/webhook/api/v1/subscriptions");
+            r.Add<WebhookSubscriptionLegacy>("webhook/subscriptions");
             r.Add<Contact>("contacts");
 
             _serviceLocator.RegisterInstance<RestResources>(r);
@@ -237,9 +242,18 @@ namespace Penneo
                 new MappingBuilder<WebhookSubscription>()
                     .ForCreate()
                     .Map(x => x.Endpoint)
+                    .Map(x => x.EventTypes)
+                    .Create()
+            );
+            
+            mappings.AddMapping(
+                new MappingBuilder<WebhookSubscriptionLegacy>()
+                    .ForCreate()
+                    .Map(x => x.Endpoint)
                     .Map(x => x.Topic)
                     .Create()
             );
+            
             mappings.AddMapping(
                 new MappingBuilder<Contact>()
                     .ForCreate()

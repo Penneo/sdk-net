@@ -70,7 +70,7 @@ namespace PenneoTests
             var list = new List<T> { (T)Activator.CreateInstance(typeof(T)) };
             for (var i = 0; i < list.Count; i++)
             {
-                list[i].Id = i;
+                list[i].SetId(i);
             }
             A.CallTo(() => con.ApiConnector.FindByAsync<T>(null, null, null)).WithAnyArguments()
                 .Returns(Task.FromResult(

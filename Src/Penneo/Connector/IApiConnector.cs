@@ -34,6 +34,13 @@ namespace Penneo.Connector
         /// </summary>
         Task<ReadObjectResult<T>> ReadObjectAsync<T>(Entity parent, int? id)
             where T : Entity;
+        
+        /// <summary>
+        /// Read an object from the backend
+        /// </summary>
+        Task<ReadObjectResult<T>> ReadObjectAsync<T>(Entity parent, string id)
+            where T : Entity;
+
 
         /// <summary>
         /// Read an object from the backend
