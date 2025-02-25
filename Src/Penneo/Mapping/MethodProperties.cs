@@ -81,17 +81,17 @@ namespace Penneo.Mapping
                 object value;
                 if (_isFile.Contains(propertyName))
                 {
-                    value = FileUtil.GetBase64((string) v);
+                    value = FileUtil.GetBase64((string)v);
                 }
                 else if (_isBase64.Contains(propertyName))
                 {
-                    value = Convert.ToBase64String((byte[]) v);
+                    value = Convert.ToBase64String((byte[])v);
                 }
                 else
                 {
                     value = v;
                 }
-               
+
                 //Convert value if converter is defined
                 Func<object, object> convert;
                 if (_convert.TryGetValue(propertyName, out convert))

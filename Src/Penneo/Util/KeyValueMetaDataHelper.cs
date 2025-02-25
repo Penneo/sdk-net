@@ -9,7 +9,7 @@ namespace Penneo.Util
     {
         private readonly Dictionary<string, object> _keyValues;
 
-        public int Count { get { return _keyValues.Count; }}
+        public int Count { get { return _keyValues.Count; } }
 
         public KeyValueMetaDataHelper(string metaData = null)
         {

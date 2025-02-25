@@ -170,12 +170,12 @@ namespace Penneo.Connector
                 }
             }
             SetLatestEntityServerResult(obj, result);
-            
+
             if (!string.IsNullOrEmpty(response.Content))
             {
                 JsonConvert.PopulateObject(response.Content, obj);
             }
-            
+
             return result.Success;
         }
 
@@ -192,7 +192,7 @@ namespace Penneo.Connector
         {
             return ReadObjectAsync<T>(parent, id, null);
         }
-        
+
         public Task<ReadObjectResult<T>> ReadObjectAsync<T>(Entity parent, string id) where T : Entity
         {
             return ReadObjectAsync<T>(parent, id, null);
@@ -218,7 +218,7 @@ namespace Penneo.Connector
             // }
             return new ReadObjectResult<T> { Response = response, Result = obj };
         }
-        
+
         public async Task<ReadObjectResult<T>> ReadObjectAsync<T>(Entity parent, string id, string relativeUrl) where T : Entity
         {
             var url = !string.IsNullOrEmpty(relativeUrl) ? relativeUrl : _restResources.GetResource(typeof(T), parent);
@@ -572,7 +572,8 @@ namespace Penneo.Connector
             if (data != null)
             {
                 request.RequestFormat = DataFormat.Json;
-                var json = JsonConvert.SerializeObject(data, new JsonSerializerSettings {
+                var json = JsonConvert.SerializeObject(data, new JsonSerializerSettings
+                {
                     Converters = { new StringEnumConverter() }
                 });
                 request.AddParameter("application/json", json, ParameterType.RequestBody);

@@ -16,7 +16,7 @@ namespace Penneo
             _serviceLocator = serviceLocator;
         }
 
-        
+
         // Resources with leading slash are considered absolute i.e. if baseUrl is https://app.penneo.com/api/v3/,
         // then `casefiles` will be https://app.penneo.com/api/v3/casefiles
         // but `/webhook/api/v1/subscriptions` will be https://app.penneo.com/webhook/api/v1/subscriptions
@@ -63,29 +63,29 @@ namespace Penneo
             mappings.AddMapping(
               new MappingBuilder<CaseFile>()
                   .ForCreate()
-                  .Map(x => x.Activated, convert: x => TimeUtil.ToUnixTime((DateTime) x))
+                  .Map(x => x.Activated, convert: x => TimeUtil.ToUnixTime((DateTime)x))
                   .Map(x => x.CaseFileTemplate.Id, "caseFileTypeId")
                   .Map(x => x.DisableEmailAttachments)
                   .Map(x => x.DisableNotificationsOwner)
-                  .Map(x => x.ExpireAt, convert: x => TimeUtil.ToUnixTime((DateTime) x))
+                  .Map(x => x.ExpireAt, convert: x => TimeUtil.ToUnixTime((DateTime)x))
                   .Map(x => x.Language)
                   .Map(x => x.MetaData)
                   .Map(x => x.Reference)
-                  .Map(x => x.SendAt, convert: x => TimeUtil.ToUnixTime((DateTime) x))
+                  .Map(x => x.SendAt, convert: x => TimeUtil.ToUnixTime((DateTime)x))
                   .Map(x => x.SensitiveData)
                   .Map(x => x.SignOnMeeting)
                   .Map(x => x.Title)
                   .Map(x => x.VisibilityMode)
                   .ForUpdate()
-                  .Map(x => x.Activated, convert: x => TimeUtil.ToUnixTime((DateTime) x))
+                  .Map(x => x.Activated, convert: x => TimeUtil.ToUnixTime((DateTime)x))
                   .Map(x => x.CaseFileTemplate.Id, "caseFileTypeId")
                   .Map(x => x.DisableEmailAttachments)
                   .Map(x => x.DisableNotificationsOwner)
-                  .Map(x => x.ExpireAt, convert: x => TimeUtil.ToUnixTime((DateTime) x))
+                  .Map(x => x.ExpireAt, convert: x => TimeUtil.ToUnixTime((DateTime)x))
                   .Map(x => x.Language)
                   .Map(x => x.MetaData)
                   .Map(x => x.Reference)
-                  .Map(x => x.SendAt, convert: x => TimeUtil.ToUnixTime((DateTime) x))
+                  .Map(x => x.SendAt, convert: x => TimeUtil.ToUnixTime((DateTime)x))
                   .Map(x => x.SensitiveData)
                   .Map(x => x.SignOnMeeting)
                   .Map(x => x.Title)
@@ -119,12 +119,12 @@ namespace Penneo
                   .Map(x => x.Role)
                   .Map(x => x.Conditions)
                   .Map(x => x.SignOrder)
-                  .Map(x => x.ActiveAt, convert: x => TimeUtil.ToUnixTime((DateTime) x))
-                  .Map(x => x.ActivatedAt, convert: x => TimeUtil.ToUnixTime((DateTime) x))
-                  .Map(x => x.ExpireAt,convert: x => TimeUtil.ToUnixTime((DateTime) x))
+                  .Map(x => x.ActiveAt, convert: x => TimeUtil.ToUnixTime((DateTime)x))
+                  .Map(x => x.ActivatedAt, convert: x => TimeUtil.ToUnixTime((DateTime)x))
+                  .Map(x => x.ExpireAt, convert: x => TimeUtil.ToUnixTime((DateTime)x))
                   .ForUpdate()
-                  .Map(x => x.ActiveAt, convert: x => TimeUtil.ToUnixTime((DateTime) x))
-                  .Map(x => x.ExpireAt, convert: x => TimeUtil.ToUnixTime((DateTime) x))
+                  .Map(x => x.ActiveAt, convert: x => TimeUtil.ToUnixTime((DateTime)x))
+                  .Map(x => x.ExpireAt, convert: x => TimeUtil.ToUnixTime((DateTime)x))
                   .Create()
             );
 
@@ -233,8 +233,8 @@ namespace Penneo
                     .Map(x => x.SignerTypeId)
                     .Map(x => x.SignerId)
                     .Map(x => x.Role)
-                    .Map(x => x.ActiveAt, convert: x => TimeUtil.ToUnixTime((DateTime) x))
-                    .Map(x => x.ExpireAt, convert: x => TimeUtil.ToUnixTime((DateTime) x))
+                    .Map(x => x.ActiveAt, convert: x => TimeUtil.ToUnixTime((DateTime)x))
+                    .Map(x => x.ExpireAt, convert: x => TimeUtil.ToUnixTime((DateTime)x))
                     .Create()
             );
 
@@ -245,7 +245,7 @@ namespace Penneo
                     .Map(x => x.EventTypes)
                     .Create()
             );
-            
+
             mappings.AddMapping(
                 new MappingBuilder<WebhookSubscriptionLegacy>()
                     .ForCreate()
@@ -253,7 +253,7 @@ namespace Penneo
                     .Map(x => x.Topic)
                     .Create()
             );
-            
+
             mappings.AddMapping(
                 new MappingBuilder<Contact>()
                     .ForCreate()

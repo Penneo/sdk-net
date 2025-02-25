@@ -9,27 +9,28 @@ namespace Penneo
     public class WebhookSubscription : EntityWithStringId
     {
         public int CustomerId { get; set; }
-        
+
         public string Secret { get; set; }
 
         public bool IsActive { get; set; }
-        
+
         /// <summary>
         /// List of event types that should trigger the webhook
         /// </summary>
         public EventType[] EventTypes;
-        
+
         /// <summary>
         /// Target URL for the webhook
         /// </summary>
         public string Endpoint { get; set; }
-        
+
     }
 
-    public enum EventType { 
+    public enum EventType
+    {
         [EnumMember(Value = "sign.casefile.completed")]
         CaseFileCompleted,
-        
+
         [EnumMember(Value = "sign.casefile.expired")]
         CaseFileExpired,
 
@@ -75,5 +76,5 @@ namespace Penneo
         [EnumMember(Value = "webhook.subscription.test")]
         WebhookSubscriptionTest
     }
-    
+
 }

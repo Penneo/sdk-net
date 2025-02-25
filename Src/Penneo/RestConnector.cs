@@ -23,7 +23,7 @@ namespace Penneo
         /// Get the url resource string for a given entity type
         /// </summary>
         public string GetUrlFromEntityType<T>(Entity parent = null)
-            where T: Entity
+            where T : Entity
         {
             return _con.Setup.GetRestResources().GetResource(typeof(T), parent);
         }
@@ -40,7 +40,7 @@ namespace Penneo
         /// Map json to a single entity of type T
         /// </summary>
         public T ToSingle<T>(string json)
-            where T: Entity
+            where T : Entity
         {
             return JsonConvert.DeserializeObject<T>(json);
         }

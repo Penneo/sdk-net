@@ -56,6 +56,6 @@ namespace PenneoTests
         {
             var con = TestUtil.CreatePenneoConnector();
             await TestUtil.TestGetLinked(con, () => CreateSigner().GetSigningRequest(con));
-        }        
+        }
     }
 }

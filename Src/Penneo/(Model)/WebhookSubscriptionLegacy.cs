@@ -12,9 +12,12 @@ namespace Penneo
     /// You can configure Penneo to send a request to your servers whenever certain entities change.
     /// See https://github.com/Penneo/sdk-net/blob/master/docs/webhooks.md for more details.
     /// </summary>
-    [Obsolete("This entity is read-only for legacy data. Creation of WebhookSubscriptionLegacy is not supported. Use " 
-              + nameof(WebhookSubscription) + " instead.")]
-    public class WebhookSubscriptionLegacy: EntityWithIntId
+    [Obsolete(
+        "This entity is read-only for legacy data. Creation of WebhookSubscriptionLegacy is not supported. Use "
+            + nameof(WebhookSubscription)
+            + " instead."
+    )]
+    public class WebhookSubscriptionLegacy : EntityWithIntId
     {
         public readonly int? UserId;
 
@@ -28,9 +31,12 @@ namespace Penneo
 
         [JsonConverter(typeof(PenneoDateConverter))]
         public readonly DateTime? Created;
-        
-        [Obsolete("Creation/updating of WebhookSubscriptionLegacy is not supported. " +
-                  "This entity is read-only for legacy data.", true)]
+
+        [Obsolete(
+            "Creation/updating of WebhookSubscriptionLegacy is not supported. "
+                + "This entity is read-only for legacy data.",
+            true
+        )]
         public override async Task<bool> PersistAsync(PenneoConnector con)
         {
             throw new NotSupportedException(
@@ -38,8 +44,11 @@ namespace Penneo
             );
         }
 
-        [Obsolete("Creation/updating of WebhookSubscriptionLegacy is not supported. " +
-                  "This entity is read-only for legacy data.", true)]
+        [Obsolete(
+            "Creation/updating of WebhookSubscriptionLegacy is not supported. "
+                + "This entity is read-only for legacy data.",
+            true
+        )]
         public async Task<bool> ConfirmAsync(PenneoConnector con, string token)
         {
             throw new NotSupportedException(
@@ -48,3 +57,4 @@ namespace Penneo
         }
     }
 }
+

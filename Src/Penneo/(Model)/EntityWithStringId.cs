@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace Penneo
 {
     /// <inheritdoc />
-    public abstract class EntityWithStringId: Entity
+    public abstract class EntityWithStringId : Entity
     {
         /// <summary>
         /// Uuid of the entity
@@ -25,9 +25,9 @@ namespace Penneo
         }
 
         public override bool IsNew => string.IsNullOrEmpty(Id);
-        
+
         internal override string GetIdAsString() => Id;
-        
+
         /// <summary>
         /// Delete the entity from the storage
         /// </summary>
@@ -40,7 +40,7 @@ namespace Penneo
             }
             Id = null;
         }
-        
+
         /// <summary>
         /// Return a string for debugging with both type and id
         /// </summary>

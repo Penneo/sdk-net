@@ -7,7 +7,7 @@ namespace Penneo
     /// Query result with multiple fetched objects
     /// </summary>
     public class QueryResult<T> : ServerResult
-        where T: Entity
+        where T : Entity
     {
         /// <summary>
         /// The objects fetched by the executed query
@@ -45,7 +45,7 @@ namespace Penneo
     /// Query result for a single object
     /// </summary>
     public class QuerySingleObjectResult<T> : ServerResult
-        where T: Entity
+        where T : Entity
     {
         /// <summary>
         /// Create an empty result

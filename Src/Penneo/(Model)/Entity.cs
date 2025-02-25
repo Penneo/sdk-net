@@ -46,7 +46,7 @@ namespace Penneo
         /// </summary>
         internal Guid InternalIdentifier { get; set; }
         public abstract bool IsNew { get; }
-        
+
         internal abstract void SetIdFromServer(Entity source);
         internal abstract string GetIdAsString();
         internal abstract void SetId(object rawId);
@@ -75,7 +75,7 @@ namespace Penneo
         }
 
         public abstract Task DeleteAsync(PenneoConnector con);
-        
+
         /// <summary>
         /// Get the latest server result for the entity
         /// </summary>
@@ -110,7 +110,7 @@ namespace Penneo
         /// Get all entities linked with this entity in the storage
         /// </summary>
         protected Task<QueryResult<T>> GetLinkedEntitiesAsync<T>(PenneoConnector con, string url = null)
-            where T: Entity
+            where T : Entity
         {
             return con.ApiConnector.GetLinkedEntitiesAsync<T>(this, url);
         }
@@ -119,7 +119,7 @@ namespace Penneo
         /// Get entity linked with this entity based on url
         /// </summary>
         protected Task<QuerySingleObjectResult<T>> GetLinkedEntityAsync<T>(PenneoConnector con, string url = null)
-            where T: Entity
+            where T : Entity
         {
             return con.ApiConnector.GetLinkedEntityAsync<T>(this, url);
         }

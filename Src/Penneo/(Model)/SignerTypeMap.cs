@@ -7,12 +7,13 @@ namespace Penneo
     public class SignerTypeMap : EntityWithIntId
     {
         public int SignerId { get; private set; }
-        public Signer Signer {
+        public Signer Signer
+        {
             set
             {
                 if (value.Id == null)
                 {
-                    throw new ArgumentException("Persist the signer before calling this"); 
+                    throw new ArgumentException("Persist the signer before calling this");
                 }
 
                 if (value.CaseFile.Id == null)
@@ -20,8 +21,8 @@ namespace Penneo
                     throw new ArgumentException("Persis the case file before calling this");
                 }
 
-                CaseFileId = (int) value.CaseFile.Id;
-                SignerId = (int) value.Id;
+                CaseFileId = (int)value.CaseFile.Id;
+                SignerId = (int)value.Id;
             }
         }
 

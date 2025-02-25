@@ -23,7 +23,7 @@ namespace Penneo.Util
                 e = unary.Operand;
             }
 
-            return ((MemberExpression) e).Member.Name;
+            return ((MemberExpression)e).Member.Name;
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace Penneo.Util
         /// </summary>
         public static string GetPropertyName<T>(Expression<Func<T, string>> property)
         {
-            return ((MemberExpression) property.Body).Member.Name;
+            return ((MemberExpression)property.Body).Member.Name;
         }
         /// <summary>
         /// Get the EnumMember value of a enum

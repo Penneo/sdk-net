@@ -60,7 +60,7 @@ namespace Penneo
         Signed = 4,
         Undeliverable = 5
     }
-    
+
     public static class InsecureSigningMethod
     {
         public const string Draw = "draw";

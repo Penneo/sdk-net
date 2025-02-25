@@ -24,7 +24,7 @@ namespace Penneo.Mapping
         /// </summary>
         public Dictionary<string, object> GetCreateValues(object obj)
         {
-            return GetValues("create", (T) obj);
+            return GetValues("create", (T)obj);
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace Penneo.Mapping
         /// </summary>
         public Dictionary<string, object> GetUpdateValues(object obj)
         {
-            return GetValues("update", (T) obj);
+            return GetValues("update", (T)obj);
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Penneo.Mapping
         /// </summary>
         public Type Type
         {
-            get { return typeof (T); }
+            get { return typeof(T); }
         }
 
         #endregion

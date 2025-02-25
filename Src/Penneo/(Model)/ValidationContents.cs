@@ -17,6 +17,6 @@ namespace Penneo
         public string Zip { get; set; }
         public string MailDistrict { get; set; }
         public bool Status { get; set; }
-    
+
     }
 }

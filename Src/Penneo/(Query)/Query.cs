@@ -35,7 +35,7 @@ namespace Penneo
             }
             return output.Object;
         }
-        
+
         /// <summary>
         /// Get an entity by its Id
         /// </summary>
@@ -57,7 +57,7 @@ namespace Penneo
             var objectResult = await _con.ApiConnector.ReadObjectAsync<T>(null, id).ConfigureAwait(false);
             return CreateSingleObjectResult(objectResult.Response, objectResult.Result, id);
         }
-        
+
         public async Task<QuerySingleObjectResult<T>> FindByIdAsync<T>(string id)
             where T : Entity
         {
@@ -269,7 +269,7 @@ namespace Penneo
             }
             return output;
         }
-        
+
         private QuerySingleObjectResult<T> CreateSingleObjectResult<T>(RestResponse response, T obj, string id)
             where T : Entity
         {

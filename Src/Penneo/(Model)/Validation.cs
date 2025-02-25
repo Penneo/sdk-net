@@ -42,7 +42,7 @@ namespace Penneo
             {
                 return ValidationStatus.New;
             }
-            return (ValidationStatus) Status;
+            return (ValidationStatus)Status;
         }
 
         public Task<byte[]> GetPdfAsync(PenneoConnector con)
