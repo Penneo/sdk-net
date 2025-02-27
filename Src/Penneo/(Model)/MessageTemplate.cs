@@ -23,7 +23,6 @@ namespace Penneo
         /// <summary>
         /// The Id of the entity
         /// </summary>
-        public int? Id { get; set; }
         public string Title { get; set; }
         public string Subject { get; set; }
         public string Message { get; set; }
