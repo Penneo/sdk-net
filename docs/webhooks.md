@@ -1,5 +1,5 @@
 # Webhook Subscriptions
-You can setup webhook subscriptions to get notified when certain happens happen in Penneo Sign.
+You can setup webhook subscriptions to get notified when certain events happen in Penneo Sign.
 You can use https://webhook.site to create a target url to test your webhook subscriptions.
 
 
@@ -35,7 +35,7 @@ Example of a notification payload:
   }
 }
 ```
-The request will have an `x-event-type` header with the event type, `x-event-id` with a unique id for the event and `x-penneo-signature` with a timestamp and signature of the payload.
+The request will have an `x-event-type` header with the event type, `x-event-id` with a unique id for the event and `x-event-signature` with a timestamp and signature of the payload.
 > Important: The endpoint must be a valid URL that can receive POST requests over the internet.
 
 ## Finding webhook subscriptions
