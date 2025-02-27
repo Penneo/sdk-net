@@ -94,6 +94,8 @@ namespace Penneo.Connector
         /// </summary>
         private bool _wasLastResponseError;
 
+        private static JsonSerializerSettings _jsonSerializerSettings;
+
         /// <summary>
         /// The latest server results for each entity processed
         /// </summary>
@@ -201,42 +203,48 @@ namespace Penneo.Connector
 
         public async Task<ReadObjectResult<T>> ReadObjectAsync<T>(Entity parent, int? id, string relativeUrl) where T : Entity
         {
-            var url = !string.IsNullOrEmpty(relativeUrl) ? relativeUrl : _restResources.GetResource(typeof(T), parent);
-            if (id.HasValue)
-            {
-                url += "/" + id;
-            }
+            var url = Url<T>(parent, id.ToString(), relativeUrl);
             var response = await CallServerAsync(url).ConfigureAwait(false);
             if (response == null || response.StatusCode != HttpStatusCode.OK)
             {
                 return new ReadObjectResult<T> { Response = response, Result = default };
             }
-            var obj = JsonConvert.DeserializeObject<T>(response.Content);
-            // if (id.HasValue)
-            // {
-            //     obj.Id = id;
-            // }
-            return new ReadObjectResult<T> { Response = response, Result = obj };
+
+            if (response.Content != null)
+            {
+                var obj = JsonConvert.DeserializeObject<T>(response.Content);
+                return new ReadObjectResult<T> { Response = response, Result = obj };
+            }
+            
+            return new ReadObjectResult<T> { Response = response, Result = null };
         }
 
         public async Task<ReadObjectResult<T>> ReadObjectAsync<T>(Entity parent, string id, string relativeUrl) where T : Entity
+        {
+            var url = Url<T>(parent, id, relativeUrl);
+            var response = await CallServerAsync(url).ConfigureAwait(false);
+            if (response == null || response.StatusCode != HttpStatusCode.OK)
+            {
+                return new ReadObjectResult<T> { Response = response, Result = default };
+            }
+
+            if (response.Content != null)
+            {
+                var obj = JsonConvert.DeserializeObject<T>(response.Content);
+                return new ReadObjectResult<T> { Response = response, Result = obj };
+            }
+            return new ReadObjectResult<T> { Response = response, Result = null };
+        }
+
+        private string Url<T>(Entity parent, string id, string relativeUrl) where T : Entity
         {
             var url = !string.IsNullOrEmpty(relativeUrl) ? relativeUrl : _restResources.GetResource(typeof(T), parent);
             if (!string.IsNullOrEmpty(id))
             {
                 url += "/" + id;
             }
-            var response = await CallServerAsync(url).ConfigureAwait(false);
-            if (response == null || response.StatusCode != HttpStatusCode.OK)
-            {
-                return new ReadObjectResult<T> { Response = response, Result = default };
-            }
-            var obj = JsonConvert.DeserializeObject<T>(response.Content);
-            // if (id.HasValue)
-            // {
-            //     obj.Id = id;
-            // }
-            return new ReadObjectResult<T> { Response = response, Result = obj };
+
+            return url;
         }
 
         /// <summary>
@@ -572,10 +580,7 @@ namespace Penneo.Connector
             if (data != null)
             {
                 request.RequestFormat = DataFormat.Json;
-                var json = JsonConvert.SerializeObject(data, new JsonSerializerSettings
-                {
-                    Converters = { new StringEnumConverter() }
-                });
+                var json = JsonConvert.SerializeObject(data, GetJsonSerializerSettings());
                 request.AddParameter("application/json", json, ParameterType.RequestBody);
             }
             return request;
@@ -656,22 +661,18 @@ namespace Penneo.Connector
         // and use a new client just with the root uri of the main client
         private RestClient GetClientFromUrl(string url)
         {
-            RestClient activeClient = _client;
-
-            if (!string.IsNullOrEmpty(url) && url.StartsWith("/"))
+            if (string.IsNullOrEmpty(url) || !url.StartsWith("/")) 
+                return _client;
+            
+            var rootOptions = new RestClientOptions
             {
-                var rootOptions = new RestClientOptions
-                {
-                    BaseUrl = new Uri(new Uri(_endpoint).GetLeftPart(UriPartial.Authority)),
-                    Authenticator = _clientOptions.Authenticator,
-                    UserAgent = _clientOptions.UserAgent,
-                    Proxy = _clientOptions.Proxy,
-                };
+                BaseUrl = new Uri(new Uri(_endpoint).GetLeftPart(UriPartial.Authority)),
+                Authenticator = _clientOptions.Authenticator,
+                UserAgent = _clientOptions.UserAgent,
+                Proxy = _clientOptions.Proxy,
+            };
 
-                activeClient = new RestClient(rootOptions);
-            }
-
-            return activeClient;
+            return new RestClient(rootOptions);
         }
 
         private void LogRequest(RestRequest request, string url, string method)
@@ -710,31 +711,30 @@ namespace Penneo.Connector
 
             if (jsonToken.Type == JTokenType.Object && jsonToken["items"] is JArray itemsArray)
             {
-                return itemsArray.ToObject<List<T>>(JsonSerializer.CreateDefault(new JsonSerializerSettings
-                {
-                    Converters = { new StringEnumConverter() }
-                }));
+                return itemsArray.ToObject<List<T>>(JsonSerializer.CreateDefault(GetJsonSerializerSettings()));
             }
             else if (jsonToken.Type == JTokenType.Array)
             {
-                return jsonToken.ToObject<List<T>>(JsonSerializer.CreateDefault(new JsonSerializerSettings
-                {
-                    Converters = { new StringEnumConverter() }
-                }));
+                return jsonToken.ToObject<List<T>>(JsonSerializer.CreateDefault(GetJsonSerializerSettings()));
             }
 
             throw new JsonSerializationException($"Unexpected JSON format: {json}");
         }
 
+        private static JsonSerializerSettings GetJsonSerializerSettings()
+        {
+            return _jsonSerializerSettings ?? (_jsonSerializerSettings = new JsonSerializerSettings
+            {
+                Converters = { new StringEnumConverter() }
+            });
+        }
+        
         /// <summary>
         /// Creates a single object from a json string
         /// </summary>
         private static T CreateObject<T>(string json)
         {
-            var direct = JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings
-            {
-                Converters = { new StringEnumConverter() }
-            });
+            var direct = JsonConvert.DeserializeObject<T>(json, GetJsonSerializerSettings());
             return direct;
         }
 
