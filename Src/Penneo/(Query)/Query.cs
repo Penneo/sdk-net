@@ -53,7 +53,6 @@ namespace Penneo
         public async Task<QuerySingleObjectResult<T>> FindByIdAsync<T>(int id)
             where T : Entity
         {
-            RestResponse response;
             var objectResult = await _con.ApiConnector.ReadObjectAsync<T>(null, id).ConfigureAwait(false);
             return CreateSingleObjectResult(objectResult.Response, objectResult.Result, id);
         }
@@ -61,7 +60,6 @@ namespace Penneo
         public async Task<QuerySingleObjectResult<T>> FindByIdAsync<T>(string id)
             where T : Entity
         {
-            RestResponse response;
             var objectResult = await _con.ApiConnector.ReadObjectAsync<T>(null, id).ConfigureAwait(false);
             return CreateSingleObjectResult(objectResult.Response, objectResult.Result, id);
         }
