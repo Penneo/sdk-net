@@ -37,7 +37,7 @@ namespace Penneo
                 + "This entity is read-only for legacy data.",
             true
         )]
-        public override async Task<bool> PersistAsync(PenneoConnector con)
+        public override Task<bool> PersistAsync(PenneoConnector con)
         {
             throw new NotSupportedException(
                 "WebhookSubscriptionLegacy is deprecated. Use the new WebhookSubscription class."
@@ -49,7 +49,7 @@ namespace Penneo
                 + "This entity is read-only for legacy data.",
             true
         )]
-        public async Task<bool> ConfirmAsync(PenneoConnector con, string token)
+        public Task<bool> ConfirmAsync(PenneoConnector con, string token)
         {
             throw new NotSupportedException(
                 "WebhookSubscriptionLegacy is deprecated. Use the new WebhookSubscription class."
