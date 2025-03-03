@@ -53,6 +53,11 @@ namespace Penneo
 
         [JsonProperty(PropertyName = "vatin")]
         public string VATIdentificationNumber { get; set; }
+        
+        /// <summary>
+        /// Will default to the language of the casefile if not set.
+        /// </summary>
+        public string Language { get; set; }
         public CaseFile CaseFile { get; set; }
         public SigningRequest SigningRequest { get; set; }
 
