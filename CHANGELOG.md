@@ -9,6 +9,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [7.2.0]
+### Added
+- Allow setting language on the signer level via `Signer.Language`
+
+
 ## [7.1.0]
 ### Added
 - `GetFoldersAsync()` method to Casefile entity which allows fetching a casefile's related folders

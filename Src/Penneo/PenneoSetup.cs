@@ -132,6 +132,7 @@ namespace Penneo
                   .Map(x => x.VATIdentificationNumber, "vatin")
                   .Map(x => x.OnBehalfOf)
                   .Map(x => x.StoreAsContact)
+                  .Map(x => x.Language)
                   .ForUpdate()
                   .Map(x => x.Name)
                   .Map(x => x.SsnType)
@@ -139,6 +140,7 @@ namespace Penneo
                   .Map(x => x.VATIdentificationNumber, "vatin")
                   .Map(x => x.OnBehalfOf)
                   .Map(x => x.StoreAsContact)
+                  .Map(x => x.Language)
                   .Create()
             );
 
