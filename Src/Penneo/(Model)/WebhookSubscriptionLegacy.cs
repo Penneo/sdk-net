@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Penneo.Connector;
-using RestSharp;
 
 namespace Penneo
 {
@@ -17,7 +15,7 @@ namespace Penneo
             + nameof(WebhookSubscription)
             + " instead."
     )]
-    public class WebhookSubscriptionLegacy : EntityWithIntId
+    public class WebhookSubscriptionLegacy : GenericEntity<int?>
     {
         public readonly int? UserId;
 
@@ -57,4 +55,3 @@ namespace Penneo
         }
     }
 }
-

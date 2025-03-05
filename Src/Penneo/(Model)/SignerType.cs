@@ -1,6 +1,6 @@
 ﻿namespace Penneo
 {
-    public class SignerType : EntityWithIntId
+    public class SignerType : GenericEntity<int?>
     {
         public string Role { get; set; }
         public int? UpperLimit { get; set; }

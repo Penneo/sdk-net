@@ -6,7 +6,7 @@ namespace Penneo
     /// You can configure Penneo to send a request to your servers when certain events occur.
     /// See https://github.com/Penneo/sdk-net/blob/master/docs/webhooks.md for more details.
     /// </summary>
-    public class WebhookSubscription : EntityWithStringId
+    public class WebhookSubscription : GenericEntity<string>
     {
         public int CustomerId { get; set; }
 
@@ -46,6 +46,9 @@ namespace Penneo
         [EnumMember(Value = "sign.signer.requestOpened")]
         SignerRequestOpened,
 
+        [EnumMember(Value = "sign.signer.opened")]
+        SignerOpened,
+
         [EnumMember(Value = "sign.signer.signed")]
         SignerSigned,
 
@@ -76,5 +79,4 @@ namespace Penneo
         [EnumMember(Value = "webhook.subscription.test")]
         WebhookSubscriptionTest
     }
-
 }

@@ -1,10 +1,8 @@
 ﻿namespace Penneo
 {
-    public class Contact : EntityWithIntId
+    public class Contact : GenericEntity<int?>
     {
-        public Contact()
-        {
-        }
+        public Contact() { }
 
         public Contact(string name)
         {
@@ -22,6 +20,5 @@
         public string Email { get; set; }
 
         public string OnBehalfOf { get; set; }
-
     }
 }

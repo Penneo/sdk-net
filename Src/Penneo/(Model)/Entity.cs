@@ -65,11 +65,11 @@ namespace Penneo
         /// </summary>
         public virtual async Task<bool> PersistAsync(PenneoConnector con)
         {
-            con.Log((IsNew ? "Creating" : "Updating") + " " + GetType().Name + " (" + (IsNew ? GetIdAsString() : "new") + ")", LogSeverity.Information);
+            con.Log((IsNew ? "Creating" : "Updating") + " " + GetType().Name + " (" + (IsNew ? "new" : GetIdAsString()) + ")", LogSeverity.Information);
             var success = await con.ApiConnector.WriteObjectAsync(this).ConfigureAwait(false);
             if (!success)
             {
-                con.Log((IsNew ? "Creating" : "Updating") + " " + GetType().Name + " (" + (IsNew ? GetIdAsString() : "new") + ") failed", LogSeverity.Information);
+                con.Log((IsNew ? "Creating" : "Updating") + " " + GetType().Name + " (" + (IsNew ? "new" : GetIdAsString()) + ") failed", LogSeverity.Information);
             }
             return success;
         }

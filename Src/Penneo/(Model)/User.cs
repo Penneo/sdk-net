@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Penneo
 {
-    public class User : EntityWithIntId
+    public class User : GenericEntity<int?>
     {
         public string FullName { get; set; }
         public string Email { get; set; }

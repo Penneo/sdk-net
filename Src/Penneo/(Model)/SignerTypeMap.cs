@@ -4,7 +4,7 @@ using Penneo.Connector;
 
 namespace Penneo
 {
-    public class SignerTypeMap : EntityWithIntId
+    public class SignerTypeMap : GenericEntity<int?>
     {
         public int SignerId { get; private set; }
         public Signer Signer

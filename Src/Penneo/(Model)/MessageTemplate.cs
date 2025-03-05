@@ -2,7 +2,7 @@
 
 namespace Penneo
 {
-    public class MessageTemplate : EntityWithIntId
+    public class MessageTemplate : GenericEntity<int?>
     {
         #region MessageTemplateType enum
         /// <summary>
