@@ -2,7 +2,7 @@
 
 namespace Penneo
 {
-    public class DocumentType : Entity
+    public class DocumentType : GenericEntity<int?>
     {
         public string Name { get; set; }
         public int? UpperLimit { get; set; }

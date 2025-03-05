@@ -6,7 +6,7 @@ namespace PenneoTests
 {
     [TestFixture]
     public class SigningRequestTests
-    {        
+    {
         [Test]
         public async Task PersistSuccessTest()
         {

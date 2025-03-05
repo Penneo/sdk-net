@@ -45,19 +45,11 @@ namespace Penneo
         /// Internal guid of the entity
         /// </summary>
         internal Guid InternalIdentifier { get; set; }
+        public abstract bool IsNew { get; }
 
-        /// <summary>
-        /// The Id of the entity
-        /// </summary>
-        public int? Id { get; set; }
-
-        /// <summary>
-        /// Denotes if the entity is new (i.e. still unknown to Penneo)
-        /// </summary>
-        public bool IsNew
-        {
-            get { return !Id.HasValue; }
-        }
+        internal abstract void SetIdFromServer(Entity source);
+        internal abstract string GetIdAsString();
+        internal abstract void SetId(object rawId);
 
         /// <summary>
         /// Get request data from the entity as a property->value dictionary
@@ -71,29 +63,18 @@ namespace Penneo
         /// <summary>
         /// Persist the entity to the storage
         /// </summary>
-        public async Task<bool> PersistAsync(PenneoConnector con)
+        public virtual async Task<bool> PersistAsync(PenneoConnector con)
         {
-            con.Log((IsNew ? "Creating" : "Updating") + " " + GetType().Name + " (" + (Id.HasValue ? Id.ToString() : "new") + ")", LogSeverity.Information);
+            con.Log((IsNew ? "Creating" : "Updating") + " " + GetType().Name + " (" + (IsNew ? "new" : GetIdAsString()) + ")", LogSeverity.Information);
             var success = await con.ApiConnector.WriteObjectAsync(this).ConfigureAwait(false);
             if (!success)
             {
-                con.Log((IsNew ? "Creating" : "Updating") + " " + GetType().Name + " (" + (Id.HasValue ? Id.ToString() : "new") + ") failed", LogSeverity.Information);
+                con.Log((IsNew ? "Creating" : "Updating") + " " + GetType().Name + " (" + (IsNew ? "new" : GetIdAsString()) + ") failed", LogSeverity.Information);
             }
             return success;
         }
 
-        /// <summary>
-        /// Delete the entity from the storage
-        /// </summary>
-        public async Task DeleteAsync(PenneoConnector con)
-        {
-            con.Log("Deleting " + GetType().Name + " (" + (Id.HasValue ? Id.ToString() : "new") + ")", LogSeverity.Information);
-            if (!await con.ApiConnector.DeleteObjectAsync(this).ConfigureAwait(false))
-            {
-                throw new Exception("Penneo: Could not delete the " + GetType().Name);
-            }
-            Id = null;
-        }
+        public abstract Task DeleteAsync(PenneoConnector con);
 
         /// <summary>
         /// Get the latest server result for the entity
@@ -109,8 +90,8 @@ namespace Penneo
         protected Task<bool> LinkEntityAsync(PenneoConnector con, Entity child)
         {
             con.Log("Linking " +
-                    GetType().Name + " (" + (Id.HasValue ? Id.ToString() : "new") + ") TO " +
-                    child.GetType().Name + " (" + (child.Id.HasValue ? Id.ToString() : "new") + ")", LogSeverity.Information);
+                    GetType().Name + " (" + (IsNew ? GetIdAsString() : "new") + ") TO " +
+                    child.GetType().Name + " (" + (child.IsNew ? GetIdAsString() : "new") + ")", LogSeverity.Information);
             return con.ApiConnector.LinkEntityAsync(this, child);
         }
 
@@ -120,8 +101,8 @@ namespace Penneo
         protected Task<bool> UnlinkEntity(PenneoConnector con, Entity child)
         {
             con.Log("Unlinking " +
-                    GetType().Name + " (" + (Id.HasValue ? Id.ToString() : "new") + ") TO " +
-                    child.GetType().Name + " (" + (child.Id.HasValue ? Id.ToString() : "new") + ")", LogSeverity.Information);
+                    GetType().Name + " (" + (IsNew ? GetIdAsString() : "new") + ") TO " +
+                    child.GetType().Name + " (" + (child.IsNew ? GetIdAsString() : "new") + ")", LogSeverity.Information);
             return con.ApiConnector.UnlinkEntityAsync(this, child);
         }
 
@@ -129,7 +110,7 @@ namespace Penneo
         /// Get all entities linked with this entity in the storage
         /// </summary>
         protected Task<QueryResult<T>> GetLinkedEntitiesAsync<T>(PenneoConnector con, string url = null)
-            where T: Entity
+            where T : Entity
         {
             return con.ApiConnector.GetLinkedEntitiesAsync<T>(this, url);
         }
@@ -138,7 +119,7 @@ namespace Penneo
         /// Get entity linked with this entity based on url
         /// </summary>
         protected Task<QuerySingleObjectResult<T>> GetLinkedEntityAsync<T>(PenneoConnector con, string url = null)
-            where T: Entity
+            where T : Entity
         {
             return con.ApiConnector.GetLinkedEntityAsync<T>(this, url);
         }
@@ -208,10 +189,7 @@ namespace Penneo
         /// <summary>
         /// Return a string for debugging with both type and id
         /// </summary>
-        public override string ToString()
-        {
-            return string.Format("{0} Id: {1}", GetType().Name, Id);
-        }
+        public abstract override string ToString();
     }
 }
 

@@ -21,7 +21,7 @@ namespace PenneoTests
                 .Map(x => x.Title)
                 .GetMapping();
 
-            var obj = new CaseFile() {Title = title};
+            var obj = new CaseFile() { Title = title };
             var createValues = mapping.GetCreateValues(obj);
             var updateValues = mapping.GetUpdateValues(obj);
 
@@ -46,7 +46,7 @@ namespace PenneoTests
                 .Map(x => x.Status)
                 .GetMapping();
 
-            var obj = new CaseFile() {Status = 3};
+            var obj = new CaseFile() { Status = 3 };
             var createValues = mapping.GetCreateValues(obj);
             var updateValues = mapping.GetUpdateValues(obj);
 
@@ -83,7 +83,7 @@ namespace PenneoTests
                 .Map(x => x.Title)
                 .GetMapping();
 
-            var obj = new CaseFile() {Status = 3};
+            var obj = new CaseFile() { Status = 3 };
 
             //only create mapping created, so this should fail
             Assert.That(() => mapping.GetUpdateValues(obj), Throws.TypeOf<KeyNotFoundException>());

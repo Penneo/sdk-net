@@ -1,35 +1,82 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Penneo.Connector;
-using RestSharp;
+using System.Runtime.Serialization;
 
 namespace Penneo
 {
     /// <summary>
-    /// You can configure Penneo to send a request to your servers whenever certain entities change.
+    /// You can configure Penneo to send a request to your servers when certain events occur.
     /// See https://github.com/Penneo/sdk-net/blob/master/docs/webhooks.md for more details.
     /// </summary>
-    public class WebhookSubscription : Entity
+    public class WebhookSubscription : GenericEntity<string>
     {
-        public int? UserId;
+        public int CustomerId { get; set; }
 
-        public int? CustomerId;
+        public string Secret { get; set; }
 
-        public bool Confirmed = false;
+        public bool IsActive { get; set; }
 
-        public string Topic;
+        /// <summary>
+        /// List of event types that should trigger the webhook
+        /// </summary>
+        public EventType[] EventTypes;
 
-        public string Endpoint;
+        /// <summary>
+        /// Target URL for the webhook
+        /// </summary>
+        public string Endpoint { get; set; }
 
-        [JsonConverter(typeof(PenneoDateConverter))]
-        public DateTime? Created;
+    }
 
-        public async Task<bool> ConfirmAsync(PenneoConnector con, string token)
-        {
-            var data = new Dictionary<string, object> {{"token", token}};
-            return (await PerformComplexActionAsync(con, Method.Post, "confirm", data).ConfigureAwait(false)).Success;
-        }
+    public enum EventType
+    {
+        [EnumMember(Value = "sign.casefile.completed")]
+        CaseFileCompleted,
+
+        [EnumMember(Value = "sign.casefile.expired")]
+        CaseFileExpired,
+
+        [EnumMember(Value = "sign.casefile.failed")]
+        CaseFileFailed,
+
+        [EnumMember(Value = "sign.casefile.rejected")]
+        CaseFileRejected,
+
+        [EnumMember(Value = "sign.signer.requestSent")]
+        SignerRequestSent,
+
+        [EnumMember(Value = "sign.signer.requestOpened")]
+        SignerRequestOpened,
+
+        [EnumMember(Value = "sign.signer.opened")]
+        SignerOpened,
+
+        [EnumMember(Value = "sign.signer.signed")]
+        SignerSigned,
+
+        [EnumMember(Value = "sign.signer.rejected")]
+        SignerRejected,
+
+        [EnumMember(Value = "sign.signer.reminderSent")]
+        SignerReminderSent,
+
+        [EnumMember(Value = "sign.signer.undeliverable")]
+        SignerUndeliverable,
+
+        [EnumMember(Value = "sign.signer.requestActivated")]
+        SignerRequestActivated,
+
+        [EnumMember(Value = "sign.signer.finalized")]
+        SignerFinalized,
+
+        [EnumMember(Value = "sign.signer.deleted")]
+        SignerDeleted,
+
+        [EnumMember(Value = "sign.signer.signedWithImageUploadAndNAP")]
+        SignerSignedWithImageUploadAndNAP,
+
+        [EnumMember(Value = "sign.signer.transientBounce")]
+        SignerTransientBounce,
+
+        [EnumMember(Value = "webhook.subscription.test")]
+        WebhookSubscriptionTest
     }
 }

@@ -6,6 +6,6 @@
         public string Label { get; set; }
         public string Type { get; set; }
         public object Value { get; set; }
-        
+
     }
 }

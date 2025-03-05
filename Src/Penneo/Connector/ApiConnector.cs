@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Linq;
 using Penneo.Util;
 using RestSharp;
 
@@ -92,6 +94,8 @@ namespace Penneo.Connector
         /// </summary>
         private bool _wasLastResponseError;
 
+        private static JsonSerializerSettings _jsonSerializerSettings;
+
         /// <summary>
         /// The latest server results for each entity processed
         /// </summary>
@@ -130,7 +134,7 @@ namespace Penneo.Connector
             }
             if (!obj.IsNew)
             {
-                var response = await CallServerAsync(obj.GetRelativeUrl(_con) + "/" + obj.Id, data, Method.Put).ConfigureAwait(false);
+                var response = await CallServerAsync(obj.GetRelativeUrl(_con) + "/" + obj.GetIdAsString(), data, Method.Put).ConfigureAwait(false);
                 return ExtractResponse(obj, response, result);
             }
             else
@@ -139,9 +143,10 @@ namespace Penneo.Connector
                 var successful = ExtractResponse(obj, response, result);
                 if (successful)
                 {
-                    //Update id given from server
-                    var fromServer = (Entity)JsonConvert.DeserializeObject(response.Content, obj.GetType());
-                    if (fromServer != null) obj.Id = fromServer.Id;
+                    if (!string.IsNullOrEmpty(response.Content))
+                    {
+                        JsonConvert.PopulateObject(response.Content, obj);
+                    }
                 }
                 return successful;
             }
@@ -167,6 +172,12 @@ namespace Penneo.Connector
                 }
             }
             SetLatestEntityServerResult(obj, result);
+
+            if (!string.IsNullOrEmpty(response.Content))
+            {
+                JsonConvert.PopulateObject(response.Content, obj);
+            }
+
             return result.Success;
         }
 
@@ -175,7 +186,7 @@ namespace Penneo.Connector
         /// </summary>
         public async Task<bool> DeleteObjectAsync(Entity obj)
         {
-            var response = await CallServerAsync(obj.GetRelativeUrl(_con) + '/' + obj.Id, null, Method.Delete).ConfigureAwait(false);
+            var response = await CallServerAsync(obj.GetRelativeUrl(_con) + '/' + obj.GetIdAsString(), null, Method.Delete).ConfigureAwait(false);
             return response != null && (response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.NoContent);
         }
 
@@ -184,33 +195,64 @@ namespace Penneo.Connector
             return ReadObjectAsync<T>(parent, id, null);
         }
 
+        public Task<ReadObjectResult<T>> ReadObjectAsync<T>(Entity parent, string id) where T : Entity
+        {
+            return ReadObjectAsync<T>(parent, id, null);
+        }
+
+
         public async Task<ReadObjectResult<T>> ReadObjectAsync<T>(Entity parent, int? id, string relativeUrl) where T : Entity
         {
-            var url = !string.IsNullOrEmpty(relativeUrl) ? relativeUrl : _restResources.GetResource(typeof(T), parent);
-            if (id.HasValue)
-            {
-                url += "/" + id;
-            }
+            var url = Url<T>(parent, id.ToString(), relativeUrl);
             var response = await CallServerAsync(url).ConfigureAwait(false);
             if (response == null || response.StatusCode != HttpStatusCode.OK)
             {
                 return new ReadObjectResult<T> { Response = response, Result = default };
             }
-            var obj = JsonConvert.DeserializeObject<T>(response.Content);
-            if (id.HasValue)
+
+            if (response.Content != null)
             {
-                obj.Id = id;
+                var obj = JsonConvert.DeserializeObject<T>(response.Content);
+                return new ReadObjectResult<T> { Response = response, Result = obj };
             }
-            return new ReadObjectResult<T> { Response = response, Result = obj };
+            
+            return new ReadObjectResult<T> { Response = response, Result = null };
         }
 
+        public async Task<ReadObjectResult<T>> ReadObjectAsync<T>(Entity parent, string id, string relativeUrl) where T : Entity
+        {
+            var url = Url<T>(parent, id, relativeUrl);
+            var response = await CallServerAsync(url).ConfigureAwait(false);
+            if (response == null || response.StatusCode != HttpStatusCode.OK)
+            {
+                return new ReadObjectResult<T> { Response = response, Result = default };
+            }
+
+            if (response.Content != null)
+            {
+                var obj = JsonConvert.DeserializeObject<T>(response.Content);
+                return new ReadObjectResult<T> { Response = response, Result = obj };
+            }
+            return new ReadObjectResult<T> { Response = response, Result = null };
+        }
+
+        private string Url<T>(Entity parent, string id, string relativeUrl) where T : Entity
+        {
+            var url = !string.IsNullOrEmpty(relativeUrl) ? relativeUrl : _restResources.GetResource(typeof(T), parent);
+            if (!string.IsNullOrEmpty(id))
+            {
+                url += "/" + id;
+            }
+
+            return url;
+        }
 
         /// <summary>
         /// <see cref="IApiConnector.LinkEntityAsync"/>
         /// </summary>
         public async Task<bool> LinkEntityAsync(Entity parent, Entity child)
         {
-            var url = parent.GetRelativeUrl(_con) + "/" + parent.Id + "/" + _restResources.GetResource(child.GetType()) + "/" + child.Id;
+            var url = parent.GetRelativeUrl(_con) + "/" + parent.GetIdAsString() + "/" + _restResources.GetResource(child.GetType()) + "/" + child.GetIdAsString();
             var response = await CallServerAsync(url, method: Method.Post).ConfigureAwait(false);
             var result = new ServerResult();
             return ExtractResponse(parent, response, result);
@@ -221,7 +263,7 @@ namespace Penneo.Connector
         /// </summary>
         public async Task<bool> UnlinkEntityAsync(Entity parent, Entity child)
         {
-            var url = parent.GetRelativeUrl(_con) + "/" + parent.Id + "/" + _restResources.GetResource(child.GetType()) + "/" + child.Id;
+            var url = parent.GetRelativeUrl(_con) + "/" + parent.GetIdAsString() + "/" + _restResources.GetResource(child.GetType()) + "/" + child.GetIdAsString();
             var response = await CallServerAsync(url, method: Method.Delete).ConfigureAwait(false);
             var result = new ServerResult();
             return ExtractResponse(parent, response, result);
@@ -236,7 +278,7 @@ namespace Penneo.Connector
             string actualUrl;
             if (string.IsNullOrEmpty(url))
             {
-                actualUrl = obj.GetRelativeUrl(_con) + "/" + obj.Id + "/" + _restResources.GetResource<T>();
+                actualUrl = obj.GetRelativeUrl(_con) + "/" + obj.GetIdAsString() + "/" + _restResources.GetResource<T>();
             }
             else
             {
@@ -261,7 +303,7 @@ namespace Penneo.Connector
             string actualUrl;
             if (string.IsNullOrEmpty(url))
             {
-                actualUrl = obj.GetRelativeUrl(_con) + "/" + obj.Id + "/" + _restResources.GetResource<T>();
+                actualUrl = obj.GetRelativeUrl(_con) + "/" + obj.GetIdAsString() + "/" + _restResources.GetResource<T>();
             }
             else
             {
@@ -282,7 +324,7 @@ namespace Penneo.Connector
         /// </summary>
         public async Task<T> FindLinkedEntityAsync<T>(Entity obj, int id)
         {
-            var url = obj.GetRelativeUrl(_con) + "/" + obj.Id + "/" + _restResources.GetResource<T>() + "/" + id;
+            var url = obj.GetRelativeUrl(_con) + "/" + obj.GetIdAsString() + "/" + _restResources.GetResource<T>() + "/" + id;
             var response = await CallServerAsync(url).ConfigureAwait(false);
             if (response == null || !_successStatusCodes.Contains(response.StatusCode))
             {
@@ -293,7 +335,7 @@ namespace Penneo.Connector
 
         public async Task<T> GetAssetAsync<T>(Entity obj, string assetName)
         {
-            var url = obj.GetRelativeUrl(_con) + "/" + obj.Id + "/" + assetName;
+            var url = obj.GetRelativeUrl(_con) + "/" + obj.GetIdAsString() + "/" + assetName;
             var response = await CallServerAsync(url).ConfigureAwait(false);
             if (response == null || string.IsNullOrEmpty(response.Content) || !_successStatusCodes.Contains(response.StatusCode))
             {
@@ -317,7 +359,7 @@ namespace Penneo.Connector
         /// </summary>
         public async Task<string> GetTextAssetsAsync(Entity obj, string assetName)
         {
-            var url = obj.GetRelativeUrl(_con) + "/" + obj.Id + "/" + assetName;
+            var url = obj.GetRelativeUrl(_con) + "/" + obj.GetIdAsString() + "/" + assetName;
             var response = await CallServerAsync(url).ConfigureAwait(false);
             var result = JsonConvert.DeserializeObject<string[]>(response.Content);
             return result[0];
@@ -328,7 +370,7 @@ namespace Penneo.Connector
         /// </summary>
         public async Task<IEnumerable<string>> GetStringListAssetAsync(Entity obj, string assetName)
         {
-            var url = obj.GetRelativeUrl(_con) + "/" + obj.Id + "/" + assetName;
+            var url = obj.GetRelativeUrl(_con) + "/" + obj.GetIdAsString() + "/" + assetName;
             var response = await CallServerAsync(url).ConfigureAwait(false);
             var result = JsonConvert.DeserializeObject<string[]>(response.Content);
             return result;
@@ -386,7 +428,7 @@ namespace Penneo.Connector
             Dictionary<string, object> data)
         {
             var result = new ServerResult();
-            var url = obj.GetRelativeUrl(_con) + "/" + obj.Id + "/" + action;
+            var url = obj.GetRelativeUrl(_con) + "/" + obj.GetIdAsString() + "/" + action;
             var response = await CallServerAsync(url, data, method).ConfigureAwait(false);
             if (response == null || !_successStatusCodes.Contains(response.StatusCode))
             {
@@ -538,7 +580,8 @@ namespace Penneo.Connector
             if (data != null)
             {
                 request.RequestFormat = DataFormat.Json;
-                request.AddJsonBody(data);
+                var json = JsonConvert.SerializeObject(data, GetJsonSerializerSettings());
+                request.AddParameter("application/json", json, ParameterType.RequestBody);
             }
             return request;
         }
@@ -581,17 +624,25 @@ namespace Penneo.Connector
         /// <summary>
         /// Calls the Penneo server with a rest request
         /// </summary>
-        public async Task<RestResponse> CallServerAsync(string url, Dictionary<string, object> data = null,
-            Method method = Method.Get, Dictionary<string, Dictionary<string, object>> options = null, int? page = null,
+        public async Task<RestResponse> CallServerAsync(
+            string url,
+            Dictionary<string, object> data = null,
+            Method method = Method.Get,
+            Dictionary<string, Dictionary<string, object>> options = null,
+            int? page = null,
             int? perPage = null)
         {
             SetProxy();
+
             try
             {
                 var request = PrepareRequest(url, data, method, options, page, perPage);
                 LogRequest(request, url, method.ToString());
 
-                var response = await _client.ExecuteAsync(request).ConfigureAwait(false);
+
+                var activeClient = GetClientFromUrl(url);
+
+                var response = await activeClient.ExecuteAsync(request).ConfigureAwait(false);
 
                 LogResponse(response, url, method.ToString());
 
@@ -604,6 +655,24 @@ namespace Penneo.Connector
                 _con.Log(ex.ToString(), LogSeverity.Fatal);
                 throw;
             }
+        }
+
+        // We default to the main client but if the url has a leading slash, we treat the url as absolute
+        // and use a new client just with the root uri of the main client
+        private RestClient GetClientFromUrl(string url)
+        {
+            if (string.IsNullOrEmpty(url) || !url.StartsWith("/")) 
+                return _client;
+            
+            var rootOptions = new RestClientOptions
+            {
+                BaseUrl = new Uri(new Uri(_endpoint).GetLeftPart(UriPartial.Authority)),
+                Authenticator = _clientOptions.Authenticator,
+                UserAgent = _clientOptions.UserAgent,
+                Proxy = _clientOptions.Proxy,
+            };
+
+            return new RestClient(rootOptions);
         }
 
         private void LogRequest(RestRequest request, string url, string method)
@@ -638,16 +707,34 @@ namespace Penneo.Connector
         private IEnumerable<T> CreateObjects<T>(string json)
             where T : Entity
         {
-            var direct = JsonConvert.DeserializeObject<List<T>>(json);
-            return direct;
+            var jsonToken = JToken.Parse(json);
+
+            if (jsonToken.Type == JTokenType.Object && jsonToken["items"] is JArray itemsArray)
+            {
+                return itemsArray.ToObject<List<T>>(JsonSerializer.CreateDefault(GetJsonSerializerSettings()));
+            }
+            else if (jsonToken.Type == JTokenType.Array)
+            {
+                return jsonToken.ToObject<List<T>>(JsonSerializer.CreateDefault(GetJsonSerializerSettings()));
+            }
+
+            throw new JsonSerializationException($"Unexpected JSON format: {json}");
         }
 
+        private static JsonSerializerSettings GetJsonSerializerSettings()
+        {
+            return _jsonSerializerSettings ?? (_jsonSerializerSettings = new JsonSerializerSettings
+            {
+                Converters = { new StringEnumConverter() }
+            });
+        }
+        
         /// <summary>
         /// Creates a single object from a json string
         /// </summary>
         private static T CreateObject<T>(string json)
         {
-            var direct = JsonConvert.DeserializeObject<T>(json);
+            var direct = JsonConvert.DeserializeObject<T>(json, GetJsonSerializerSettings());
             return direct;
         }
 

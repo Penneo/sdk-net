@@ -6,7 +6,7 @@ using Penneo.Connector;
 
 namespace Penneo
 {
-    public class SignatureLine : Entity
+    public class SignatureLine : GenericEntity<int?>
     {
         public SignatureLine()
         {

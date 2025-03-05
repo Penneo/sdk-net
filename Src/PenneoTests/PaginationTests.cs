@@ -23,29 +23,29 @@ namespace PenneoTests
         [Test]
         public void PageNotZeroTest()
         {
-          Assert.That(() => TestUtil.CreateTestApiConnector().PrepareRequest(string.Empty, page: 0, perPage: 10),
-                Throws.TypeOf<NotSupportedException>());
+            Assert.That(() => TestUtil.CreateTestApiConnector().PrepareRequest(string.Empty, page: 0, perPage: 10),
+                  Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]
         public void PerPageNotZeroTest()
         {
-          Assert.That(() => TestUtil.CreateTestApiConnector().PrepareRequest(string.Empty, page: 5, perPage: 0),
-                Throws.TypeOf<NotSupportedException>());
+            Assert.That(() => TestUtil.CreateTestApiConnector().PrepareRequest(string.Empty, page: 5, perPage: 0),
+                  Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]
         public void PageNotLessThanZeroTest()
         {
-          Assert.That(() => TestUtil.CreateTestApiConnector().PrepareRequest(string.Empty, page: -2, perPage: 10),
-                Throws.TypeOf<NotSupportedException>());
+            Assert.That(() => TestUtil.CreateTestApiConnector().PrepareRequest(string.Empty, page: -2, perPage: 10),
+                  Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]
         public void PerPageNotLessThanZeroTest()
         {
-          Assert.That(() => TestUtil.CreateTestApiConnector().PrepareRequest(string.Empty, page: 5, perPage: -5),
-                Throws.TypeOf<NotSupportedException>());
+            Assert.That(() => TestUtil.CreateTestApiConnector().PrepareRequest(string.Empty, page: 5, perPage: -5),
+                  Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]

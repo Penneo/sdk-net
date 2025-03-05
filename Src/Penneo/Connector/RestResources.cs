@@ -20,7 +20,7 @@ namespace Penneo.Connector
         /// </summary>
         public void Add<T>(string resource)
         {
-            _resources[typeof (T)] = resource;
+            _resources[typeof(T)] = resource;
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace Penneo.Connector
         /// </summary>
         public string GetResource<T>(Entity parent = null)
         {
-            return GetResource(typeof (T), parent);
+            return GetResource(typeof(T), parent);
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace Penneo.Connector
             {
                 return r;
             }
-            return GetResource(parent.GetType()) + "/" + parent.Id + "/" + r;
+            return GetResource(parent.GetType()) + "/" + parent.GetIdAsString() + "/" + r;
         }
     }
 }

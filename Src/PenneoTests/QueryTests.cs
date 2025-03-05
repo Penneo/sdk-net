@@ -90,7 +90,7 @@ namespace PenneoTests
             IEnumerable<T> returned = new[] { instance };
             A.CallTo(() => con.ApiConnector.FindByAsync<T>(null, null, null)).WithAnyArguments()
                 .Returns(Task.FromResult(new FindByResult<T>
-                    { Success = true, Objects = returned, Response = _response200 }));
+                { Success = true, Objects = returned, Response = _response200 }));
 
             var obj = await f();
 

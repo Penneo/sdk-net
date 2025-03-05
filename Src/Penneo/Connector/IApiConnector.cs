@@ -37,6 +37,13 @@ namespace Penneo.Connector
 
         /// <summary>
         /// Read an object from the backend
+        /// </summary>
+        Task<ReadObjectResult<T>> ReadObjectAsync<T>(Entity parent, string id)
+            where T : Entity;
+
+
+        /// <summary>
+        /// Read an object from the backend
         /// If relative url is specifically provided, then that overrides general resource setup
         /// </summary>
         Task<ReadObjectResult<T>> ReadObjectAsync<T>(Entity parent, int? id, string relativeUrl)
@@ -56,7 +63,7 @@ namespace Penneo.Connector
         /// Gets all entities linked with obj from the backend.
         /// </summary>
         Task<QueryResult<T>> GetLinkedEntitiesAsync<T>(Entity obj, string url = null)
-            where T: Entity;
+            where T : Entity;
 
         /// <summary>
         /// Gets single entity linked with obj from the backend (url must be provided).

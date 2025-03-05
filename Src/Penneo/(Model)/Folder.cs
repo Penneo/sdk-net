@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace Penneo
 {
-    public class Folder : Entity
+    public class Folder : GenericEntity<int?>
     {
         private int? _parentId;
         private Folder _parentFolder;
@@ -59,7 +59,7 @@ namespace Penneo
             }
         }
 
-        public ICollection<Folder> ChildFolders { get; set; } 
+        public ICollection<Folder> ChildFolders { get; set; }
 
         public async Task<IEnumerable<CaseFile>> GetCaseFilesAsync(PenneoConnector con)
         {

@@ -22,7 +22,7 @@ namespace PenneoTests
             doc.Id = 1;
             return doc;
         }
-        
+
         private static Document CreateEmptyDocument()
         {
             var cf = new CaseFile();
@@ -30,7 +30,7 @@ namespace PenneoTests
             doc.Id = 2;
             return doc;
         }
-        
+
         private static Document CreateBase64Document()
         {
             var cf = new CaseFile();
@@ -155,7 +155,7 @@ namespace PenneoTests
         {
             var con1 = TestUtil.CreatePenneoConnector();
             var doc1 = CreateDocument();
-            await TestUtil.TestGetLinked(con1,  () => doc1.GetDocumentTypeAsync(con1));
+            await TestUtil.TestGetLinked(con1, () => doc1.GetDocumentTypeAsync(con1));
 
             var con2 = TestUtil.CreatePenneoConnector();
             var doc2 = new Document();

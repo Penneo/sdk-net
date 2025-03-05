@@ -18,7 +18,7 @@ namespace Penneo
 
         public void RegisterInstance<T>(object o)
         {
-            _objects[typeof (T).Name] = o;
+            _objects[typeof(T).Name] = o;
         }
 
         public T GetInstance<T>(string name)
@@ -28,12 +28,12 @@ namespace Penneo
             {
                 throw new KeyNotFoundException(name + " not found");
             }
-            return (T) val;
+            return (T)val;
         }
 
         public T GetInstance<T>()
         {
-            var name = typeof (T).Name;
+            var name = typeof(T).Name;
             return GetInstance<T>(name);
         }
     }

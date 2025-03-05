@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Penneo
 {
-    public class Validation : Entity
+    public class Validation : GenericEntity<int?>
     {
         private const string ASSET_PDF = "pdf";
         private const string ASSET_LINK = "link";
@@ -42,7 +42,7 @@ namespace Penneo
             {
                 return ValidationStatus.New;
             }
-            return (ValidationStatus) Status;
+            return (ValidationStatus)Status;
         }
 
         public Task<byte[]> GetPdfAsync(PenneoConnector con)

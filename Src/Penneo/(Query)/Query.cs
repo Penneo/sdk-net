@@ -36,13 +36,34 @@ namespace Penneo
             return output.Object;
         }
 
+        /// <summary>
+        /// Get an entity by its Id
+        /// </summary>
+        public async Task<T> FindAsync<T>(string id)
+            where T : Entity
+        {
+            var output = await FindByIdAsync<T>(id).ConfigureAwait(false);
+            if (!output.Success)
+            {
+                throw new Exception(output.ErrorMessage);
+            }
+            return output.Object;
+        }
+
         public async Task<QuerySingleObjectResult<T>> FindByIdAsync<T>(int id)
             where T : Entity
         {
-            RestResponse response;
             var objectResult = await _con.ApiConnector.ReadObjectAsync<T>(null, id).ConfigureAwait(false);
             return CreateSingleObjectResult(objectResult.Response, objectResult.Result, id);
         }
+
+        public async Task<QuerySingleObjectResult<T>> FindByIdAsync<T>(string id)
+            where T : Entity
+        {
+            var objectResult = await _con.ApiConnector.ReadObjectAsync<T>(null, id).ConfigureAwait(false);
+            return CreateSingleObjectResult(objectResult.Response, objectResult.Result, id);
+        }
+
 
         /// <summary>
         /// Get the first entity matching the search criteria
@@ -223,7 +244,7 @@ namespace Penneo
         {
             RestResponse response;
             var objectResult = await _con.ApiConnector.ReadObjectAsync<User>(null, null, "user").ConfigureAwait(false);
-            return CreateSingleObjectResult(objectResult.Response, objectResult.Result, null);
+            return CreateSingleObjectResult(objectResult.Response, objectResult.Result, (int?)null);
         }
 
         private QuerySingleObjectResult<T> CreateSingleObjectResult<T>(RestResponse response, T obj, int? id)
@@ -246,6 +267,28 @@ namespace Penneo
             }
             return output;
         }
+
+        private QuerySingleObjectResult<T> CreateSingleObjectResult<T>(RestResponse response, T obj, string id)
+            where T : Entity
+        {
+            var output = new QuerySingleObjectResult<T>
+            {
+                Success = obj != null,
+                StatusCode = response.StatusCode,
+                ErrorMessage = response.ErrorMessage,
+                Object = obj
+            };
+            if (!output.Success)
+            {
+                output.ErrorMessage = "Penneo: Could not find the requested " + typeof(T).Name;
+                if (!string.IsNullOrEmpty(id))
+                {
+                    output.ErrorMessage += " (id = " + id + ")";
+                }
+            }
+            return output;
+        }
+
 
         /// <summary>
         /// Get the next page based on an earlier result

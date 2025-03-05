@@ -90,6 +90,6 @@ namespace PenneoTests
             {
                 A.CallTo(() => con.ApiConnector.LinkEntityAsync(sl, s)).MustHaveHappened();
             }
-        }   
+        }
     }
 }
