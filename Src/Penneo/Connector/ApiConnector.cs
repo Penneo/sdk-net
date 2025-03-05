@@ -173,11 +173,6 @@ namespace Penneo.Connector
             }
             SetLatestEntityServerResult(obj, result);
 
-            if (!string.IsNullOrEmpty(response.Content))
-            {
-                JsonConvert.PopulateObject(response.Content, obj);
-            }
-
             return result.Success;
         }
 
