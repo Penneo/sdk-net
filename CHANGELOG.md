@@ -9,7 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-## [8.0.0-alpha0]
+## [8.0.0]
 ### Changed
 - WebhookSubscription has been upgraded to use the new webhook API. The new API is more flexible and allows for more advanced use cases (see documentation for details). The SDK no longer support creating new webhooks via the old API - all new subscriptions should use the new API instead.
 
