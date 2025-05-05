@@ -36,7 +36,7 @@ namespace Penneo
 
         internal override string GetRelativeUrl(PenneoConnector con)
         {
-            return "/casefiles/" + CaseFileId + "/signers/" + SignerId + "/signertypes/" + SignerTypeId;
+            return "casefiles/" + CaseFileId + "/signers/" + SignerId + "/signertypes/" + SignerTypeId;
         }
     }
 
