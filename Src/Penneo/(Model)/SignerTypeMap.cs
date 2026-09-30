@@ -4,6 +4,7 @@ using Penneo.Connector;
 
 namespace Penneo
 {
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public class SignerTypeMap : GenericEntity<int?>
     {
         public int SignerId { get; private set; }

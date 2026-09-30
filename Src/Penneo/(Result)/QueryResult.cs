@@ -6,6 +6,7 @@ namespace Penneo
     /// <summary>
     /// Query result with multiple fetched objects
     /// </summary>
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public class QueryResult<T> : ServerResult
         where T : Entity
     {
@@ -44,6 +45,7 @@ namespace Penneo
     /// <summary>
     /// Query result for a single object
     /// </summary>
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public class QuerySingleObjectResult<T> : ServerResult
         where T : Entity
     {

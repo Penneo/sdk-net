@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace Penneo
 {
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public class QueryInput : ICloneable
     {
         public int Id { get; set; }

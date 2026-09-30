@@ -9,6 +9,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [9.0.0]
+### Changed
+- **Penneo.SDK is deprecated** and will not receive further updates. The public API is marked obsolete so consuming projects get a compiler warning.
+- Updated RestSharp from `112.0.0` to `114.0.0`. RestSharp 114 changed `IAuthenticator.Authenticate` to take a `CancellationToken`, which threw `TypeLoadException` against 8.0.1.
+- Updated Newtonsoft.Json from `13.0.3` to `13.0.4`.
+- Replaced the dedicated `net6.0` target with `net10.0`. `netstandard2.0` and `net48` are unchanged, so .NET 6, 8, and 9 apps keep using the `netstandard2.0` asset.
+
 ## [8.0.1]
 ### Fixed
 - Fixed an issue with misconfigured endpoint for `SignerTypeMap` entity resulting in 405 response on `PersistAsync()`

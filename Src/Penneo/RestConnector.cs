@@ -10,6 +10,7 @@ namespace Penneo
     /// <summary>
     /// Utility class to invoke the Penneo backend directly using custom URLs
     /// </summary>
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public class RestConnector
     {
         private readonly PenneoConnector _con;

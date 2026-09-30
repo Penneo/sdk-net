@@ -13,6 +13,7 @@ namespace Penneo
     /// <summary>
     /// Create queries against Penneo
     /// </summary>
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public class Query
     {
         private readonly PenneoConnector _con;

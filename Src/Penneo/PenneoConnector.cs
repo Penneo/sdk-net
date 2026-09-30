@@ -6,6 +6,7 @@ namespace Penneo
     /// <summary>
     /// Connection to the Penneo backend. Must be initialized before operations can start.
     /// </summary>
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public class PenneoConnector
     {
         internal Dictionary<string, string> Headers;

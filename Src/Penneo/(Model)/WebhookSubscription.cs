@@ -6,6 +6,7 @@ namespace Penneo
     /// You can configure Penneo to send a request to your servers when certain events occur.
     /// See https://github.com/Penneo/sdk-net/blob/master/docs/webhooks.md for more details.
     /// </summary>
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public class WebhookSubscription : GenericEntity<string>
     {
         public int CustomerId { get; set; }
@@ -26,6 +27,7 @@ namespace Penneo
 
     }
 
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public enum EventType
     {
         [EnumMember(Value = "sign.casefile.completed")]

@@ -1,5 +1,6 @@
 ﻿namespace Penneo
 {
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public class Customer : GenericEntity<int?>
     {
         public string Name { get; set; }

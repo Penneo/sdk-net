@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace Penneo.Util
 {
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public static class PaginationUtil
     {
         /// <summary>

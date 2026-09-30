@@ -5,6 +5,7 @@ namespace Penneo.Util
     /// <summary>
     /// String utilities
     /// </summary>
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public static class StringUtil
     {
         /// <summary>

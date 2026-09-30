@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 
 namespace Penneo
 {
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public class Folder : GenericEntity<int?>
     {
         private int? _parentId;

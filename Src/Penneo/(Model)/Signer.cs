@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 
 namespace Penneo
 {
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public class Signer : GenericEntity<int?>
     {
         public Signer()

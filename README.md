@@ -1,8 +1,11 @@
 # Penneo SDK for .Net
+
+> **Deprecated.** Penneo.SDK will not receive further updates. 9.0.0 is a compatibility release for RestSharp 114 and marks the public API obsolete. Contact support@penneo.com if you still depend on this package.
+
 Penneo is all about digitizing the process of signing documents and contacts. The Penneo SDK for .Net enables .Net developers to use digital signing of documents in their .Net code. Get more info at [penneo.com](https://penneo.com/) about how to become a customer.
 
 ## Prerequisites
-The Penneo SDK for .Net requires that you are using netcoreapp3.1 or newer. If you need other target framework support, please contact us at support@penneo.com.
+9.0.0 requires RestSharp 114 or newer. The package ships `net10.0`, `netstandard2.0`, and `net48` assets. Apps on .NET 6, 8, or 9 use the `netstandard2.0` asset. If you need other target framework support, please contact us at support@penneo.com.
 
 ## Getting Started
 You can install the SDK by simply cloning or downloading the source, or you can use Nuget. We recommend that you use Nuget:

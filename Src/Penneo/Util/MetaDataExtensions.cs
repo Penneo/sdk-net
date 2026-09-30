@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 
 namespace Penneo.Util
 {
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public static class MetaDataExtensions
     {
         public static void AddBytes(this Dictionary<string, object> d, string key, byte[] rawBytes)

@@ -2,12 +2,14 @@
 
 namespace Penneo
 {
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public class MessageTemplate : GenericEntity<int?>
     {
         #region MessageTemplateType enum
         /// <summary>
         /// Type of message templates
         /// </summary>
+        [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
         public enum MessageTemplateType
         {
             [EnumMember(Value = "signing_request")]

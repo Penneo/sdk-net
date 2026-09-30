@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 namespace Penneo
 {
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public class SigningRequest : GenericEntity<int?>
     {
         private const string ASSET_LINK = "link";
@@ -51,6 +52,7 @@ namespace Penneo
         }
     }
 
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public enum SigningRequestStatus
     {
         New = 0,
@@ -61,6 +63,7 @@ namespace Penneo
         Undeliverable = 5
     }
 
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public static class InsecureSigningMethod
     {
         public const string Draw = "draw";
