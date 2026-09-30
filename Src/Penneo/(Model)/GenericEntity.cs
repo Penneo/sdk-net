@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 namespace Penneo
 {
     /// <inheritdoc />
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public abstract class GenericEntity<T> : Entity
     {
         /// <summary>

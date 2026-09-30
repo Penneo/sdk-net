@@ -9,6 +9,7 @@ using Penneo.Connector;
 
 namespace Penneo
 {
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public class Document : GenericEntity<int?>
     {
         private const string TYPE_ATTACHMENT = "attachment";
@@ -299,6 +300,7 @@ namespace Penneo
     /// <summary>
     /// Document status values
     /// </summary>
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public enum DocumentStatus
     {
         New = 0,

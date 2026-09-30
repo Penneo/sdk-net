@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Penneo.SDK</id>
-    <version>7.0.2</version>
+    <version>9.0.0</version>
     <title>Penneo .Net SDK</title>
     <authors>Penneo</authors>
     <owners>Penneo</owners>
@@ -10,12 +10,12 @@
     <projectUrl>https://github.com/Penneo/sdk-net</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/Penneo/sdk-net/master/icon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>SDK for using Penneo in your own C# projects</description>
+    <description>DEPRECATED. Penneo.SDK will not receive further updates. This release keeps existing integrations working with RestSharp 114. Contact support@penneo.com.</description>
     <copyright>Copyright 2014</copyright>
     <tags>Penneo sign signing digital</tags>
     <dependencies>
-      <dependency id="RestSharp" version="112.0.0" />
-      <dependency id="Newtonsoft.Json" version="13.0.2" />
+      <dependency id="RestSharp" version="114.0.0" />
+      <dependency id="Newtonsoft.Json" version="13.0.4" />
       <dependency id="System.Net.Http" version="4.3.4" />
     </dependencies>
     <releaseNotes>

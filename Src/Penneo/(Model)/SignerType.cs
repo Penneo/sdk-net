@@ -1,5 +1,6 @@
 ﻿namespace Penneo
 {
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public class SignerType : GenericEntity<int?>
     {
         public string Role { get; set; }

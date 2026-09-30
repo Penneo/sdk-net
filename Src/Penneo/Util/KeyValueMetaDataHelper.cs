@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 
 namespace Penneo.Util
 {
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public class KeyValueMetaDataHelper
     {
         private readonly Dictionary<string, object> _keyValues;

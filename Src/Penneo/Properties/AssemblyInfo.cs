@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 
 [assembly: AssemblyTitle("Penneo")]
-[assembly: AssemblyDescription("SDK for Penneo Web API")]
+[assembly: AssemblyDescription("DEPRECATED. SDK for Penneo Web API. This package will not receive further updates.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Penneo")]
 [assembly: AssemblyProduct("Penneo")]

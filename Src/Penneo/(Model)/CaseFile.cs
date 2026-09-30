@@ -7,12 +7,14 @@ using Penneo.Connector;
 
 namespace Penneo
 {
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public class CaseFile : GenericEntity<int?>
     {
         #region CaseFileStatus enum
         /// <summary>
         /// Available case file statuses
         /// </summary>
+        [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
         public enum CaseFileStatus
         {
             New = 0,

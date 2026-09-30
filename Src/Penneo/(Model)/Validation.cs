@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 namespace Penneo
 {
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public class Validation : GenericEntity<int?>
     {
         private const string ASSET_PDF = "pdf";
@@ -81,6 +82,7 @@ namespace Penneo
         }
     }
 
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public enum ValidationStatus
     {
         New = 0,

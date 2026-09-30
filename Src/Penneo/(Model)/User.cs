@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 namespace Penneo
 {
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public class User : GenericEntity<int?>
     {
         public string FullName { get; set; }

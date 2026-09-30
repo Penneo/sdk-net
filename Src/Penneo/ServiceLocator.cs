@@ -2,6 +2,7 @@
 
 namespace Penneo
 {
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public class ServiceLocator
     {
         private readonly Dictionary<string, object> _objects;

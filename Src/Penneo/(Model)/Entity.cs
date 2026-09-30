@@ -10,6 +10,7 @@ namespace Penneo
     /// <summary>
     /// Base class for all Penneo business entities
     /// </summary>
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public abstract class Entity
     {
         protected Entity()

@@ -1,5 +1,6 @@
 ﻿namespace Penneo
 {
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public class CopyRecipient : GenericEntity<int?>
     {
         public CopyRecipient()

@@ -11,7 +11,8 @@ namespace Penneo
     /// See https://github.com/Penneo/sdk-net/blob/master/docs/webhooks.md for more details.
     /// </summary>
     [Obsolete(
-        "This entity is read-only for legacy data. Creation of WebhookSubscriptionLegacy is not supported. Use "
+        SdkDeprecation.Message
+            + " This entity is read-only for legacy data. Creation of WebhookSubscriptionLegacy is not supported. Use "
             + nameof(WebhookSubscription)
             + " instead."
     )]

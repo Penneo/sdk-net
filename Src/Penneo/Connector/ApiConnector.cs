@@ -14,6 +14,7 @@ namespace Penneo.Connector
     /// 
     /// </summary>
     /// <typeparam name="T"></typeparam>
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public class FindByResult<T>
         where T : Entity
     {
@@ -769,6 +770,7 @@ namespace Penneo.Connector
         }
     }
 
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public class ReadObjectResult<T> where T : Entity
     {
         public RestResponse Response { get; set; }
@@ -776,6 +778,7 @@ namespace Penneo.Connector
     }
 
 
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public class PenneoDateConverter : JsonConverter
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)

@@ -6,6 +6,7 @@ using Penneo.Util;
 
 namespace Penneo
 {
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public class PenneoSetup
     {
         private readonly ServiceLocator _serviceLocator;

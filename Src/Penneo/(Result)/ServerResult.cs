@@ -2,6 +2,7 @@
 
 namespace Penneo
 {
+    [global::System.Obsolete(global::Penneo.SdkDeprecation.Message)]
     public class ServerResult
     {
         public bool Success { get; set; }
