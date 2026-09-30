@@ -1,3 +1,3 @@
 #!/bin/bash
 
-dotnet vstest Src/PenneoTests/bin/Debug/net10.0/PenneoTests.dll
+dotnet vstest Src/PenneoTests/bin/Debug/net8.0/PenneoTests.dll
