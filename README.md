@@ -1,6 +1,6 @@
 # Penneo SDK for .Net
 
-> **Deprecated.** Penneo.SDK will not receive further updates. 9.0.0 is a compatibility release for RestSharp 114 and marks the public API obsolete. Contact support@penneo.com if you still depend on this package.
+> **Deprecated.** Penneo.SDK will not receive further updates. 9.0.0 is a compatibility release for RestSharp 114 and marks the Penneo.SDK library obsolete.
 
 Penneo is all about digitizing the process of signing documents and contacts. The Penneo SDK for .Net enables .Net developers to use digital signing of documents in their .Net code. Get more info at [penneo.com](https://penneo.com/) about how to become a customer.
 
